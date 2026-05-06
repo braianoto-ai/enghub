@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { StarRating } from "@/components/ui/star-rating";
 import { Button } from "@/components/ui/button";
+import { ReviewForm } from "./review-form";
 import {
   MapPin,
   Phone,
@@ -63,7 +64,7 @@ export default async function TenantPage({
       .limit(6),
     supabase
       .from("reviews")
-      .select("rating, comment, created_at, author:profiles(name)")
+      .select("rating, comment, created_at, reviewer_name, author:profiles(name)")
       .eq("tenant_id", tenant.id)
       .order("created_at", { ascending: false })
       .limit(5),
@@ -316,22 +317,22 @@ export default async function TenantPage({
               </CardContent>
             </Card>
 
-            {reviews && reviews.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Avaliações recentes</CardTitle>
-                </CardHeader>
-                <CardContent>
+            {/* Reviews list */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Avaliações</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {reviews && reviews.length > 0 ? (
                   <ul className="divide-y divide-gray-100">
                     {reviews.map((r, i) => {
                       const author = r.author as unknown as { name: string } | null;
+                      const displayName = (r as { reviewer_name?: string | null }).reviewer_name ?? author?.name ?? "Anônimo";
                       return (
                         <li key={i} className="py-4 first:pt-0 last:pb-0">
-                          <div className="flex items-start justify-between">
+                          <div className="flex items-start justify-between gap-4">
                             <div>
-                              <p className="font-medium text-gray-900">
-                                {author?.name ?? "Anônimo"}
-                              </p>
+                              <p className="font-medium text-gray-900">{displayName}</p>
                               <p className="text-sm text-yellow-500">
                                 {"★".repeat(r.rating)}
                                 {"☆".repeat(5 - r.rating)}
@@ -349,18 +350,24 @@ export default async function TenantPage({
                       );
                     })}
                   </ul>
-                </CardContent>
-              </Card>
-            )}
+                ) : (
+                  <div className="flex flex-col items-center gap-2 py-8 text-center">
+                    <MessageSquare size={24} className="text-gray-300" />
+                    <p className="text-sm text-gray-400">Ainda sem avaliações</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
 
-            {(!reviews || reviews.length === 0) && (
-              <Card>
-                <CardContent className="flex h-32 flex-col items-center justify-center text-center">
-                  <MessageSquare size={24} className="text-gray-300" />
-                  <p className="mt-2 text-sm text-gray-400">Ainda sem avaliações</p>
-                </CardContent>
-              </Card>
-            )}
+            {/* Review form */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Deixe sua avaliação</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ReviewForm tenantId={tenant.id} />
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

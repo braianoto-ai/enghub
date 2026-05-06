@@ -13,6 +13,7 @@ import {
   LogOut,
   ExternalLink,
   Inbox,
+  CreditCard,
 } from "lucide-react";
 
 const navItems = [
@@ -22,6 +23,7 @@ const navItems = [
   { href: "/dashboard/perfil", label: "Perfil", icon: User },
   { href: "/dashboard/avaliacoes", label: "Avaliações", icon: Star },
   { href: "/dashboard/mensagens", label: "Mensagens", icon: Inbox },
+  { href: "/dashboard/plano", label: "Plano", icon: CreditCard },
 ];
 
 interface SidebarProps {

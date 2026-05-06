@@ -16,7 +16,7 @@ export default async function AvaliacoesPage() {
 
   const { data: reviews } = await supabase
     .from("reviews")
-    .select("id, rating, comment, created_at, author:profiles(name, email)")
+    .select("id, rating, comment, created_at, reviewer_name, reviewer_email, author:profiles(name, email)")
     .eq("tenant_id", tenant?.id ?? "")
     .order("created_at", { ascending: false });
 
@@ -71,14 +71,18 @@ export default async function AvaliacoesPage() {
             <ul className="divide-y divide-gray-100">
               {reviews.map((r) => {
                 const author = r.author as unknown as { name: string; email: string } | null;
+                const rExt = r as unknown as { reviewer_name?: string | null; reviewer_email?: string | null };
+                const displayName = rExt.reviewer_name ?? author?.name ?? "Anônimo";
+                const displayEmail = rExt.reviewer_email ?? author?.email ?? null;
                 return (
                   <li key={r.id} className="py-4">
-                    <div className="flex items-start justify-between">
+                    <div className="flex items-start justify-between gap-4">
                       <div>
-                        <p className="font-medium text-gray-900">
-                          {author?.name ?? "Anônimo"}
-                        </p>
-                        <p className="text-sm text-yellow-500">
+                        <p className="font-medium text-gray-900">{displayName}</p>
+                        {displayEmail && (
+                          <p className="text-xs text-gray-400">{displayEmail}</p>
+                        )}
+                        <p className="mt-1 text-sm text-yellow-500">
                           {"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}
                           <span className="ml-1 text-gray-400">{r.rating}/5</span>
                         </p>
@@ -86,7 +90,7 @@ export default async function AvaliacoesPage() {
                           <p className="mt-2 text-sm text-gray-600">{r.comment}</p>
                         )}
                       </div>
-                      <p className="text-xs text-gray-400">
+                      <p className="shrink-0 text-xs text-gray-400">
                         {new Date(r.created_at).toLocaleDateString("pt-BR")}
                       </p>
                     </div>
