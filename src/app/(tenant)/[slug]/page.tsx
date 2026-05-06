@@ -160,307 +160,259 @@ export default async function TenantPage({
   const contactPhone = prof?.whatsapp ?? prof?.phone ?? null;
   const registrationBadge = prof?.crea ?? prof?.cau ?? null;
 
+  const initials = tenant.name.split(" ").slice(0, 2).map((w: string) => w[0]).join("").toUpperCase();
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
       <ViewTracker tenantId={tenant.id} />
-      {prof?.whatsapp && (
-        <WhatsAppButton phone={prof.whatsapp} name={tenant.name} />
-      )}
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-4 py-16">
-        <div className="mx-auto max-w-5xl">
+      {prof?.whatsapp && <WhatsAppButton phone={prof.whatsapp} name={tenant.name} />}
+
+      {/* ── HERO ── */}
+      <div className="relative bg-gradient-to-br from-zinc-950 via-zinc-900 to-violet-950/50 px-4 pb-16 pt-12">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute -right-40 -top-20 h-80 w-80 rounded-full bg-violet-600/10 blur-3xl" />
+          <div className="absolute -left-20 bottom-0 h-60 w-60 rounded-full bg-violet-500/5 blur-3xl" />
+        </div>
+        <div className="relative mx-auto max-w-5xl">
           <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:text-left">
-            <Avatar name={tenant.name} size="lg" className="h-24 w-24 text-2xl" />
-            <div className="text-white">
-              <h1 className="text-3xl font-bold">{tenant.name}</h1>
+            {/* Avatar */}
+            <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-violet-700 text-2xl font-bold text-white shadow-lg shadow-violet-900/30">
+              {initials}
+            </div>
+            <div>
+              <h1 className="text-3xl font-extrabold text-white">{tenant.name}</h1>
               <div className="mt-2 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
                 {primaryArea && (
-                  <Badge className="bg-white/20 text-white">
+                  <span className="rounded-full border border-violet-400/30 bg-violet-500/15 px-3 py-0.5 text-sm text-violet-200">
                     {engineeringAreaLabels[primaryArea]}
-                  </Badge>
+                  </span>
                 )}
                 {registrationBadge && (
-                  <Badge className="bg-white/20 text-white">
-                    <Shield size={12} className="mr-1" />
+                  <span className="flex items-center gap-1 rounded-full border border-white/10 bg-white/10 px-3 py-0.5 text-sm text-zinc-300">
+                    <Shield size={12} className="text-violet-400" />
                     {registrationBadge}
-                  </Badge>
+                  </span>
                 )}
               </div>
               {(prof?.city || prof?.state) && (
-                <div className="mt-2 flex items-center justify-center gap-1 text-blue-100 sm:justify-start">
-                  <MapPin size={16} />
+                <p className="mt-2 flex items-center justify-center gap-1 text-sm text-zinc-400 sm:justify-start">
+                  <MapPin size={13} />
                   {[prof.city, prof.state].filter(Boolean).join(", ")}
-                </div>
+                </p>
               )}
             </div>
+          </div>
+
+          {/* Stats */}
+          <div className="mt-8 grid grid-cols-3 divide-x divide-white/10 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
+            {[
+              { value: reviews?.length ?? 0, label: "Avaliações" },
+              { value: avgRating > 0 ? avgRating.toFixed(1) : "—", label: "Nota média" },
+              { value: prof?.years_experience ? `${prof.years_experience}` : "—", label: "Anos exp." },
+            ].map((s) => (
+              <div key={s.label} className="px-4 py-4 text-center">
+                <p className="text-xl font-bold text-white">{s.value}</p>
+                <p className="text-xs text-zinc-400">{s.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
+      {/* ── CONTENT ── */}
       <div className="mx-auto max-w-5xl px-4 py-8">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+
           {/* Sidebar */}
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Contato</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
+          <div className="space-y-4">
+            {/* CTA */}
+            <Link href={`/${slug}/contato`}>
+              <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-500">
+                Solicitar Orçamento
+                <MessageSquare size={15} />
+              </button>
+            </Link>
+
+            {/* Contato */}
+            <div className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+              <h3 className="mb-3 text-sm font-semibold text-zinc-900 dark:text-zinc-100">Contato</h3>
+              <div className="space-y-2">
                 {contactPhone && (
-                  <a
-                    href={`tel:${contactPhone}`}
-                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600"
-                  >
-                    <Phone size={16} />
-                    {contactPhone}
+                  <a href={`tel:${contactPhone}`} className="flex items-center gap-2 text-sm text-zinc-600 hover:text-violet-600 dark:text-zinc-400 dark:hover:text-violet-400">
+                    <Phone size={14} /> {contactPhone}
                   </a>
                 )}
                 {prof?.website && (
-                  <a
-                    href={prof.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600"
-                  >
-                    <Globe size={16} />
-                    Website
-                    <ExternalLink size={12} />
+                  <a href={prof.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-zinc-600 hover:text-violet-600 dark:text-zinc-400 dark:hover:text-violet-400">
+                    <Globe size={14} /> Website <ExternalLink size={11} />
                   </a>
                 )}
                 {!contactPhone && !prof?.website && (
-                  <p className="text-sm text-gray-400">Nenhum contato informado</p>
+                  <p className="text-sm text-zinc-400">Nenhum contato informado</p>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Avaliações</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-3xl font-bold">
-                  {avgRating > 0 ? avgRating.toFixed(1) : "-"}
-                </p>
-                <StarRating rating={Math.round(avgRating)} size={20} />
-                <p className="mt-1 text-sm text-gray-500">
-                  {reviews?.length ?? 0} avaliações
-                </p>
-              </CardContent>
-            </Card>
-
-            {prof?.areas && prof.areas.length > 1 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Especialidades</CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-wrap gap-2">
+            {/* Especialidades */}
+            {prof?.areas && prof.areas.length > 0 && (
+              <div className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+                <h3 className="mb-3 text-sm font-semibold text-zinc-900 dark:text-zinc-100">Especialidades</h3>
+                <div className="flex flex-wrap gap-2">
                   {prof.areas.map((area: string) => (
-                    <Badge key={area} variant="info">
+                    <span key={area} className="rounded-full bg-violet-50 px-3 py-1 text-xs font-medium text-violet-700 dark:bg-violet-900/20 dark:text-violet-400">
                       {engineeringAreaLabels[area]}
-                    </Badge>
+                    </span>
                   ))}
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             )}
 
-            <Link href={`/${slug}/contato`}>
-              <Button className="w-full" size="lg">
-                Solicitar Orçamento
-              </Button>
-            </Link>
+            {/* Avaliação */}
+            <div className="rounded-2xl border border-zinc-200 bg-white p-5 text-center dark:border-zinc-800 dark:bg-zinc-900">
+              <p className="text-4xl font-bold text-zinc-900 dark:text-zinc-100">
+                {avgRating > 0 ? avgRating.toFixed(1) : "—"}
+              </p>
+              <StarRating rating={Math.round(avgRating)} size={18} />
+              <p className="mt-1 text-xs text-zinc-400">{reviews?.length ?? 0} avaliações</p>
+            </div>
           </div>
 
-          {/* Main Content */}
+          {/* Main */}
           <div className="space-y-6 lg:col-span-2">
+            {/* Bio */}
             {prof?.bio && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Sobre</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="leading-relaxed text-gray-600">{prof.bio}</p>
-                  <div className="mt-4 flex flex-wrap gap-4 text-sm text-gray-500">
+              <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+                <h2 className="mb-3 font-semibold text-zinc-900 dark:text-zinc-100">Sobre</h2>
+                <p className="leading-relaxed text-zinc-600 dark:text-zinc-400">{prof.bio}</p>
+                {(prof.years_experience || prof.education) && (
+                  <div className="mt-4 flex flex-wrap gap-4 border-t border-zinc-100 pt-4 dark:border-zinc-800">
                     {prof.years_experience && prof.years_experience > 0 && (
-                      <span>{prof.years_experience} anos de experiência</span>
+                      <span className="text-sm text-zinc-500">{prof.years_experience} anos de experiência</span>
                     )}
-                    {prof.education && <span>{prof.education}</span>}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Projetos</CardTitle>
-                  {projects && projects.length > 0 && (
-                    <Link
-                      href={`/${slug}/projetos`}
-                      className="text-sm text-blue-600 hover:underline"
-                    >
-                      Ver todos
-                    </Link>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent>
-                {!projects || projects.length === 0 ? (
-                  <p className="py-8 text-center text-gray-400">
-                    Nenhum projeto publicado ainda
-                  </p>
-                ) : (
-                  <div className="space-y-6">
-                    {projects.map((project) => {
-                      const galleryImages = (
-                        (project.project_images as { url: string; position: number }[] | null) ?? []
-                      )
-                        .sort((a, b) => a.position - b.position)
-                        .map((img) => img.url);
-
-                      const images =
-                        galleryImages.length > 0
-                          ? galleryImages
-                          : project.image_url
-                          ? [project.image_url]
-                          : [];
-
-                      return (
-                        <div
-                          key={project.id}
-                          className="overflow-hidden rounded-xl border hover:shadow-sm transition-shadow"
-                        >
-                          {images.length > 0 && (
-                            <ImageGallery images={images} title={project.title} />
-                          )}
-                          <div className="p-4">
-                            <h4 className="font-medium text-gray-900">{project.title}</h4>
-                            {project.location && (
-                              <p className="mt-1 flex items-center gap-1 text-xs text-gray-400">
-                                <MapPin size={12} />
-                                {project.location}
-                              </p>
-                            )}
-                            <Badge variant="info" className="mt-2">
-                              {engineeringAreaLabels[project.area]}
-                            </Badge>
-                            {project.description && (
-                              <p className="mt-2 line-clamp-2 text-sm text-gray-500">
-                                {project.description}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
+                    {prof.education && <span className="text-sm text-zinc-500">{prof.education}</span>}
                   </div>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            )}
 
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Serviços</CardTitle>
-                  {services && services.length > 0 && (
-                    <Link
-                      href={`/${slug}/servicos`}
-                      className="text-sm text-blue-600 hover:underline"
-                    >
-                      Ver todos
-                    </Link>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent>
-                {!services || services.length === 0 ? (
-                  <p className="py-8 text-center text-gray-400">
-                    Nenhum serviço cadastrado ainda
-                  </p>
-                ) : (
-                  <div className="space-y-3">
-                    {services.map((service) => (
-                      <div
-                        key={service.id}
-                        className="flex items-center justify-between rounded-lg border p-4"
-                      >
-                        <div>
-                          <h4 className="font-medium text-gray-900">{service.title}</h4>
-                          <Badge variant="info" className="mt-1">
-                            {engineeringAreaLabels[service.area]}
-                          </Badge>
-                          {service.description && (
-                            <p className="mt-1 text-sm text-gray-500 line-clamp-1">
-                              {service.description}
+            {/* Projetos */}
+            <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="font-semibold text-zinc-900 dark:text-zinc-100">Projetos</h2>
+                {projects && projects.length > 0 && (
+                  <Link href={`/${slug}/projetos`} className="text-sm font-medium text-violet-600 hover:underline dark:text-violet-400">
+                    Ver todos →
+                  </Link>
+                )}
+              </div>
+              {!projects || projects.length === 0 ? (
+                <p className="py-8 text-center text-zinc-400">Nenhum projeto publicado ainda</p>
+              ) : (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {projects.map((project) => {
+                    const galleryImages = (
+                      (project.project_images as { url: string; position: number }[] | null) ?? []
+                    ).sort((a, b) => a.position - b.position).map((img) => img.url);
+                    const images = galleryImages.length > 0 ? galleryImages : project.image_url ? [project.image_url] : [];
+                    return (
+                      <div key={project.id} className="overflow-hidden rounded-xl border border-zinc-100 dark:border-zinc-800">
+                        {images.length > 0 && <ImageGallery images={images} title={project.title} />}
+                        <div className="p-3">
+                          <h4 className="font-medium text-zinc-900 dark:text-zinc-100">{project.title}</h4>
+                          {project.location && (
+                            <p className="mt-0.5 flex items-center gap-1 text-xs text-zinc-400">
+                              <MapPin size={11} />{project.location}
                             </p>
+                          )}
+                          <span className="mt-2 inline-block rounded-full bg-violet-50 px-2 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-900/20 dark:text-violet-400">
+                            {engineeringAreaLabels[project.area]}
+                          </span>
+                          {project.description && (
+                            <p className="mt-1 line-clamp-2 text-xs text-zinc-500">{project.description}</p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Serviços */}
+            <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="font-semibold text-zinc-900 dark:text-zinc-100">Serviços</h2>
+                {services && services.length > 0 && (
+                  <Link href={`/${slug}/servicos`} className="text-sm font-medium text-violet-600 hover:underline dark:text-violet-400">
+                    Ver todos →
+                  </Link>
+                )}
+              </div>
+              {!services || services.length === 0 ? (
+                <p className="py-8 text-center text-zinc-400">Nenhum serviço cadastrado ainda</p>
+              ) : (
+                <div className="space-y-3">
+                  {services.map((service) => (
+                    <div key={service.id} className="flex items-center justify-between rounded-xl border border-zinc-100 p-4 dark:border-zinc-800">
+                      <div>
+                        <h4 className="font-medium text-zinc-900 dark:text-zinc-100">{service.title}</h4>
+                        <span className="mt-1 inline-block rounded-full bg-violet-50 px-2 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-900/20 dark:text-violet-400">
+                          {engineeringAreaLabels[service.area]}
+                        </span>
+                        {service.description && (
+                          <p className="mt-1 text-sm text-zinc-500 line-clamp-1">{service.description}</p>
                           )}
                         </div>
                         {service.price_from && (
-                          <p className="ml-4 shrink-0 text-sm font-medium text-gray-900">
+                          <p className="ml-4 shrink-0 text-sm font-semibold text-violet-600 dark:text-violet-400">
                             A partir de{" "}
-                            {Number(service.price_from).toLocaleString("pt-BR", {
-                              style: "currency",
-                              currency: "BRL",
-                            })}
+                            {Number(service.price_from).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
                           </p>
                         )}
                       </div>
                     ))}
                   </div>
                 )}
-              </CardContent>
-            </Card>
+            </div>
 
-            {/* Reviews list */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Avaliações</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {reviews && reviews.length > 0 ? (
-                  <ul className="divide-y divide-gray-100">
-                    {reviews.map((r, i) => {
-                      const author = r.author as unknown as { name: string } | null;
-                      const displayName = (r as { reviewer_name?: string | null }).reviewer_name ?? author?.name ?? "Anônimo";
-                      return (
-                        <li key={i} className="py-4 first:pt-0 last:pb-0">
-                          <div className="flex items-start justify-between gap-4">
-                            <div>
-                              <p className="font-medium text-gray-900">{displayName}</p>
-                              <p className="text-sm text-yellow-500">
-                                {"★".repeat(r.rating)}
-                                {"☆".repeat(5 - r.rating)}
-                                <span className="ml-1 text-gray-400">{r.rating}/5</span>
-                              </p>
-                              {r.comment && (
-                                <p className="mt-1 text-sm text-gray-600">{r.comment}</p>
-                              )}
-                            </div>
-                            <p className="shrink-0 text-xs text-gray-400">
-                              {new Date(r.created_at).toLocaleDateString("pt-BR")}
+            {/* Avaliações */}
+            <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+              <h2 className="mb-4 font-semibold text-zinc-900 dark:text-zinc-100">Avaliações</h2>
+              {reviews && reviews.length > 0 ? (
+                <ul className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                  {reviews.map((r, i) => {
+                    const author = r.author as unknown as { name: string } | null;
+                    const displayName = (r as { reviewer_name?: string | null }).reviewer_name ?? author?.name ?? "Anônimo";
+                    return (
+                      <li key={i} className="py-4 first:pt-0 last:pb-0">
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <p className="font-medium text-zinc-900 dark:text-zinc-100">{displayName}</p>
+                            <p className="text-sm text-yellow-500">
+                              {"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}
+                              <span className="ml-1 text-xs text-zinc-400">{r.rating}/5</span>
                             </p>
+                            {r.comment && <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{r.comment}</p>}
                           </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                ) : (
-                  <div className="flex flex-col items-center gap-2 py-8 text-center">
-                    <MessageSquare size={24} className="text-gray-300" />
-                    <p className="text-sm text-gray-400">Ainda sem avaliações</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                          <p className="shrink-0 text-xs text-zinc-400">{new Date(r.created_at).toLocaleDateString("pt-BR")}</p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <div className="flex flex-col items-center gap-2 py-8 text-center">
+                  <MessageSquare size={24} className="text-zinc-300" />
+                  <p className="text-sm text-zinc-400">Ainda sem avaliações</p>
+                </div>
+              )}
+            </div>
 
-            {/* Review form */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Deixe sua avaliação</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ReviewForm tenantId={tenant.id} />
-              </CardContent>
-            </Card>
+            {/* Formulário de avaliação */}
+            <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+              <h2 className="mb-4 font-semibold text-zinc-900 dark:text-zinc-100">Deixe sua avaliação</h2>
+              <ReviewForm tenantId={tenant.id} />
+            </div>
           </div>
         </div>
       </div>
