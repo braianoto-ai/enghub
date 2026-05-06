@@ -15,6 +15,7 @@ export default async function BuscarPage({
       id,
       name,
       slug,
+      featured,
       professional_profiles (
         bio,
         areas,
@@ -24,6 +25,7 @@ export default async function BuscarPage({
       )
     `)
     .eq("status", "ACTIVE")
+    .order("featured", { ascending: false })
     .order("created_at", { ascending: false });
 
   // Busca média de avaliações para cada tenant
@@ -57,6 +59,7 @@ export default async function BuscarPage({
         id: t.id,
         name: t.name,
         slug: t.slug,
+        featured: t.featured ?? false,
         bio: prof?.bio ?? null,
         areas: (prof?.areas ?? []) as string[],
         city: prof?.city ?? null,

@@ -2,13 +2,14 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, MapPin, Star, Briefcase, Users } from "lucide-react";
+import { Search, MapPin, Star, Briefcase, Users, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 interface Professional {
   id: string;
   name: string;
   slug: string;
+  featured: boolean;
   bio: string | null;
   areas: string[];
   city: string | null;
@@ -120,8 +121,14 @@ function ProfessionalCard({ professional: p }: { professional: Professional }) {
   return (
     <Link
       href={`/${p.slug}`}
-      className="group flex flex-col rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
+      className={`group relative flex flex-col rounded-xl border bg-white p-5 shadow-sm transition-shadow hover:shadow-md ${p.featured ? "border-yellow-300 ring-1 ring-yellow-200" : "border-gray-200"}`}
     >
+      {p.featured && (
+        <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-yellow-50 px-2 py-0.5 text-xs font-medium text-yellow-700">
+          <Sparkles size={10} className="fill-yellow-500 text-yellow-500" />
+          Destaque
+        </div>
+      )}
       <div className="flex items-start gap-3">
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
           {initials}
