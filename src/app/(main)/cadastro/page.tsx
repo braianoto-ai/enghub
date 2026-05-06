@@ -68,6 +68,13 @@ function CadastroForm() {
       return;
     }
 
+    // Dispara e-mail de boas-vindas (fire-and-forget)
+    fetch("/api/notify/welcome", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, slug, hasTrial: true }),
+    }).catch(() => null);
+
     setSuccess(true);
     setLoading(false);
   }

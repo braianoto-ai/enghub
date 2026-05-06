@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { ImageGallery } from "../image-gallery";
 import { engineeringAreaLabels } from "@/lib/utils";
-import { MapPin, FolderOpen } from "lucide-react";
+import { MapPin, FolderOpen, ArrowRight } from "lucide-react";
 
 interface ProjectImage {
   url: string;
@@ -26,7 +27,8 @@ interface ProjetosClientProps {
   slug: string;
 }
 
-export function ProjetosClient({ projects }: ProjetosClientProps) {
+
+export function ProjetosClient({ projects, slug }: ProjetosClientProps) {
   const [selectedArea, setSelectedArea] = useState<string>("all");
 
   const areas = useMemo(() => {
@@ -60,8 +62,8 @@ export function ProjetosClient({ projects }: ProjetosClientProps) {
             onClick={() => setSelectedArea("all")}
             className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
               selectedArea === "all"
-                ? "bg-blue-600 text-white"
-                : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
+                ? "bg-violet-600 text-white"
+                : "border border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
             }`}
           >
             Todos ({projects.length})
@@ -102,29 +104,35 @@ export function ProjetosClient({ projects }: ProjetosClientProps) {
           return (
             <div
               key={project.id}
-              className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
+              className="group overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900"
             >
               {images.length > 0 && (
                 <ImageGallery images={images} title={project.title} />
               )}
               <div className="p-5">
-                <h3 className="font-semibold text-gray-900">{project.title}</h3>
+                <h3 className="font-semibold text-zinc-900 dark:text-zinc-100">{project.title}</h3>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
-                  <Badge variant="info">
+                  <span className="rounded-full bg-violet-50 px-2 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-900/20 dark:text-violet-400">
                     {engineeringAreaLabels[project.area] ?? project.area}
-                  </Badge>
+                  </span>
                   {project.location && (
-                    <span className="flex items-center gap-1 text-xs text-gray-400">
+                    <span className="flex items-center gap-1 text-xs text-zinc-400 dark:text-zinc-500">
                       <MapPin size={11} />
                       {project.location}
                     </span>
                   )}
                 </div>
                 {project.description && (
-                  <p className="mt-3 text-sm leading-relaxed text-gray-500">
+                  <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
                     {project.description}
                   </p>
                 )}
+                <Link
+                  href={`/${slug}/projetos/${project.id}`}
+                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-violet-600 hover:underline dark:text-violet-400"
+                >
+                  Ver detalhes <ArrowRight size={13} />
+                </Link>
               </div>
             </div>
           );

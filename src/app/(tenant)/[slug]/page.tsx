@@ -11,6 +11,7 @@ import { ImageGallery } from "./image-gallery";
 import { ViewTracker } from "./view-tracker";
 import { WhatsAppButton } from "./whatsapp-button";
 import { AvailabilityBadge, type AvailabilityStatus } from "@/components/availability-switcher";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import {
   MapPin,
   Phone,
@@ -168,6 +169,23 @@ export default async function TenantPage({
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
       <ViewTracker tenantId={tenant.id} />
       {prof?.whatsapp && <WhatsAppButton phone={prof.whatsapp} name={tenant.name} />}
+
+      {/* ── TOP NAV ── */}
+      <div className="sticky top-0 z-40 flex h-12 items-center justify-between border-b border-white/10 bg-zinc-950/80 px-4 backdrop-blur-md dark:border-white/5">
+        <Link href="/buscar" className="flex items-center gap-2 text-sm text-zinc-400 transition-colors hover:text-white">
+          <span className="flex h-6 w-6 items-center justify-center rounded bg-violet-600 text-xs font-bold text-white">E</span>
+          <span className="hidden font-semibold text-white sm:block">EngHub</span>
+        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/${slug}/contato`}
+            className="rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-violet-500"
+          >
+            Solicitar orçamento
+          </Link>
+          <ThemeToggle variant="ghost-light" />
+        </div>
+      </div>
 
       {/* ── HERO ── */}
       <div className="relative bg-gradient-to-br from-zinc-950 via-zinc-900 to-violet-950/50 px-4 pb-16 pt-12">
@@ -341,10 +359,14 @@ export default async function TenantPage({
                     ).sort((a, b) => a.position - b.position).map((img) => img.url);
                     const images = galleryImages.length > 0 ? galleryImages : project.image_url ? [project.image_url] : [];
                     return (
-                      <div key={project.id} className="overflow-hidden rounded-xl border border-zinc-100 dark:border-zinc-800">
+                      <Link
+                        key={project.id}
+                        href={`/${slug}/projetos/${project.id}`}
+                        className="group overflow-hidden rounded-xl border border-zinc-100 transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-800"
+                      >
                         {images.length > 0 && <ImageGallery images={images} title={project.title} />}
                         <div className="p-3">
-                          <h4 className="font-medium text-zinc-900 dark:text-zinc-100">{project.title}</h4>
+                          <h4 className="font-medium text-zinc-900 group-hover:text-violet-600 dark:text-zinc-100 dark:group-hover:text-violet-400">{project.title}</h4>
                           {project.location && (
                             <p className="mt-0.5 flex items-center gap-1 text-xs text-zinc-400">
                               <MapPin size={11} />{project.location}
@@ -357,7 +379,7 @@ export default async function TenantPage({
                             <p className="mt-1 line-clamp-2 text-xs text-zinc-500">{project.description}</p>
                           )}
                         </div>
-                      </div>
+                      </Link>
                     );
                   })}
                 </div>

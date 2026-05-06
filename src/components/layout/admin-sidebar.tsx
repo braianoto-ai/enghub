@@ -11,13 +11,16 @@ import {
   Users,
   LogOut,
   Shield,
+  Star,
+  MessageSquare,
 } from "lucide-react";
 
 const navItems = [
   { href: "/admin", label: "Painel", icon: LayoutDashboard },
   { href: "/admin/tenants", label: "Tenants", icon: Building2 },
-  { href: "/admin/planos", label: "Planos", icon: CreditCard },
+  { href: "/admin/avaliacoes", label: "Avaliações", icon: Star },
   { href: "/admin/usuarios", label: "Usuários", icon: Users },
+  { href: "/admin/planos", label: "Planos", icon: CreditCard },
 ];
 
 export function AdminSidebar() {

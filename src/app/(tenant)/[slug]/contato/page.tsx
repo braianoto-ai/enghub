@@ -1,10 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
-import { Avatar } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Phone, MessageCircle, Globe, ExternalLink, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { ContatoForm } from "./contato-form";
+import Image from "next/image";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { ChatClient } from "./chat-client";
+import { getInitials } from "@/lib/utils";
 
 export default async function ContatoPage({
   params,
@@ -25,32 +26,42 @@ export default async function ContatoPage({
 
   const { data: prof } = await supabase
     .from("professional_profiles")
-    .select("phone, whatsapp, website, city, state")
+    .select("phone, whatsapp, website, city, state, avatar_url")
     .eq("tenant_id", tenant.id)
     .maybeSingle();
 
-  const whatsappLink = prof?.whatsapp
-    ? `https://wa.me/55${prof.whatsapp.replace(/\D/g, "")}`
-    : null;
+  const initials = getInitials(tenant.name);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-4 py-10">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+      {/* Top nav */}
+      <div className="sticky top-0 z-40 flex h-12 items-center justify-between border-b border-white/10 bg-zinc-950/80 px-4 backdrop-blur-md">
+        <Link href={`/${slug}`} className="flex items-center gap-2 text-sm text-zinc-400 transition-colors hover:text-white">
+          <span className="flex h-6 w-6 items-center justify-center rounded bg-violet-600 text-xs font-bold text-white">E</span>
+          <span className="hidden font-semibold text-white sm:block">EngHub</span>
+        </Link>
+        <ThemeToggle variant="ghost-light" />
+      </div>
+
+      {/* Hero */}
+      <div className="bg-gradient-to-br from-zinc-950 via-zinc-900 to-violet-950/50 px-4 py-10">
         <div className="mx-auto max-w-2xl">
-          <Link
-            href={`/${slug}`}
-            className="mb-6 flex items-center gap-2 text-sm text-blue-100 hover:text-white"
-          >
-            <ArrowLeft size={16} />
+          <Link href={`/${slug}`} className="mb-5 flex items-center gap-1.5 text-sm text-zinc-400 transition-colors hover:text-white">
+            <ArrowLeft size={15} />
             Voltar ao perfil
           </Link>
           <div className="flex items-center gap-4">
-            <Avatar name={tenant.name} size="lg" className="h-16 w-16 text-xl" />
-            <div className="text-white">
-              <h1 className="text-2xl font-bold">{tenant.name}</h1>
+            <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-violet-700 text-lg font-bold text-white overflow-hidden shadow-lg shadow-violet-900/30">
+              {prof?.avatar_url ? (
+                <Image src={prof.avatar_url} alt={tenant.name} fill className="object-cover" />
+              ) : (
+                initials
+              )}
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-white">{tenant.name}</h1>
               {(prof?.city || prof?.state) && (
-                <p className="mt-1 text-sm text-blue-100">
+                <p className="mt-0.5 text-sm text-zinc-400">
                   {[prof.city, prof.state].filter(Boolean).join(", ")}
                 </p>
               )}
@@ -59,70 +70,17 @@ export default async function ContatoPage({
         </div>
       </div>
 
-      <div className="mx-auto max-w-2xl px-4 py-8 space-y-6">
-        {/* Canais de contato direto */}
-        {(prof?.phone || prof?.whatsapp || prof?.website) && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Contato direto</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {prof?.whatsapp && (
-                <a
-                  href={whatsappLink!}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-700 hover:bg-green-100 transition-colors"
-                >
-                  <MessageCircle size={20} />
-                  <div>
-                    <p className="font-medium">WhatsApp</p>
-                    <p className="text-sm">{prof.whatsapp}</p>
-                  </div>
-                </a>
-              )}
-              {prof?.phone && (
-                <a
-                  href={`tel:${prof.phone}`}
-                  className="flex items-center gap-3 rounded-lg border px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  <Phone size={20} />
-                  <div>
-                    <p className="font-medium">Telefone</p>
-                    <p className="text-sm">{prof.phone}</p>
-                  </div>
-                </a>
-              )}
-              {prof?.website && (
-                <a
-                  href={prof.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 rounded-lg border px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  <Globe size={20} />
-                  <div className="flex items-center gap-2">
-                    <div>
-                      <p className="font-medium">Website</p>
-                      <p className="text-sm">{prof.website}</p>
-                    </div>
-                    <ExternalLink size={14} className="ml-auto text-gray-400" />
-                  </div>
-                </a>
-              )}
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Formulário de mensagem */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Enviar mensagem</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ContatoForm tenantId={tenant.id} tenantName={tenant.name} />
-          </CardContent>
-        </Card>
+      {/* Chat */}
+      <div className="mx-auto max-w-2xl px-4 py-6">
+        <ChatClient
+          tenantId={tenant.id}
+          tenantName={tenant.name}
+          tenantSlug={slug}
+          avatarUrl={prof?.avatar_url ?? null}
+          phone={prof?.phone ?? null}
+          whatsapp={prof?.whatsapp ?? null}
+          website={prof?.website ?? null}
+        />
       </div>
     </div>
   );

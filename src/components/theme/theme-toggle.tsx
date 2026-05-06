@@ -5,7 +5,12 @@ import { Sun, Moon, Monitor } from "lucide-react";
 
 type Theme = "light" | "dark" | "system";
 
-export function ThemeToggle() {
+interface ThemeToggleProps {
+  /** "default" = cinza adaptável ao tema; "ghost-light" = ícone branco/translúcido (para navs escuros) */
+  variant?: "default" | "ghost-light";
+}
+
+export function ThemeToggle({ variant = "default" }: ThemeToggleProps) {
   const [theme, setTheme] = useState<Theme>("system");
 
   useEffect(() => {
@@ -28,12 +33,13 @@ export function ThemeToggle() {
   const next: Record<Theme, Theme> = { light: "dark", dark: "system", system: "light" };
   const labels: Record<Theme, string> = { light: "Claro", dark: "Escuro", system: "Sistema" };
 
+  const cls =
+    variant === "ghost-light"
+      ? "flex items-center justify-center rounded-lg p-2 text-zinc-400 transition-colors hover:bg-white/10 hover:text-white"
+      : "flex items-center justify-center rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800";
+
   return (
-    <button
-      onClick={() => apply(next[theme])}
-      title={`Tema: ${labels[theme]}`}
-      className="flex items-center justify-center rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-    >
+    <button onClick={() => apply(next[theme])} title={`Tema: ${labels[theme]}`} className={cls}>
       {theme === "dark" ? (
         <Moon size={18} />
       ) : theme === "light" ? (
