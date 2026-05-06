@@ -16,14 +16,14 @@ import {
   Cpu,
 } from "lucide-react";
 
-const AREA_CONFIG: Record<string, { label: string; icon: React.ElementType; gradient: string }> = {
-  CIVIL:      { label: "Eng. Civil",      icon: Building2,    gradient: "from-blue-500 to-blue-700" },
-  MECANICA:   { label: "Eng. Mecânica",   icon: HardHat,      gradient: "from-orange-500 to-orange-700" },
-  ELETRICA:   { label: "Eng. Elétrica",   icon: Zap,          gradient: "from-yellow-500 to-yellow-700" },
-  ARQUITETURA:{ label: "Arquitetura",     icon: Building2,    gradient: "from-purple-500 to-purple-700" },
-  AMBIENTAL:  { label: "Eng. Ambiental",  icon: Leaf,         gradient: "from-green-500 to-green-700" },
-  QUIMICA:    { label: "Eng. Química",    icon: FlaskConical, gradient: "from-pink-500 to-pink-700" },
-  PRODUCAO:   { label: "Eng. de Produção",icon: Cpu,          gradient: "from-indigo-500 to-indigo-700" },
+const AREA_CONFIG: Record<string, { label: string; icon: React.ElementType; border: string; iconColor: string }> = {
+  CIVIL:      { label: "Eng. Civil",       icon: Building2,    border: "from-blue-500 via-blue-400 to-cyan-400",     iconColor: "text-blue-500 dark:text-blue-400" },
+  MECANICA:   { label: "Eng. Mecânica",    icon: HardHat,      border: "from-orange-500 via-orange-400 to-amber-300", iconColor: "text-orange-500 dark:text-orange-400" },
+  ELETRICA:   { label: "Eng. Elétrica",    icon: Zap,          border: "from-yellow-400 via-amber-400 to-orange-400", iconColor: "text-yellow-500 dark:text-yellow-400" },
+  ARQUITETURA:{ label: "Arquitetura",      icon: Building2,    border: "from-purple-500 via-violet-400 to-fuchsia-400",iconColor: "text-purple-500 dark:text-purple-400" },
+  AMBIENTAL:  { label: "Eng. Ambiental",   icon: Leaf,         border: "from-green-500 via-emerald-400 to-teal-400",  iconColor: "text-green-500 dark:text-green-400" },
+  QUIMICA:    { label: "Eng. Química",     icon: FlaskConical, border: "from-pink-500 via-rose-400 to-red-400",       iconColor: "text-pink-500 dark:text-pink-400" },
+  PRODUCAO:   { label: "Eng. de Produção", icon: Cpu,          border: "from-indigo-500 via-blue-400 to-violet-400",  iconColor: "text-indigo-500 dark:text-indigo-400" },
 };
 
 export default async function HomePage() {
@@ -151,16 +151,24 @@ export default async function HomePage() {
               <Link
                 key={area.key}
                 href={`/buscar?area=${area.key}`}
-                className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:border-slate-700 dark:bg-slate-900"
+                className="group relative"
               >
-                <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${area.gradient} text-white shadow-lg`}>
-                  <area.icon size={22} />
+                {/* gradient border wrapper */}
+                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${area.border} opacity-0 transition-opacity duration-300 group-hover:opacity-100`} />
+                <div className="absolute inset-[1px] rounded-2xl bg-white dark:bg-slate-900" />
+
+                {/* card content */}
+                <div className="relative rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 group-hover:border-transparent group-hover:-translate-y-1 group-hover:shadow-lg dark:border-slate-700/60 dark:bg-slate-900">
+                  <area.icon
+                    size={32}
+                    strokeWidth={1.5}
+                    className={`mb-4 ${area.iconColor} transition-transform duration-300 group-hover:scale-110`}
+                  />
+                  <h3 className="font-semibold text-gray-900 dark:text-slate-100">{area.label}</h3>
+                  <p className="mt-1 text-sm text-gray-400 dark:text-slate-500">
+                    {area.count} profissional{area.count !== 1 ? "is" : ""}
+                  </p>
                 </div>
-                <h3 className="font-semibold text-gray-900 dark:text-slate-100">{area.label}</h3>
-                <p className="mt-1 text-sm text-gray-400 dark:text-slate-500">
-                  {area.count} profissional{area.count !== 1 ? "is" : ""}
-                </p>
-                <ArrowRight size={14} className="absolute right-4 top-4 text-gray-300 opacity-0 transition-opacity group-hover:opacity-100 dark:text-slate-600" />
               </Link>
             ))}
           </div>
