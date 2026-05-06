@@ -6,6 +6,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { StarRating } from "@/components/ui/star-rating";
 import { Button } from "@/components/ui/button";
 import { ReviewForm } from "./review-form";
+import { ImageGallery } from "./image-gallery";
 import {
   MapPin,
   Phone,
@@ -50,7 +51,7 @@ export default async function TenantPage({
       .maybeSingle(),
     supabase
       .from("projects")
-      .select("id, title, area, location, description, image_url")
+      .select("id, title, area, location, description, image_url, project_images(url, position)")
       .eq("tenant_id", tenant.id)
       .eq("status", "PUBLISHED")
       .order("created_at", { ascending: false })
@@ -224,41 +225,49 @@ export default async function TenantPage({
                     Nenhum projeto publicado ainda
                   </p>
                 ) : (
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    {projects.map((project) => (
-                      <div
-                        key={project.id}
-                        className="overflow-hidden rounded-lg border hover:shadow-sm transition-shadow"
-                      >
-                        {project.image_url && (
-                          <div className="relative h-36 w-full">
-                            <Image
-                              src={project.image_url}
-                              alt={project.title}
-                              fill
-                              className="object-cover"
-                            />
+                  <div className="space-y-6">
+                    {projects.map((project) => {
+                      const galleryImages = (
+                        (project.project_images as { url: string; position: number }[] | null) ?? []
+                      )
+                        .sort((a, b) => a.position - b.position)
+                        .map((img) => img.url);
+
+                      const images =
+                        galleryImages.length > 0
+                          ? galleryImages
+                          : project.image_url
+                          ? [project.image_url]
+                          : [];
+
+                      return (
+                        <div
+                          key={project.id}
+                          className="overflow-hidden rounded-xl border hover:shadow-sm transition-shadow"
+                        >
+                          {images.length > 0 && (
+                            <ImageGallery images={images} title={project.title} />
+                          )}
+                          <div className="p-4">
+                            <h4 className="font-medium text-gray-900">{project.title}</h4>
+                            {project.location && (
+                              <p className="mt-1 flex items-center gap-1 text-xs text-gray-400">
+                                <MapPin size={12} />
+                                {project.location}
+                              </p>
+                            )}
+                            <Badge variant="info" className="mt-2">
+                              {engineeringAreaLabels[project.area]}
+                            </Badge>
+                            {project.description && (
+                              <p className="mt-2 line-clamp-2 text-sm text-gray-500">
+                                {project.description}
+                              </p>
+                            )}
                           </div>
-                        )}
-                        <div className="p-4">
-                          <h4 className="font-medium text-gray-900">{project.title}</h4>
-                          {project.location && (
-                            <p className="mt-1 flex items-center gap-1 text-xs text-gray-400">
-                              <MapPin size={12} />
-                              {project.location}
-                            </p>
-                          )}
-                          <Badge variant="info" className="mt-2">
-                            {engineeringAreaLabels[project.area]}
-                          </Badge>
-                          {project.description && (
-                            <p className="mt-2 line-clamp-2 text-sm text-gray-500">
-                              {project.description}
-                            </p>
-                          )}
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </CardContent>

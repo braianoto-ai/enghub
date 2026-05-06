@@ -11,25 +11,36 @@ import Link from "next/link";
 import { ArrowLeft, ImagePlus, X } from "lucide-react";
 import Image from "next/image";
 
+const MAX_IMAGES = 8;
+
+interface PreviewFile {
+  file: File;
+  preview: string;
+}
+
 export default function NovoProjeto() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [preview, setPreview] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [images, setImages] = useState<PreviewFile[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setImageFile(file);
-    setPreview(URL.createObjectURL(file));
+  function handleImagesChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    const remaining = MAX_IMAGES - images.length;
+    const toAdd = files.slice(0, remaining).map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+    setImages((prev) => [...prev, ...toAdd]);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
-  function clearImage() {
-    setImageFile(null);
-    setPreview(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
+  function removeImage(index: number) {
+    setImages((prev) => {
+      URL.revokeObjectURL(prev[index].preview);
+      return prev.filter((_, i) => i !== index);
+    });
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -39,8 +50,13 @@ export default function NovoProjeto() {
     setError("");
 
     const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { router.push("/login"); return; }
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      router.push("/login");
+      return;
+    }
 
     const { data: tenant } = await supabase
       .from("tenants")
@@ -48,18 +64,24 @@ export default function NovoProjeto() {
       .eq("owner_id", user.id)
       .maybeSingle();
 
-    if (!tenant) { setError("Tenant não encontrado."); setLoading(false); return; }
+    if (!tenant) {
+      setError("Tenant não encontrado.");
+      setLoading(false);
+      return;
+    }
 
-    let imageUrl: string | null = null;
-    if (imageFile) {
-      const ext = imageFile.name.split(".").pop();
-      const path = `${user.id}/${Date.now()}.${ext}`;
+    // Upload all images in order
+    const uploadedUrls: string[] = [];
+    for (let i = 0; i < images.length; i++) {
+      const { file } = images[i];
+      const ext = file.name.split(".").pop();
+      const path = `${user.id}/${Date.now()}-${i}.${ext}`;
       const { error: uploadErr } = await supabase.storage
         .from("project-images")
-        .upload(path, imageFile, { upsert: true });
+        .upload(path, file, { upsert: true });
 
       if (uploadErr) {
-        setError("Erro ao fazer upload da imagem: " + uploadErr.message);
+        setError("Erro ao fazer upload da imagem " + (i + 1) + ": " + uploadErr.message);
         setLoading(false);
         return;
       }
@@ -67,28 +89,45 @@ export default function NovoProjeto() {
       const { data: urlData } = supabase.storage
         .from("project-images")
         .getPublicUrl(path);
-      imageUrl = urlData.publicUrl;
+      uploadedUrls.push(urlData.publicUrl);
     }
 
     const formData = new FormData(form);
-    const { error: err } = await supabase.from("projects").insert({
-      tenant_id: tenant.id,
-      title: formData.get("title"),
-      description: formData.get("description"),
-      area: formData.get("area"),
-      location: formData.get("location"),
-      client: formData.get("client"),
-      status: formData.get("publish") === "on" ? "PUBLISHED" : "DRAFT",
-      image_url: imageUrl,
-    });
+    const { data: project, error: projectErr } = await supabase
+      .from("projects")
+      .insert({
+        tenant_id: tenant.id,
+        title: formData.get("title"),
+        description: formData.get("description"),
+        area: formData.get("area"),
+        location: formData.get("location"),
+        client: formData.get("client"),
+        status: formData.get("publish") === "on" ? "PUBLISHED" : "DRAFT",
+        image_url: uploadedUrls[0] ?? null,
+      })
+      .select("id")
+      .single();
 
-    if (err) {
-      setError("Erro ao criar projeto: " + err.message);
-    } else {
-      router.push("/dashboard/projetos");
-      router.refresh();
+    if (projectErr) {
+      setError("Erro ao criar projeto: " + projectErr.message);
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+
+    // Insert all images into project_images
+    if (uploadedUrls.length > 0) {
+      await supabase.from("project_images").insert(
+        uploadedUrls.map((url, position) => ({
+          project_id: project.id,
+          tenant_id: tenant.id,
+          url,
+          position,
+        }))
+      );
+    }
+
+    router.push("/dashboard/projetos");
+    router.refresh();
   }
 
   return (
@@ -102,66 +141,113 @@ export default function NovoProjeto() {
         <h1 className="text-2xl font-bold text-gray-900">Novo Projeto</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-8 space-y-6 max-w-2xl">
+      <form onSubmit={handleSubmit} className="mt-8 max-w-2xl space-y-6">
         {error && (
-          <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</div>
+          <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+            {error}
+          </div>
         )}
+
         <Card>
-          <CardHeader><CardTitle>Imagem de Capa</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle>
+              Imagens{" "}
+              <span className="text-sm font-normal text-gray-400">
+                ({images.length}/{MAX_IMAGES})
+              </span>
+            </CardTitle>
+          </CardHeader>
           <CardContent>
-            {preview ? (
-              <div className="relative">
-                <Image
-                  src={preview}
-                  alt="Preview"
-                  width={640}
-                  height={256}
-                  className="h-48 w-full rounded-lg object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={clearImage}
-                  className="absolute right-2 top-2 rounded-full bg-black/50 p-1 text-white hover:bg-black/70"
-                >
-                  <X size={16} />
-                </button>
+            {/* Previews grid */}
+            {images.length > 0 && (
+              <div className="mb-3 grid grid-cols-4 gap-2">
+                {images.map((img, i) => (
+                  <div key={i} className="relative aspect-square">
+                    <Image
+                      src={img.preview}
+                      alt={`Imagem ${i + 1}`}
+                      fill
+                      className="rounded-lg object-cover"
+                    />
+                    {i === 0 && (
+                      <span className="absolute left-1 top-1 rounded bg-blue-600 px-1 py-0.5 text-[10px] font-semibold text-white">
+                        Capa
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => removeImage(i)}
+                      className="absolute right-1 top-1 rounded-full bg-black/60 p-0.5 text-white hover:bg-black/80"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                ))}
               </div>
-            ) : (
+            )}
+
+            {images.length < MAX_IMAGES && (
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="flex h-48 w-full flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 text-gray-400 hover:border-blue-400 hover:text-blue-500 transition-colors"
+                className="flex h-24 w-full flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-gray-300 text-gray-400 transition-colors hover:border-blue-400 hover:text-blue-500"
               >
-                <ImagePlus size={32} />
-                <span className="text-sm">Clique para adicionar uma imagem</span>
-                <span className="text-xs">PNG, JPG, WEBP até 5MB</span>
+                <ImagePlus size={24} />
+                <span className="text-sm">
+                  {images.length === 0
+                    ? "Adicionar imagens (máx. 8)"
+                    : `Adicionar mais (${MAX_IMAGES - images.length} restantes)`}
+                </span>
               </button>
             )}
+
             <input
               ref={fileInputRef}
               type="file"
               accept="image/png,image/jpeg,image/webp"
+              multiple
               className="hidden"
-              onChange={handleImageChange}
+              onChange={handleImagesChange}
             />
+            <p className="mt-2 text-xs text-gray-400">
+              A primeira imagem será a capa do projeto. PNG, JPG ou WEBP.
+            </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader><CardTitle>Informações do Projeto</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle>Informações do Projeto</CardTitle>
+          </CardHeader>
           <CardContent className="space-y-4">
-            <Input id="title" name="title" label="Título" placeholder="Ex: Projeto Residencial Alphaville" required />
+            <Input
+              id="title"
+              name="title"
+              label="Título"
+              placeholder="Ex: Projeto Residencial Alphaville"
+              required
+            />
             <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-700">Área</label>
-              <select name="area" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" required>
+              <label className="block text-sm font-medium text-gray-700">
+                Área
+              </label>
+              <select
+                name="area"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                required
+              >
                 <option value="">Selecione a área</option>
                 {Object.entries(engineeringAreaLabels).map(([key, label]) => (
-                  <option key={key} value={key}>{label}</option>
+                  <option key={key} value={key}>
+                    {label}
+                  </option>
                 ))}
               </select>
             </div>
             <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-700">Descrição</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Descrição
+              </label>
               <textarea
                 name="description"
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -169,19 +255,32 @@ export default function NovoProjeto() {
                 placeholder="Descreva o projeto..."
               />
             </div>
-            <Input id="location" name="location" label="Localização" placeholder="São Paulo, SP" />
-            <Input id="client" name="client" label="Cliente" placeholder="Nome do cliente (opcional)" />
-            <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+            <Input
+              id="location"
+              name="location"
+              label="Localização"
+              placeholder="São Paulo, SP"
+            />
+            <Input
+              id="client"
+              name="client"
+              label="Cliente"
+              placeholder="Nome do cliente (opcional)"
+            />
+            <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-700">
               <input type="checkbox" name="publish" className="rounded" />
               Publicar imediatamente
             </label>
           </CardContent>
         </Card>
+
         <div className="flex justify-end gap-3">
           <Link href="/dashboard/projetos">
             <Button variant="outline">Cancelar</Button>
           </Link>
-          <Button disabled={loading}>{loading ? "Salvando..." : "Salvar Projeto"}</Button>
+          <Button disabled={loading}>
+            {loading ? "Salvando..." : "Salvar Projeto"}
+          </Button>
         </div>
       </form>
     </div>
