@@ -1,160 +1,393 @@
+import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { HeroSearch } from "./hero-search";
 import {
-  Search,
+  ArrowRight,
   Shield,
   Star,
   Users,
+  CheckCircle,
   Building2,
   Zap,
-  ArrowRight,
+  Leaf,
+  FlaskConical,
+  HardHat,
+  Cpu,
 } from "lucide-react";
 
-const areas = [
-  { name: "Engenharia Civil", icon: Building2, count: 0 },
-  { name: "Engenharia Mecânica", icon: Zap, count: 0 },
-  { name: "Engenharia Elétrica", icon: Zap, count: 0 },
-  { name: "Arquitetura", icon: Building2, count: 0 },
-  { name: "Engenharia Ambiental", icon: Shield, count: 0 },
-  { name: "Engenharia Química", icon: Zap, count: 0 },
-];
+const AREA_CONFIG: Record<string, { label: string; icon: React.ElementType; gradient: string }> = {
+  CIVIL:      { label: "Eng. Civil",      icon: Building2,    gradient: "from-blue-500 to-blue-700" },
+  MECANICA:   { label: "Eng. Mecânica",   icon: HardHat,      gradient: "from-orange-500 to-orange-700" },
+  ELETRICA:   { label: "Eng. Elétrica",   icon: Zap,          gradient: "from-yellow-500 to-yellow-700" },
+  ARQUITETURA:{ label: "Arquitetura",     icon: Building2,    gradient: "from-purple-500 to-purple-700" },
+  AMBIENTAL:  { label: "Eng. Ambiental",  icon: Leaf,         gradient: "from-green-500 to-green-700" },
+  QUIMICA:    { label: "Eng. Química",    icon: FlaskConical, gradient: "from-pink-500 to-pink-700" },
+  PRODUCAO:   { label: "Eng. de Produção",icon: Cpu,          gradient: "from-indigo-500 to-indigo-700" },
+};
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await createClient();
+
+  const [
+    { count: totalProfessionals },
+    { count: totalReviews },
+    { count: totalProjects },
+    { data: topProfessionals },
+    { data: areaCounts },
+  ] = await Promise.all([
+    supabase.from("tenants").select("id", { count: "exact", head: true }).eq("status", "ACTIVE"),
+    supabase.from("reviews").select("id", { count: "exact", head: true }),
+    supabase.from("projects").select("id", { count: "exact", head: true }).eq("status", "PUBLISHED"),
+    supabase
+      .from("tenants")
+      .select("id, name, slug, professional_profiles(areas, city, state, bio), reviews(rating)")
+      .eq("status", "ACTIVE")
+      .limit(20),
+    supabase
+      .from("professional_profiles")
+      .select("areas"),
+  ]);
+
+  // Compute top 3 by avg rating
+  const professionalsWithRating = (topProfessionals ?? [])
+    .map((t) => {
+      const reviews = (t.reviews as { rating: number }[]) ?? [];
+      const avg = reviews.length > 0
+        ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
+        : 0;
+      const prof = Array.isArray(t.professional_profiles)
+        ? t.professional_profiles[0]
+        : t.professional_profiles;
+      return { ...t, prof, avg, reviewCount: reviews.length };
+    })
+    .filter((t) => t.prof)
+    .sort((a, b) => b.avg - a.avg || b.reviewCount - a.reviewCount)
+    .slice(0, 3);
+
+  // Count professionals per area
+  const areaCountMap: Record<string, number> = {};
+  (areaCounts ?? []).forEach((p) => {
+    const areas = (p.areas as string[]) ?? [];
+    areas.forEach((a) => { areaCountMap[a] = (areaCountMap[a] ?? 0) + 1; });
+  });
+
+  const displayAreas = Object.keys(AREA_CONFIG).map((key) => ({
+    key,
+    ...AREA_CONFIG[key],
+    count: areaCountMap[key] ?? 0,
+  }));
+
   return (
-    <>
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 px-4 py-24 text-white">
-        <div className="mx-auto max-w-7xl text-center">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-            Encontre os melhores
-            <br />
-            <span className="text-blue-200">engenheiros do Brasil</span>
+    <div className="overflow-x-hidden">
+      {/* ── HERO ─────────────────────────────────────────── */}
+      <section className="relative bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950 px-4 pb-32 pt-20 text-white">
+        {/* Background blobs */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute -left-40 -top-40 h-96 w-96 rounded-full bg-blue-600/20 blur-3xl" />
+          <div className="absolute -right-40 top-20 h-96 w-96 rounded-full bg-indigo-600/20 blur-3xl" />
+          <div className="absolute bottom-0 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-blue-500/10 blur-3xl" />
+        </div>
+
+        <div className="relative mx-auto max-w-4xl text-center">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-1.5 text-sm text-blue-300 backdrop-blur-sm">
+            <span className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
+            {totalProfessionals ?? 0} profissionais ativos na plataforma
+          </div>
+
+          <h1 className="mt-4 text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
+            Encontre o engenheiro
+            <span className="block bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">
+              certo para sua obra
+            </span>
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-blue-100">
-            A plataforma que conecta profissionais de engenharia a clientes.
-            Portfólios verificados, avaliações reais e a facilidade que você
-            precisa.
+
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
+            Portfólios verificados, avaliações reais e contato direto com profissionais de engenharia de todo o Brasil.
           </p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link href="/buscar">
-              <Button
-                size="lg"
-                className="bg-white text-blue-700 hover:bg-blue-50"
-              >
-                <Search size={20} className="mr-2" />
-                Buscar Profissionais
-              </Button>
-            </Link>
-            <Link href="/cadastro">
-              <Button
-                size="lg"
-                variant="outline"
-                className="!border-white !bg-transparent !text-white hover:!bg-white/10"
-              >
-                Sou Engenheiro
-                <ArrowRight size={20} className="ml-2" />
-              </Button>
-            </Link>
+
+          <div className="mt-10">
+            <HeroSearch />
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-slate-400">
+            <span className="flex items-center gap-1.5"><CheckCircle size={14} className="text-green-400" />Grátis para clientes</span>
+            <span className="flex items-center gap-1.5"><CheckCircle size={14} className="text-green-400" />Sem intermediários</span>
+            <span className="flex items-center gap-1.5"><CheckCircle size={14} className="text-green-400" />CREA/CAU verificados</span>
+          </div>
+        </div>
+
+        {/* Stats bar */}
+        <div className="relative mx-auto mt-20 max-w-3xl">
+          <div className="grid grid-cols-3 divide-x divide-white/10 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md">
+            {[
+              { value: totalProfessionals ?? 0, label: "Profissionais" },
+              { value: totalReviews ?? 0, label: "Avaliações" },
+              { value: totalProjects ?? 0, label: "Projetos" },
+            ].map((stat) => (
+              <div key={stat.label} className="px-6 py-5 text-center">
+                <p className="text-3xl font-bold text-white">{stat.value.toLocaleString("pt-BR")}</p>
+                <p className="mt-1 text-sm text-slate-400">{stat.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Areas */}
-      <section className="px-4 py-20">
-        <div className="mx-auto max-w-7xl">
-          <h2 className="text-center text-3xl font-bold text-gray-900">
-            Áreas de Engenharia
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-center text-gray-500">
-            Encontre profissionais especializados na área que você precisa
-          </p>
-          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {areas.map((area) => (
-              <Link href="/buscar" key={area.name}>
-                <Card className="group cursor-pointer transition-shadow hover:shadow-md">
-                  <CardContent className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white">
-                      <area.icon size={24} />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">
-                        {area.name}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        {area.count} profissionais
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
+      {/* ── AREAS ────────────────────────────────────────── */}
+      <section className="px-4 py-24 dark:bg-slate-950">
+        <div className="mx-auto max-w-6xl">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-slate-100 sm:text-4xl">
+              Áreas de atuação
+            </h2>
+            <p className="mt-3 text-gray-500 dark:text-slate-400">
+              Encontre o especialista certo para cada tipo de projeto
+            </p>
+          </div>
+
+          <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {displayAreas.map((area) => (
+              <Link
+                key={area.key}
+                href={`/buscar?area=${area.key}`}
+                className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:border-slate-700 dark:bg-slate-900"
+              >
+                <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${area.gradient} text-white shadow-lg`}>
+                  <area.icon size={22} />
+                </div>
+                <h3 className="font-semibold text-gray-900 dark:text-slate-100">{area.label}</h3>
+                <p className="mt-1 text-sm text-gray-400 dark:text-slate-500">
+                  {area.count} profissional{area.count !== 1 ? "is" : ""}
+                </p>
+                <ArrowRight size={14} className="absolute right-4 top-4 text-gray-300 opacity-0 transition-opacity group-hover:opacity-100 dark:text-slate-600" />
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="bg-gray-50 px-4 py-20">
-        <div className="mx-auto max-w-7xl">
-          <h2 className="text-center text-3xl font-bold text-gray-900">
-            Por que usar o EngHub?
-          </h2>
-          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
-            <div className="text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-blue-100">
-                <Shield size={28} className="text-blue-600" />
+      {/* ── TOP PROFESSIONALS ────────────────────────────── */}
+      {professionalsWithRating.length > 0 && (
+        <section className="bg-gray-50 px-4 py-24 dark:bg-slate-900">
+          <div className="mx-auto max-w-6xl">
+            <div className="flex items-end justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-slate-100 sm:text-4xl">
+                  Profissionais em destaque
+                </h2>
+                <p className="mt-2 text-gray-500 dark:text-slate-400">
+                  Os melhor avaliados da plataforma
+                </p>
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-gray-900">
-                Profissionais Verificados
-              </h3>
-              <p className="mt-2 text-gray-500">
-                Todos os profissionais com CREA/CAU verificados para sua
-                segurança
-              </p>
+              <Link href="/buscar" className="hidden text-sm font-medium text-blue-600 hover:underline dark:text-blue-400 sm:block">
+                Ver todos →
+              </Link>
             </div>
-            <div className="text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-blue-100">
-                <Star size={28} className="text-blue-600" />
-              </div>
-              <h3 className="mt-4 text-lg font-semibold text-gray-900">
-                Avaliações Reais
-              </h3>
-              <p className="mt-2 text-gray-500">
-                Veja avaliações de clientes reais antes de contratar
-              </p>
+
+            <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {professionalsWithRating.map((p) => {
+                const initials = p.name.split(" ").slice(0, 2).map((w: string) => w[0]).join("").toUpperCase();
+                const areas = (p.prof?.areas as string[]) ?? [];
+                return (
+                  <Link
+                    key={p.id}
+                    href={`/${p.slug}`}
+                    className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-lg font-bold text-white shadow">
+                        {initials}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="truncate font-semibold text-gray-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400">
+                          {p.name}
+                        </p>
+                        {(p.prof?.city || p.prof?.state) && (
+                          <p className="truncate text-xs text-gray-400 dark:text-slate-500">
+                            {[p.prof.city, p.prof.state].filter(Boolean).join(", ")}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {p.prof?.bio && (
+                      <p className="mt-3 line-clamp-2 text-sm text-gray-500 dark:text-slate-400">{p.prof.bio}</p>
+                    )}
+
+                    {areas.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-1">
+                        {areas.slice(0, 2).map((a: string) => (
+                          <span key={a} className="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                            {AREA_CONFIG[a]?.label ?? a}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-3 dark:border-slate-700">
+                      <div className="flex items-center gap-1">
+                        <Star size={14} className="fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm font-medium text-gray-700 dark:text-slate-300">
+                          {p.avg > 0 ? p.avg.toFixed(1) : "—"}
+                        </span>
+                        {p.reviewCount > 0 && (
+                          <span className="text-xs text-gray-400 dark:text-slate-500">({p.reviewCount})</span>
+                        )}
+                      </div>
+                      <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
+                        Ver perfil →
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
-            <div className="text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-blue-100">
-                <Users size={28} className="text-blue-600" />
+          </div>
+        </section>
+      )}
+
+      {/* ── HOW IT WORKS ─────────────────────────────────── */}
+      <section className="px-4 py-24 dark:bg-slate-950">
+        <div className="mx-auto max-w-6xl">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-slate-100 sm:text-4xl">
+              Como funciona
+            </h2>
+            <p className="mt-3 text-gray-500 dark:text-slate-400">Em 3 passos simples</p>
+          </div>
+
+          <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2">
+            {/* For clients */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-slate-700 dark:bg-slate-900">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                <Users size={14} />
+                Para clientes
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-gray-900">
-                Comunidade
-              </h3>
-              <p className="mt-2 text-gray-500">
-                Conecte-se com outros profissionais e expanda sua rede
-              </p>
+              <div className="space-y-6">
+                {[
+                  { step: "1", title: "Busque por área", desc: "Filtre por especialidade, cidade ou nome" },
+                  { step: "2", title: "Veja o portfólio", desc: "Projetos, avaliações e contato direto" },
+                  { step: "3", title: "Entre em contato", desc: "Mensagem, WhatsApp ou solicitação de orçamento" },
+                ].map((item) => (
+                  <div key={item.step} className="flex gap-4">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                      {item.step}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-slate-100">{item.title}</p>
+                      <p className="mt-0.5 text-sm text-gray-500 dark:text-slate-400">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Link href="/buscar" className="mt-8 block">
+                <Button className="w-full">
+                  Buscar profissionais
+                  <ArrowRight size={16} className="ml-2" />
+                </Button>
+              </Link>
+            </div>
+
+            {/* For engineers */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-slate-700 dark:bg-slate-900">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
+                <HardHat size={14} />
+                Para engenheiros
+              </div>
+              <div className="space-y-6">
+                {[
+                  { step: "1", title: "Crie seu perfil", desc: "Cadastro gratuito em menos de 5 minutos" },
+                  { step: "2", title: "Mostre seus projetos", desc: "Portfólio com fotos, descrições e áreas" },
+                  { step: "3", title: "Receba clientes", desc: "Mensagens e orçamentos direto no dashboard" },
+                ].map((item) => (
+                  <div key={item.step} className="flex gap-4">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-sm font-bold text-white">
+                      {item.step}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-slate-100">{item.title}</p>
+                      <p className="mt-0.5 text-sm text-gray-500 dark:text-slate-400">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Link href="/cadastro" className="mt-8 block">
+                <Button variant="secondary" className="w-full">
+                  Criar meu perfil grátis
+                  <ArrowRight size={16} className="ml-2" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="px-4 py-20">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold text-gray-900">
-            Pronto para começar?
+      {/* ── WHY ENGHUB ───────────────────────────────────── */}
+      <section className="bg-gray-50 px-4 py-24 dark:bg-slate-900">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-slate-100 sm:text-4xl">
+            Por que o EngHub?
           </h2>
-          <p className="mt-4 text-lg text-gray-500">
-            Crie seu perfil gratuito e comece a receber clientes hoje mesmo.
-          </p>
-          <Link href="/cadastro">
-            <Button size="lg" className="mt-8">
-              Criar meu perfil grátis
-              <ArrowRight size={20} className="ml-2" />
-            </Button>
-          </Link>
+          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {[
+              {
+                icon: Shield,
+                color: "bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400",
+                title: "CREA/CAU Verificados",
+                desc: "Apenas profissionais com registro ativo nos conselhos regionais",
+              },
+              {
+                icon: Star,
+                color: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/40 dark:text-yellow-400",
+                title: "Avaliações reais",
+                desc: "Reviews de clientes verificados, sem moderação tendenciosa",
+              },
+              {
+                icon: Users,
+                color: "bg-green-100 text-green-600 dark:bg-green-900/40 dark:text-green-400",
+                title: "Comunidade ativa",
+                desc: "Rede crescente de engenheiros de todo o Brasil",
+              },
+            ].map((f) => (
+              <div key={f.title} className="rounded-2xl border border-gray-200 bg-white p-6 text-center dark:border-slate-700 dark:bg-slate-800">
+                <div className={`mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full ${f.color}`}>
+                  <f.icon size={26} />
+                </div>
+                <h3 className="font-semibold text-gray-900 dark:text-slate-100">{f.title}</h3>
+                <p className="mt-2 text-sm text-gray-500 dark:text-slate-400">{f.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
-    </>
+
+      {/* ── CTA ──────────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700 px-4 py-24 text-white">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/5 blur-3xl" />
+          <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-white/5 blur-3xl" />
+        </div>
+        <div className="relative mx-auto max-w-2xl text-center">
+          <h2 className="text-4xl font-bold">Pronto para começar?</h2>
+          <p className="mt-4 text-lg text-blue-100">
+            Cadastro gratuito. Sem cartão de crédito. Comece em 5 minutos.
+          </p>
+          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <Link href="/cadastro">
+              <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
+                Criar perfil grátis
+                <ArrowRight size={18} className="ml-2" />
+              </Button>
+            </Link>
+            <Link href="/buscar">
+              <Button size="lg" variant="ghost" className="!text-white hover:!bg-white/10">
+                Buscar engenheiros
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

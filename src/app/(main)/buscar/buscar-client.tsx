@@ -20,13 +20,15 @@ interface Professional {
 
 interface BuscarClientProps {
   professionals: Professional[];
+  initialSearch?: string;
+  initialArea?: string;
 }
 
 const ALL_AREAS = "Todas as áreas";
 
-export function BuscarClient({ professionals }: BuscarClientProps) {
-  const [search, setSearch] = useState("");
-  const [selectedArea, setSelectedArea] = useState(ALL_AREAS);
+export function BuscarClient({ professionals, initialSearch = "", initialArea = "" }: BuscarClientProps) {
+  const [search, setSearch] = useState(initialSearch);
+  const [selectedArea, setSelectedArea] = useState(initialArea || ALL_AREAS);
 
   const areas = useMemo(() => {
     const set = new Set<string>();

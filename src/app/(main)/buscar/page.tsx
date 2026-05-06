@@ -1,7 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { BuscarClient } from "./buscar-client";
 
-export default async function BuscarPage() {
+export default async function BuscarPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; area?: string }>;
+}) {
+  const { q, area } = await searchParams;
   const supabase = await createClient();
 
   const { data: tenants } = await supabase
@@ -62,5 +67,5 @@ export default async function BuscarPage() {
       };
     });
 
-  return <BuscarClient professionals={professionals} />;
+  return <BuscarClient professionals={professionals} initialSearch={q ?? ""} initialArea={area ?? ""} />;
 }
