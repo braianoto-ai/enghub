@@ -119,7 +119,6 @@ export default function NovoProjeto() {
       await supabase.from("project_images").insert(
         uploadedUrls.map((url, position) => ({
           project_id: project.id,
-          tenant_id: tenant.id,
           url,
           position,
         }))
