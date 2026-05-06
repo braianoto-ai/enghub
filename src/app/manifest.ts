@@ -10,7 +10,7 @@ export default function manifest(): MetadataRoute.Manifest {
     display: "standalone",
     orientation: "portrait",
     background_color: "#ffffff",
-    theme_color: "#7c3aed",
+    theme_color: "#374151",
     categories: ["business", "productivity"],
     lang: "pt-BR",
     icons: [
@@ -37,7 +37,6 @@ export default function manifest(): MetadataRoute.Manifest {
         src: "/og-screenshot.png",
         sizes: "1280x720",
         type: "image/png",
-        // @ts-expect-error — form_factor não está no tipo ainda mas é válido
         form_factor: "wide",
         label: "EngHub no desktop",
       },
