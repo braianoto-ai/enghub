@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { Users, Building2, Star, MessageSquare, TrendingUp, Clock, Sparkles, CreditCard } from "lucide-react";
+import { Users, Building2, Star, MessageSquare, TrendingUp, Clock, ShieldCheck, CreditCard } from "lucide-react";
 import Link from "next/link";
 
 export default async function AdminDashboardPage() {
@@ -19,6 +19,7 @@ export default async function AdminDashboardPage() {
     { count: newTenantsMonth },
     { count: newTenantsWeek },
     { count: trialCount },
+    { count: pendingVerifCount },
     { data: recentTenants },
     { data: planDist },
     { data: recentReviews },
@@ -33,6 +34,7 @@ export default async function AdminDashboardPage() {
       .eq("plan", "PRO")
       .not("trial_ends_at", "is", null)
       .gte("trial_ends_at", now.toISOString()),
+    supabase.from("professional_profiles").select("*", { count: "exact", head: true }).eq("crea_cau_status", "PENDING"),
     supabase.from("tenants")
       .select("id, name, slug, plan, status, created_at, trial_ends_at")
       .order("created_at", { ascending: false })
@@ -55,6 +57,7 @@ export default async function AdminDashboardPage() {
     { label: "Em trial PRO", value: trialCount ?? 0, sub: "trials ativos", icon: Clock, color: "amber" },
     { label: "Conversas", value: convCount ?? 0, sub: "via chat", icon: MessageSquare, color: "blue" },
     { label: "Avaliações", value: reviewCount ?? 0, sub: "no total", icon: Star, color: "yellow" },
+    { label: "Verificações", value: pendingVerifCount ?? 0, sub: "pendentes", icon: ShieldCheck, color: "green", href: "/admin/verificacoes" },
   ];
 
   const colorMap: Record<string, string> = {
@@ -86,17 +89,25 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        {stats.map((s) => (
-          <div key={s.label} className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-            <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${colorMap[s.color]}`}>
-              <s.icon size={20} />
-            </div>
-            <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">{s.value}</p>
-            <p className="mt-0.5 text-xs font-medium text-gray-500 dark:text-slate-400">{s.label}</p>
-            <p className="mt-0.5 text-xs text-gray-400 dark:text-slate-500">{s.sub}</p>
-          </div>
-        ))}
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        {stats.map((s) => {
+          const inner = (
+            <>
+              <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${colorMap[s.color]}`}>
+                <s.icon size={20} />
+              </div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-slate-100">{s.value}</p>
+              <p className="mt-0.5 text-xs font-medium text-gray-500 dark:text-slate-400">{s.label}</p>
+              <p className="mt-0.5 text-xs text-gray-400 dark:text-slate-500">{s.sub}</p>
+            </>
+          );
+          const cls = "rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900";
+          return "href" in s && s.href ? (
+            <Link key={s.label} href={s.href} className={`${cls} hover:border-gray-400 transition-colors`}>{inner}</Link>
+          ) : (
+            <div key={s.label} className={cls}>{inner}</div>
+          );
+        })}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -167,6 +178,9 @@ export default async function AdminDashboardPage() {
               </Link>
               <Link href="/admin/avaliacoes" className="flex items-center gap-2 rounded-lg p-2 text-sm text-gray-600 hover:bg-gray-50 dark:text-slate-400 dark:hover:bg-slate-800">
                 <Star size={15} /> Moderar avaliações
+              </Link>
+              <Link href="/admin/verificacoes" className="flex items-center gap-2 rounded-lg p-2 text-sm text-gray-600 hover:bg-gray-50 dark:text-slate-400 dark:hover:bg-slate-800">
+                <ShieldCheck size={15} /> Verificações CREA/CAU
               </Link>
               <Link href="/admin/usuarios" className="flex items-center gap-2 rounded-lg p-2 text-sm text-gray-600 hover:bg-gray-50 dark:text-slate-400 dark:hover:bg-slate-800">
                 <Users size={15} /> Ver usuários

@@ -19,6 +19,7 @@ import {
   Globe,
   ExternalLink,
   Shield,
+  ShieldCheck,
   MessageSquare,
   FileText,
 } from "lucide-react";
@@ -130,7 +131,7 @@ export default async function TenantPage({
     supabase
       .from("professional_profiles")
       .select(
-        "bio, phone, whatsapp, website, linkedin, instagram, crea, cau, areas, city, state, years_experience, certifications, education, availability, curriculum_url, avatar_url"
+        "bio, phone, whatsapp, website, linkedin, instagram, crea, cau, crea_cau_verified, crea_cau_type, crea_cau_number, areas, city, state, years_experience, certifications, education, availability, curriculum_url, avatar_url"
       )
       .eq("tenant_id", tenant.id)
       .maybeSingle(),
@@ -163,7 +164,8 @@ export default async function TenantPage({
 
   const primaryArea = prof?.areas?.[0] ?? null;
   const contactPhone = prof?.whatsapp ?? prof?.phone ?? null;
-  const registrationBadge = prof?.crea ?? prof?.cau ?? null;
+  const registrationBadge = prof?.crea_cau_number ?? prof?.crea ?? prof?.cau ?? null;
+  const isVerified = prof?.crea_cau_verified === true;
 
   const initials = tenant.name.split(" ").slice(0, 2).map((w: string) => w[0]).join("").toUpperCase();
 
@@ -219,9 +221,17 @@ export default async function TenantPage({
                   </span>
                 )}
                 {registrationBadge && (
-                  <span className="flex items-center gap-1 rounded-full border border-white/10 bg-white/10 px-3 py-0.5 text-sm text-zinc-300">
-                    <Shield size={12} className="text-gray-400" />
+                  <span className={`flex items-center gap-1 rounded-full border px-3 py-0.5 text-sm ${
+                    isVerified
+                      ? "border-green-500/40 bg-green-500/15 text-green-300"
+                      : "border-white/10 bg-white/10 text-zinc-300"
+                  }`}>
+                    {isVerified
+                      ? <ShieldCheck size={12} className="text-green-400" />
+                      : <Shield size={12} className="text-gray-400" />
+                    }
                     {registrationBadge}
+                    {isVerified && <span className="ml-0.5 text-xs text-green-400">✓</span>}
                   </span>
                 )}
                 {prof?.availability && (
@@ -320,6 +330,14 @@ export default async function TenantPage({
               </p>
               <StarRating rating={Math.round(avgRating)} size={18} />
               <p className="mt-1 text-xs text-zinc-400">{t("rating_count", { count: reviews?.length ?? 0 })}</p>
+              {isVerified && (
+                <div className="mt-3 flex items-center justify-center gap-1.5 rounded-xl border border-green-200 bg-green-50 px-3 py-2 dark:border-green-800/40 dark:bg-green-900/10">
+                  <ShieldCheck size={14} className="text-green-500" />
+                  <span className="text-xs font-semibold text-green-700 dark:text-green-400">
+                    {prof?.crea_cau_type ?? "CREA/CAU"} verificado
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 

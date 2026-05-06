@@ -17,6 +17,7 @@ import {
   CreditCard,
   BarChart2,
   Gift,
+  ShieldCheck,
 } from "lucide-react";
 import { ShareModal } from "@/components/share-modal";
 
@@ -30,6 +31,7 @@ const navItems = [
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/dashboard/indicacoes", label: "Indicações", icon: Gift },
   { href: "/dashboard/plano", label: "Plano", icon: CreditCard },
+  { href: "/dashboard/verificacao", label: "Verificação", icon: ShieldCheck },
 ];
 
 interface SidebarProps {
