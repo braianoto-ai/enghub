@@ -96,7 +96,7 @@ export default async function HomePage() {
           </div>
 
           <h1 className="mt-4 text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
-            Encontre o engenheiro
+            Encontre o profissional
             <span className="block bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">
               certo para sua obra
             </span>
