@@ -52,7 +52,7 @@ export function BuscarClient({ professionals, initialSearch = "", initialArea = 
   }, [professionals, search, selectedArea]);
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10">
+    <div className="mx-auto max-w-7xl px-4 py-10">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">
           Encontre um engenheiro

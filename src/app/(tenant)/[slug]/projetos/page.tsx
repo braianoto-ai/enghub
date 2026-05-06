@@ -31,7 +31,7 @@ export default async function ProjetosPage({
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-4 py-10">
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-7xl">
           <Link
             href={`/${slug}`}
             className="mb-4 flex items-center gap-2 text-sm text-blue-100 hover:text-white"
@@ -48,7 +48,7 @@ export default async function ProjetosPage({
         </div>
       </div>
 
-      <div className="mx-auto max-w-5xl px-4 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8">
         <ProjetosClient projects={projects ?? []} slug={slug} />
       </div>
     </div>

@@ -173,7 +173,7 @@ export default async function TenantPage({
           <div className="absolute -right-40 -top-20 h-80 w-80 rounded-full bg-violet-600/10 blur-3xl" />
           <div className="absolute -left-20 bottom-0 h-60 w-60 rounded-full bg-violet-500/5 blur-3xl" />
         </div>
-        <div className="relative mx-auto max-w-5xl">
+        <div className="relative mx-auto max-w-7xl">
           <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:text-left">
             {/* Avatar */}
             <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-violet-700 text-2xl font-bold text-white shadow-lg shadow-violet-900/30">
@@ -220,7 +220,7 @@ export default async function TenantPage({
       </div>
 
       {/* ── CONTENT ── */}
-      <div className="mx-auto max-w-5xl px-4 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
 
           {/* Sidebar */}

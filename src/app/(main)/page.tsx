@@ -89,7 +89,7 @@ export default async function HomePage() {
           <div className="absolute bottom-0 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-violet-600/10 blur-3xl" />
         </div>
 
-        <div className="relative mx-auto max-w-4xl text-center">
+        <div className="relative mx-auto max-w-5xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-400/20 bg-violet-500/10 px-4 py-1.5 text-sm text-violet-300 backdrop-blur-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
             {totalProfessionals ?? 0} profissionais ativos na plataforma
@@ -136,7 +136,7 @@ export default async function HomePage() {
 
       {/* ── AREAS ────────────────────────────────────────── */}
       <section className="px-4 py-24 dark:bg-slate-950">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-7xl">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-slate-100 sm:text-4xl">
               Áreas de atuação
@@ -178,7 +178,7 @@ export default async function HomePage() {
       {/* ── TOP PROFESSIONALS ────────────────────────────── */}
       {professionalsWithRating.length > 0 && (
         <section className="bg-gray-50 px-4 py-24 dark:bg-slate-900">
-          <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-7xl">
             <div className="flex items-end justify-between">
               <div>
                 <h2 className="text-3xl font-bold text-gray-900 dark:text-slate-100 sm:text-4xl">
@@ -257,7 +257,7 @@ export default async function HomePage() {
 
       {/* ── HOW IT WORKS ─────────────────────────────────── */}
       <section className="px-4 py-24 dark:bg-slate-950">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-7xl">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-slate-100 sm:text-4xl">
               Como funciona
@@ -333,7 +333,7 @@ export default async function HomePage() {
 
       {/* ── WHY ENGHUB ───────────────────────────────────── */}
       <section className="bg-gray-50 px-4 py-24 dark:bg-slate-900">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-7xl">
           <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-slate-100 sm:text-4xl">
             Por que o EngHub?
           </h2>
