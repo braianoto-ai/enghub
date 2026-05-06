@@ -14,10 +14,10 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-600">
               <span className="text-lg font-bold text-white">E</span>
             </div>
-            <span className="text-xl font-bold text-gray-900 dark:text-slate-100">EngHub</span>
+            <span className="text-xl font-bold text-gray-900 dark:text-slate-100">Eng<span className="text-violet-600 dark:text-violet-400">Hub</span></span>
           </Link>
 
           <div className="hidden items-center gap-6 md:flex">
