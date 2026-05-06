@@ -14,6 +14,7 @@ import {
   ExternalLink,
   Inbox,
   CreditCard,
+  BarChart2,
 } from "lucide-react";
 
 const navItems = [
@@ -23,6 +24,7 @@ const navItems = [
   { href: "/dashboard/perfil", label: "Perfil", icon: User },
   { href: "/dashboard/avaliacoes", label: "Avaliações", icon: Star },
   { href: "/dashboard/mensagens", label: "Mensagens", icon: Inbox },
+  { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/dashboard/plano", label: "Plano", icon: CreditCard },
 ];
 

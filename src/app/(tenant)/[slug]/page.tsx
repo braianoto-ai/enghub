@@ -7,6 +7,7 @@ import { StarRating } from "@/components/ui/star-rating";
 import { Button } from "@/components/ui/button";
 import { ReviewForm } from "./review-form";
 import { ImageGallery } from "./image-gallery";
+import { ViewTracker } from "./view-tracker";
 import {
   MapPin,
   Phone,
@@ -82,6 +83,7 @@ export default async function TenantPage({
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ViewTracker tenantId={tenant.id} />
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-4 py-16">
         <div className="mx-auto max-w-5xl">
