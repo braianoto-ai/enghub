@@ -30,12 +30,10 @@ export default function AnalyticsLoading() {
           <Skeleton className="h-5 w-24" />
         </div>
         <div className="flex items-end gap-2 h-48">
-          {Array.from({ length: 7 }).map((_, i) => (
-            <Skeleton
-              key={i}
-              className="flex-1 rounded-t-md"
-              style={{ height: `${30 + Math.random() * 70}%` }}
-            />
+          {[60, 80, 45, 90, 55, 70, 40].map((h, i) => (
+            <div key={i} className="flex-1" style={{ height: `${h}%` }}>
+              <Skeleton className="h-full w-full rounded-t-md" />
+            </div>
           ))}
         </div>
         <div className="mt-2 flex justify-between">

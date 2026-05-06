@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
-export function Footer() {
+export async function Footer() {
+  const t = await getTranslations("footer");
+
   return (
     <footer className="border-t border-gray-200 bg-gray-50 dark:border-slate-800 dark:bg-slate-900">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -13,38 +16,37 @@ export function Footer() {
               <span className="text-lg font-bold text-gray-900 dark:text-slate-100">Eng<span className="text-gray-700 dark:text-gray-400">Hub</span></span>
             </div>
             <p className="mt-3 text-sm text-gray-500 dark:text-slate-400">
-              A plataforma que conecta engenheiros e clientes. Mostre seu
-              trabalho e encontre os melhores profissionais.
+              {t("tagline")}
             </p>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-slate-200">Plataforma</h3>
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-slate-200">{t("platform_heading")}</h3>
             <ul className="mt-3 space-y-2">
-              <li><Link href="/buscar" className="text-sm text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200">Buscar Profissionais</Link></li>
-              <li><Link href="/planos" className="text-sm text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200">Planos e Preços</Link></li>
-              <li><Link href="/cadastro" className="text-sm text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200">Cadastre-se</Link></li>
+              <li><Link href="/buscar" className="text-sm text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200">{t("platform_search")}</Link></li>
+              <li><Link href="/planos" className="text-sm text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200">{t("platform_plans")}</Link></li>
+              <li><Link href="/cadastro" className="text-sm text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200">{t("platform_signup")}</Link></li>
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-slate-200">Áreas</h3>
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-slate-200">{t("areas_heading")}</h3>
             <ul className="mt-3 space-y-2">
-              <li className="text-sm text-gray-500 dark:text-slate-400">Engenharia Civil</li>
-              <li className="text-sm text-gray-500 dark:text-slate-400">Engenharia Mecânica</li>
-              <li className="text-sm text-gray-500 dark:text-slate-400">Engenharia Elétrica</li>
-              <li className="text-sm text-gray-500 dark:text-slate-400">Arquitetura</li>
+              <li className="text-sm text-gray-500 dark:text-slate-400">{t("area_civil")}</li>
+              <li className="text-sm text-gray-500 dark:text-slate-400">{t("area_mecanica")}</li>
+              <li className="text-sm text-gray-500 dark:text-slate-400">{t("area_eletrica")}</li>
+              <li className="text-sm text-gray-500 dark:text-slate-400">{t("area_arquitetura")}</li>
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-slate-200">Suporte</h3>
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-slate-200">{t("support_heading")}</h3>
             <ul className="mt-3 space-y-2">
-              <li><Link href="/sobre" className="text-sm text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200">Sobre nós</Link></li>
-              <li><Link href="/contato" className="text-sm text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200">Contato</Link></li>
+              <li><Link href="/sobre" className="text-sm text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200">{t("support_about")}</Link></li>
+              <li><Link href="/contato" className="text-sm text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200">{t("support_contact")}</Link></li>
             </ul>
           </div>
         </div>
         <div className="mt-8 border-t border-gray-200 pt-8 dark:border-slate-800">
           <p className="text-center text-sm text-gray-400 dark:text-slate-500">
-            &copy; {new Date().getFullYear()} EngHub. Todos os direitos reservados.
+            &copy; {new Date().getFullYear()} EngHub. {t("rights")}
           </p>
         </div>
       </div>

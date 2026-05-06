@@ -12,13 +12,14 @@ import {
   LogOut,
   Shield,
   Star,
-  MessageSquare,
+  ShieldCheck,
 } from "lucide-react";
 
 const navItems = [
   { href: "/admin", label: "Painel", icon: LayoutDashboard },
   { href: "/admin/tenants", label: "Tenants", icon: Building2 },
   { href: "/admin/avaliacoes", label: "Avaliações", icon: Star },
+  { href: "/admin/verificacoes", label: "Verificações", icon: ShieldCheck },
   { href: "/admin/usuarios", label: "Usuários", icon: Users },
   { href: "/admin/planos", label: "Planos", icon: CreditCard },
 ];
