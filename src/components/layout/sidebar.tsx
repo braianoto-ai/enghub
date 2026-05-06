@@ -18,6 +18,7 @@ import {
   BarChart2,
   Gift,
   ShieldCheck,
+  Calendar,
 } from "lucide-react";
 import { ShareModal } from "@/components/share-modal";
 
@@ -30,6 +31,7 @@ const navItems = [
   { href: "/dashboard/mensagens", label: "Mensagens", icon: Inbox },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/dashboard/indicacoes", label: "Indicações", icon: Gift },
+  { href: "/dashboard/agenda", label: "Agenda", icon: Calendar },
   { href: "/dashboard/plano", label: "Plano", icon: CreditCard },
   { href: "/dashboard/verificacao", label: "Verificação", icon: ShieldCheck },
 ];

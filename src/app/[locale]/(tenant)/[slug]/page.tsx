@@ -22,6 +22,7 @@ import {
   ShieldCheck,
   MessageSquare,
   FileText,
+  Calendar,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -274,6 +275,13 @@ export default async function TenantPage({
               <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-gray-700 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-600">
                 {t("request_quote")}
                 <MessageSquare size={15} />
+              </button>
+            </Link>
+
+            <Link href={`/${slug}/agendar`}>
+              <button className="flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white py-3 text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
+                <Calendar size={15} />
+                {t("schedule_meeting")}
               </button>
             </Link>
 

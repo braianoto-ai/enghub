@@ -211,6 +211,7 @@
   },
   "profile": {
     "request_quote": "Request Quote",
+    "schedule_meeting": "Schedule a meeting",
     "download_cv": "Download CV (PDF)",
     "contact": "Contact",
     "no_contact": "No contact information provided",
