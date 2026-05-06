@@ -3,17 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { MoreVertical, Ban, CheckCircle, CreditCard } from "lucide-react";
+import { MoreVertical, Ban, CheckCircle, CreditCard, Star } from "lucide-react";
 
 interface TenantActionsProps {
   tenantId: string;
   currentStatus: string;
   currentPlan: string;
+  featured: boolean;
 }
 
 const plans = ["FREE", "PRO", "EMPRESA", "PREMIUM"];
 
-export function TenantActions({ tenantId, currentStatus, currentPlan }: TenantActionsProps) {
+export function TenantActions({ tenantId, currentStatus, currentPlan, featured }: TenantActionsProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -32,6 +33,15 @@ export function TenantActions({ tenantId, currentStatus, currentPlan }: TenantAc
     setLoading(true);
     const supabase = createClient();
     await supabase.from("tenants").update({ plan }).eq("id", tenantId);
+    setOpen(false);
+    router.refresh();
+    setLoading(false);
+  }
+
+  async function toggleFeatured() {
+    setLoading(true);
+    const supabase = createClient();
+    await supabase.from("tenants").update({ featured: !featured }).eq("id", tenantId);
     setOpen(false);
     router.refresh();
     setLoading(false);
@@ -63,6 +73,13 @@ export function TenantActions({ tenantId, currentStatus, currentPlan }: TenantAc
             </button>
           ))}
           <div className="border-t border-gray-100">
+            <button
+              onClick={toggleFeatured}
+              className={`flex w-full items-center gap-2 px-3 py-2 text-sm ${featured ? "text-yellow-600 hover:bg-yellow-50" : "text-gray-700 hover:bg-gray-50"}`}
+            >
+              <Star size={14} className={featured ? "fill-yellow-500 text-yellow-500" : ""} />
+              {featured ? "Remover destaque" : "Marcar destaque"}
+            </button>
             <button
               onClick={toggleStatus}
               className={`flex w-full items-center gap-2 px-3 py-2 text-sm ${currentStatus === "ACTIVE" ? "text-red-600 hover:bg-red-50" : "text-green-600 hover:bg-green-50"}`}

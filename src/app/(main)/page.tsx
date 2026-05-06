@@ -41,15 +41,16 @@ export default async function HomePage() {
     supabase.from("projects").select("id", { count: "exact", head: true }).eq("status", "PUBLISHED"),
     supabase
       .from("tenants")
-      .select("id, name, slug, professional_profiles(areas, city, state, bio), reviews(rating)")
+      .select("id, name, slug, featured, professional_profiles(areas, city, state, bio), reviews(rating)")
       .eq("status", "ACTIVE")
-      .limit(20),
+      .eq("featured", true)
+      .limit(6),
     supabase
       .from("professional_profiles")
       .select("areas"),
   ]);
 
-  // Compute top 3 by avg rating
+  // Compute featured professionals with ratings
   const professionalsWithRating = (topProfessionals ?? [])
     .map((t) => {
       const reviews = (t.reviews as { rating: number }[]) ?? [];
@@ -62,7 +63,6 @@ export default async function HomePage() {
       return { ...t, prof, avg, reviewCount: reviews.length };
     })
     .filter((t) => t.prof)
-    .sort((a, b) => b.avg - a.avg || b.reviewCount - a.reviewCount)
     .slice(0, 3);
 
   // Count professionals per area
@@ -177,7 +177,7 @@ export default async function HomePage() {
                   Profissionais em destaque
                 </h2>
                 <p className="mt-2 text-gray-500 dark:text-slate-400">
-                  Os melhor avaliados da plataforma
+                  Selecionados pela equipe EngHub
                 </p>
               </div>
               <Link href="/buscar" className="hidden text-sm font-medium text-blue-600 hover:underline dark:text-blue-400 sm:block">

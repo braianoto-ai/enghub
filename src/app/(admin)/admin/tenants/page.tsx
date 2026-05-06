@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Building2 } from "lucide-react";
+import { Building2, Star } from "lucide-react";
 import { TenantActions } from "./tenant-actions";
 
 export default async function TenantsPage() {
@@ -9,7 +9,7 @@ export default async function TenantsPage() {
 
   const { data: tenants } = await supabase
     .from("tenants")
-    .select("id, name, slug, plan, status, created_at, owner:profiles(name, email)")
+    .select("id, name, slug, plan, status, featured, created_at, owner:profiles(name, email)")
     .order("created_at", { ascending: false });
 
   const planColors: Record<string, "default" | "info" | "success" | "warning"> = {
@@ -39,6 +39,7 @@ export default async function TenantsPage() {
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Slug</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Plano</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Destaque</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Cadastro</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Ações</th>
               </tr>
@@ -66,18 +67,28 @@ export default async function TenantsPage() {
                           {tenant.status === "ACTIVE" ? "Ativo" : tenant.status === "SUSPENDED" ? "Suspenso" : "Pendente"}
                         </Badge>
                       </td>
+                      <td className="px-6 py-4">
+                        {tenant.featured ? (
+                          <span className="flex items-center gap-1 text-sm font-medium text-yellow-600">
+                            <Star size={14} className="fill-yellow-500 text-yellow-500" />
+                            Destaque
+                          </span>
+                        ) : (
+                          <span className="text-sm text-gray-400">—</span>
+                        )}
+                      </td>
                       <td className="px-6 py-4 text-sm text-gray-500">
                         {new Date(tenant.created_at).toLocaleDateString("pt-BR")}
                       </td>
                       <td className="px-6 py-4">
-                        <TenantActions tenantId={tenant.id} currentStatus={tenant.status} currentPlan={tenant.plan} />
+                        <TenantActions tenantId={tenant.id} currentStatus={tenant.status} currentPlan={tenant.plan} featured={tenant.featured ?? false} />
                       </td>
                     </tr>
                   );
                 })
               ) : (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-gray-400">
+                  <td colSpan={7} className="px-6 py-12 text-center text-gray-400">
                     <Building2 size={32} className="mx-auto mb-2 text-gray-300" />
                     Nenhum tenant cadastrado
                   </td>
