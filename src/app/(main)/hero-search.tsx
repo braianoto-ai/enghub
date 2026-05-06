@@ -31,7 +31,7 @@ export function HeroSearch() {
       </div>
       <button
         type="submit"
-        className="m-1.5 rounded-xl bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-400"
+        className="m-1.5 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-500"
       >
         Buscar
       </button>
