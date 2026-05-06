@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Trash2, Edit, MoreVertical } from "lucide-react";
+import Link from "next/link";
 
 interface ProjetosActionsProps {
   projectId: string;
@@ -46,6 +47,14 @@ export function ProjetosActions({ projectId, tenantId }: ProjetosActionsProps) {
       </button>
       {open && (
         <div className="absolute right-0 top-7 z-10 w-40 rounded-lg border border-gray-200 bg-white shadow-lg">
+          <Link
+            href={`/dashboard/projetos/${projectId}/editar`}
+            className="flex w-full items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+            onClick={() => setOpen(false)}
+          >
+            <Edit size={14} />
+            Editar
+          </Link>
           <button
             onClick={() => handleDelete()}
             className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
