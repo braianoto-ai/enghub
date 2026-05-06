@@ -5,9 +5,25 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "EngHub - Plataforma para Engenheiros",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://enghub.com.br"),
+  title: {
+    default: "EngHub — Plataforma para Engenheiros",
+    template: "%s | EngHub",
+  },
   description:
-    "Encontre os melhores engenheiros do Brasil. Portfólios verificados, avaliações reais e a facilidade que você precisa.",
+    "Encontre os melhores engenheiros do Brasil. Portfólios verificados, avaliações reais e contato direto.",
+  openGraph: {
+    siteName: "EngHub",
+    type: "website",
+    locale: "pt_BR",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

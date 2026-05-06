@@ -1,5 +1,18 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { BuscarClient } from "./buscar-client";
+
+export const metadata: Metadata = {
+  title: "Buscar Engenheiros",
+  description:
+    "Encontre engenheiros por especialidade, cidade ou nome. Portfólios verificados e avaliações reais no EngHub.",
+  alternates: { canonical: "/buscar" },
+  openGraph: {
+    title: "Buscar Engenheiros | EngHub",
+    description: "Encontre o profissional de engenharia certo para seu projeto.",
+    url: "/buscar",
+  },
+};
 
 export default async function BuscarPage({
   searchParams,
