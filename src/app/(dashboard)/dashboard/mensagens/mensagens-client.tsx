@@ -215,7 +215,7 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
           <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">Conversas em tempo real com visitantes</p>
         </div>
         {totalUnread > 0 && (
-          <span className="rounded-full bg-violet-100 px-3 py-1 text-sm font-medium text-violet-700 dark:bg-violet-900/30 dark:text-violet-400">
+          <span className="rounded-full bg-gray-200 px-3 py-1 text-sm font-medium text-gray-800 dark:bg-gray-800/30 dark:text-gray-400">
             {totalUnread} não {totalUnread === 1 ? "lida" : "lidas"}
           </span>
         )}
@@ -239,7 +239,7 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Buscar conversa..."
-                  className="w-full rounded-lg border border-gray-200 py-2 pl-8 pr-3 text-sm focus:border-violet-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500"
+                  className="w-full rounded-lg border border-gray-200 py-2 pl-8 pr-3 text-sm focus:border-gray-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500"
                 />
               </div>
             </div>
@@ -251,14 +251,14 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
                   onClick={() => setSelected(conv)}
                   className={`w-full border-b px-4 py-3.5 text-left transition-colors last:border-b-0 dark:border-slate-800 ${
                     selected?.id === conv.id
-                      ? "bg-violet-50 dark:bg-violet-900/20"
+                      ? "bg-gray-100 dark:bg-gray-800/20"
                       : "hover:bg-gray-50 dark:hover:bg-slate-800"
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex min-w-0 items-center gap-2">
                       {(conv.unread_count ?? 0) > 0 && (
-                        <Circle size={8} className="shrink-0 fill-violet-500 text-violet-500" />
+                        <Circle size={8} className="shrink-0 fill-gray-500 text-gray-500" />
                       )}
                       <p className={`truncate text-sm ${conv.unread_count ? "font-semibold text-gray-900 dark:text-slate-100" : "font-medium text-gray-700 dark:text-slate-300"}`}>
                         {conv.visitor_name}
@@ -290,7 +290,7 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
                 <div>
                   <p className="font-semibold text-gray-900 dark:text-slate-100">{selected.visitor_name}</p>
                   <div className="flex items-center gap-3 mt-0.5">
-                    <a href={`mailto:${selected.visitor_email}`} className="text-xs text-violet-600 hover:underline dark:text-violet-400">{selected.visitor_email}</a>
+                    <a href={`mailto:${selected.visitor_email}`} className="text-xs text-gray-700 hover:underline dark:text-gray-400">{selected.visitor_email}</a>
                     {selected.visitor_phone && (
                       <a href={`tel:${selected.visitor_phone}`} className="text-xs text-gray-400 hover:text-gray-600 dark:text-slate-500">
                         {selected.visitor_phone}
@@ -313,11 +313,11 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
                   <div key={msg.id} className={`flex ${msg.sender === "professional" ? "justify-end" : "justify-start"}`}>
                     <div className={`max-w-[70%] rounded-2xl px-4 py-2.5 text-sm ${
                       msg.sender === "professional"
-                        ? "rounded-br-sm bg-violet-600 text-white"
+                        ? "rounded-br-sm bg-gray-700 text-white"
                         : "rounded-bl-sm bg-gray-100 text-gray-800 dark:bg-slate-800 dark:text-slate-100"
                     }`}>
                       <p className="leading-relaxed whitespace-pre-wrap">{msg.content}</p>
-                      <p className={`mt-1 text-[10px] ${msg.sender === "professional" ? "text-violet-200" : "text-gray-400 dark:text-slate-500"}`}>
+                      <p className={`mt-1 text-[10px] ${msg.sender === "professional" ? "text-gray-300" : "text-gray-400 dark:text-slate-500"}`}>
                         {new Date(msg.created_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
                         {msg.sender === "professional" && (
                           <CheckCheck size={11} className="inline ml-1 opacity-70" />
@@ -339,7 +339,7 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
                     onKeyDown={handleKeyDown}
                     rows={1}
                     placeholder="Responder... (Enter para enviar)"
-                    className="flex-1 resize-none rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500"
+                    className="flex-1 resize-none rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500"
                     style={{ maxHeight: "100px" }}
                     onInput={(e) => {
                       const t = e.currentTarget;
@@ -350,7 +350,7 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
                   <button
                     onClick={handleSend}
                     disabled={!input.trim() || sending}
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-600 text-white transition-colors hover:bg-violet-500 disabled:opacity-40"
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-700 text-white transition-colors hover:bg-gray-600 disabled:opacity-40"
                   >
                     {sending ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}
                   </button>

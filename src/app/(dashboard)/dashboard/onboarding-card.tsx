@@ -65,8 +65,8 @@ export function OnboardingCard({ steps, slug }: OnboardingCardProps) {
       {/* Header */}
       <div className="flex items-center justify-between border-b border-zinc-100 px-6 py-4 dark:border-zinc-800">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-violet-100 dark:bg-violet-900/40">
-            <Rocket size={18} className="text-violet-600" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700/40">
+            <Rocket size={18} className="text-gray-700" />
           </div>
           <div>
             <p className="font-semibold text-zinc-900 dark:text-zinc-100">
@@ -79,7 +79,7 @@ export function OnboardingCard({ steps, slug }: OnboardingCardProps) {
         </div>
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <span className="text-2xl font-bold text-violet-600">{pct}%</span>
+            <span className="text-2xl font-bold text-gray-700">{pct}%</span>
           </div>
           <button
             onClick={() => setDismissed(true)}
@@ -93,7 +93,7 @@ export function OnboardingCard({ steps, slug }: OnboardingCardProps) {
       {/* Barra de progresso */}
       <div className="h-1.5 w-full bg-zinc-100 dark:bg-zinc-800">
         <div
-          className="h-1.5 bg-violet-600 transition-all duration-500"
+          className="h-1.5 bg-gray-700 transition-all duration-500"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -145,7 +145,7 @@ export function OnboardingCard({ steps, slug }: OnboardingCardProps) {
 
             {/* Ação */}
             {!step.done && (
-              <div className="flex shrink-0 items-center gap-1 text-xs font-medium text-violet-600">
+              <div className="flex shrink-0 items-center gap-1 text-xs font-medium text-gray-700">
                 Fazer agora
                 <ChevronRight size={14} />
               </div>

@@ -58,17 +58,17 @@ export default async function AdminDashboardPage() {
   ];
 
   const colorMap: Record<string, string> = {
-    violet: "bg-violet-50 text-violet-600 dark:bg-violet-900/20 dark:text-violet-400",
+    violet: "bg-gray-100 text-gray-700 dark:bg-gray-800/20 dark:text-gray-400",
     green: "bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400",
     amber: "bg-amber-50 text-amber-600 dark:bg-amber-900/20 dark:text-amber-400",
-    blue: "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400",
+    blue: "bg-gray-100 text-gray-600 dark:bg-gray-700/20 dark:text-gray-400",
     yellow: "bg-yellow-50 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400",
   };
 
   const planColors: Record<string, string> = {
     FREE: "bg-gray-100 text-gray-600",
-    PRO: "bg-violet-100 text-violet-700",
-    EMPRESA: "bg-blue-100 text-blue-700",
+    PRO: "bg-gray-200 text-gray-800",
+    EMPRESA: "bg-gray-200 text-gray-700",
     PREMIUM: "bg-amber-100 text-amber-700",
   };
 
@@ -104,7 +104,7 @@ export default async function AdminDashboardPage() {
         <div className="lg:col-span-2 rounded-2xl border border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-900">
           <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-slate-800">
             <h2 className="font-semibold text-gray-900 dark:text-slate-100">Cadastros recentes</h2>
-            <Link href="/admin/tenants" className="text-sm text-violet-600 hover:underline dark:text-violet-400">Ver todos →</Link>
+            <Link href="/admin/tenants" className="text-sm text-gray-700 hover:underline dark:text-gray-400">Ver todos →</Link>
           </div>
           <div className="divide-y divide-gray-100 dark:divide-slate-800">
             {(recentTenants ?? []).map((t) => {
@@ -152,7 +152,7 @@ export default async function AdminDashboardPage() {
                     <span className="text-gray-500 dark:text-slate-400">{count} <span className="text-gray-400">({pct}%)</span></span>
                   </div>
                   <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-slate-800">
-                    <div className="h-2 rounded-full bg-violet-500 transition-all" style={{ width: `${pct}%` }} />
+                    <div className="h-2 rounded-full bg-gray-1000 transition-all" style={{ width: `${pct}%` }} />
                   </div>
                 </div>
               );
@@ -180,7 +180,7 @@ export default async function AdminDashboardPage() {
       <div className="rounded-2xl border border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-slate-800">
           <h2 className="font-semibold text-gray-900 dark:text-slate-100">Avaliações recentes</h2>
-          <Link href="/admin/avaliacoes" className="text-sm text-violet-600 hover:underline dark:text-violet-400">Ver todas →</Link>
+          <Link href="/admin/avaliacoes" className="text-sm text-gray-700 hover:underline dark:text-gray-400">Ver todas →</Link>
         </div>
         <div className="divide-y divide-gray-100 dark:divide-slate-800">
           {(recentReviews ?? []).map((r) => {
@@ -194,7 +194,7 @@ export default async function AdminDashboardPage() {
                   </div>
                   {r.comment && <p className="mt-0.5 truncate text-xs text-gray-500 dark:text-slate-400">{r.comment}</p>}
                   {tenant && (
-                    <Link href={`/${tenant.slug}`} target="_blank" className="mt-0.5 text-xs text-violet-500 hover:underline">
+                    <Link href={`/${tenant.slug}`} target="_blank" className="mt-0.5 text-xs text-gray-500 hover:underline">
                       {tenant.name}
                     </Link>
                   )}

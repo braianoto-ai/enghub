@@ -181,7 +181,7 @@ export default async function PlanoPage({
       {nextPlans.length > 0 && (
         <div className="mt-10">
           <div className="flex items-center gap-2">
-            <Zap size={18} className="text-violet-600" />
+            <Zap size={18} className="text-gray-700" />
             <h2 className="text-lg font-semibold text-gray-900">
               Faça upgrade
             </h2>
@@ -195,7 +195,7 @@ export default async function PlanoPage({
               return (
                 <Card
                   key={planKey}
-                  className={planKey === "PRO" ? "border-violet-500 ring-1 ring-violet-500" : ""}
+                  className={planKey === "PRO" ? "border-gray-500 ring-1 ring-gray-500" : ""}
                 >
                   <CardHeader>
                     <div className="flex items-center justify-between">
@@ -274,7 +274,7 @@ function UsageStat({
                   ? "bg-red-500"
                   : pct >= 80
                   ? "bg-orange-400"
-                  : "bg-violet-500"
+                  : "bg-gray-1000"
               }`}
               style={{ width: `${pct}%` }}
             />

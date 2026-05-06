@@ -24,8 +24,8 @@ const PLANS = ["FREE", "PRO", "EMPRESA", "PREMIUM"];
 
 const planColors: Record<string, string> = {
   FREE: "bg-gray-100 text-gray-600 dark:bg-slate-800 dark:text-slate-400",
-  PRO: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400",
-  EMPRESA: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+  PRO: "bg-gray-200 text-gray-800 dark:bg-gray-800/30 dark:text-gray-400",
+  EMPRESA: "bg-gray-200 text-gray-700 dark:bg-gray-800/30 dark:text-gray-400",
   PREMIUM: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
 };
 
@@ -68,18 +68,18 @@ export function TenantsAdminClient({ tenants }: { tenants: Tenant[] }) {
         <div className="relative flex-1">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar por nome, slug ou e-mail..."
-            className="w-full rounded-xl border border-gray-200 py-2.5 pl-9 pr-3 text-sm focus:border-violet-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500" />
+            className="w-full rounded-xl border border-gray-200 py-2.5 pl-9 pr-3 text-sm focus:border-gray-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500" />
         </div>
         <div className="flex gap-2">
           <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
-            className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-violet-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
+            className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-gray-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
             <option value="all">Todos status</option>
             <option value="ACTIVE">Ativo</option>
             <option value="SUSPENDED">Suspenso</option>
             <option value="PENDING">Pendente</option>
           </select>
           <select value={filterPlan} onChange={(e) => setFilterPlan(e.target.value)}
-            className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-violet-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
+            className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-gray-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
             <option value="all">Todos planos</option>
             {PLANS.map((p) => <option key={p} value={p}>{p}</option>)}
           </select>
@@ -111,7 +111,7 @@ export function TenantsAdminClient({ tenants }: { tenants: Tenant[] }) {
                       <div>
                         <div className="flex items-center gap-1">
                           <p className="text-sm font-medium text-gray-900 dark:text-slate-100">{t.name}</p>
-                          <Link href={`/${t.slug}`} target="_blank" className="text-gray-400 hover:text-violet-600">
+                          <Link href={`/${t.slug}`} target="_blank" className="text-gray-400 hover:text-gray-700">
                             <ExternalLink size={11} />
                           </Link>
                         </div>
@@ -156,7 +156,7 @@ export function TenantsAdminClient({ tenants }: { tenants: Tenant[] }) {
                           </div>
                           {PLANS.map((plan) => (
                             <button key={plan} onClick={() => update(t.id, { plan })}
-                              className={`flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-slate-800 ${plan === t.plan ? "font-semibold text-violet-600 dark:text-violet-400" : "text-gray-700 dark:text-slate-300"}`}>
+                              className={`flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-slate-800 ${plan === t.plan ? "font-semibold text-gray-700 dark:text-gray-400" : "text-gray-700 dark:text-slate-300"}`}>
                               <CreditCard size={13} /> {plan} {plan === t.plan && "✓"}
                             </button>
                           ))}

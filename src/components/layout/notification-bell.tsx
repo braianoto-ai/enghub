@@ -94,7 +94,7 @@ export function NotificationBell() {
       >
         <Bell size={19} />
         {unread > 0 && (
-          <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-violet-600 text-[10px] font-bold text-white ring-2 ring-white dark:ring-slate-900">
+          <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-gray-700 text-[10px] font-bold text-white ring-2 ring-white dark:ring-slate-900">
             {unread > 9 ? "9+" : unread}
           </span>
         )}
@@ -109,7 +109,7 @@ export function NotificationBell() {
                 Notificações
               </span>
               {unread > 0 && (
-                <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-semibold text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
+                <span className="rounded-full bg-gray-200 px-2 py-0.5 text-xs font-semibold text-gray-800 dark:bg-gray-700/40 dark:text-gray-300">
                   {unread} nova{unread > 1 ? "s" : ""}
                 </span>
               )}
@@ -117,7 +117,7 @@ export function NotificationBell() {
             {unread > 0 && (
               <button
                 onClick={markAllRead}
-                className="flex items-center gap-1 text-xs text-violet-600 hover:text-violet-700 dark:text-violet-400"
+                className="flex items-center gap-1 text-xs text-gray-700 hover:text-gray-800 dark:text-gray-400"
               >
                 <Check size={12} />
                 Marcar todas
@@ -129,7 +129,7 @@ export function NotificationBell() {
           <div className="max-h-96 overflow-y-auto">
             {loading ? (
               <div className="flex h-24 items-center justify-center">
-                <div className="h-5 w-5 animate-spin rounded-full border-2 border-violet-600 border-t-transparent" />
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-600 border-t-transparent" />
               </div>
             ) : notifications.length === 0 ? (
               <div className="flex flex-col items-center justify-center gap-2 py-10 text-zinc-400">
@@ -139,7 +139,7 @@ export function NotificationBell() {
             ) : (
               <ul className="divide-y divide-zinc-100 dark:divide-zinc-800">
                 {notifications.map((n) => (
-                  <li key={n.id} className={!n.read ? "bg-violet-50/60 dark:bg-violet-900/10" : ""}>
+                  <li key={n.id} className={!n.read ? "bg-gray-100/60 dark:bg-gray-800/10" : ""}>
                     <Link
                       href={n.href}
                       onClick={() => {
@@ -152,12 +152,12 @@ export function NotificationBell() {
                       <div
                         className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
                           n.type === "message"
-                            ? "bg-blue-100 dark:bg-blue-900/30"
+                            ? "bg-gray-200 dark:bg-gray-800/30"
                             : "bg-yellow-100 dark:bg-yellow-900/30"
                         }`}
                       >
                         {n.type === "message" ? (
-                          <MessageSquare size={15} className="text-blue-600 dark:text-blue-400" />
+                          <MessageSquare size={15} className="text-gray-600 dark:text-gray-400" />
                         ) : (
                           <Star size={15} className="text-yellow-500" />
                         )}
@@ -180,7 +180,7 @@ export function NotificationBell() {
 
                       {/* Bolinha não lida */}
                       {!n.read && (
-                        <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-violet-600" />
+                        <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-gray-700" />
                       )}
                     </Link>
                   </li>
@@ -195,7 +195,7 @@ export function NotificationBell() {
               <Link
                 href="/dashboard/mensagens"
                 onClick={() => setOpen(false)}
-                className="text-xs font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400"
+                className="text-xs font-medium text-gray-700 hover:text-gray-800 dark:text-gray-400"
               >
                 Ver todas as mensagens →
               </Link>

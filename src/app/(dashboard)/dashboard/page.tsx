@@ -131,8 +131,8 @@ export default async function DashboardPage() {
                     {stat.value}
                   </p>
                 </div>
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-violet-50 dark:bg-violet-900/30">
-                  <stat.icon size={24} className="text-violet-600" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800/30">
+                  <stat.icon size={24} className="text-gray-700" />
                 </div>
               </div>
             </CardContent>
@@ -185,7 +185,7 @@ export default async function DashboardPage() {
                 "Responda avaliações para mostrar que você se importa com seus clientes",
               ].map((tip, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-600 dark:bg-violet-900/40 dark:text-violet-400">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gray-200 text-xs font-bold text-gray-700 dark:bg-gray-700/40 dark:text-gray-400">
                     {i + 1}
                   </span>
                   {tip}
