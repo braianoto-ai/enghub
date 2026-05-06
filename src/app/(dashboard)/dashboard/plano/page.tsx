@@ -2,8 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, Zap } from "lucide-react";
-import Link from "next/link";
+import { Check, Zap, CheckCircle, XCircle } from "lucide-react";
+import { UpgradeButton, ManageButton } from "./upgrade-button";
 
 const PLAN_CONFIG: Record<
   string,
@@ -80,7 +80,12 @@ const PLAN_CONFIG: Record<
 
 const UPGRADE_ORDER = ["FREE", "PRO", "EMPRESA", "PREMIUM"];
 
-export default async function PlanoPage() {
+export default async function PlanoPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ success?: string; canceled?: string }>;
+}) {
+  const { success, canceled } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -89,7 +94,7 @@ export default async function PlanoPage() {
 
   const { data: tenant } = await supabase
     .from("tenants")
-    .select("id, plan")
+    .select("id, plan, stripe_customer_id, stripe_subscription_id")
     .eq("owner_id", user.id)
     .maybeSingle();
 
@@ -110,10 +115,25 @@ export default async function PlanoPage() {
   const currentIndex = UPGRADE_ORDER.indexOf(tenant.plan);
   const nextPlans = UPGRADE_ORDER.slice(currentIndex + 1);
 
+  const hasSubscription = !!(tenant.stripe_subscription_id);
+
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900">Meu Plano</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">Meu Plano</h1>
       <p className="mt-1 text-gray-500">Gerencie seu plano e recursos</p>
+
+      {success && (
+        <div className="mt-4 flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700 dark:border-green-800 dark:bg-green-900/20 dark:text-green-400">
+          <CheckCircle size={16} />
+          Plano atualizado com sucesso! Seja bem-vindo ao {plan.label}.
+        </div>
+      )}
+      {canceled && (
+        <div className="mt-4 flex items-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800/40 dark:text-zinc-400">
+          <XCircle size={16} />
+          Checkout cancelado. Seu plano não foi alterado.
+        </div>
+      )}
 
       {/* Current plan */}
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -125,15 +145,20 @@ export default async function PlanoPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-gray-900">{plan.price}</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-slate-100">{plan.price}</p>
             <ul className="mt-4 space-y-2">
               {plan.features.map((f) => (
-                <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
+                <li key={f} className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-400">
                   <Check size={15} className="text-green-500 shrink-0" />
                   {f}
                 </li>
               ))}
             </ul>
+            {hasSubscription && (
+              <div className="mt-6">
+                <ManageButton />
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -193,25 +218,14 @@ export default async function PlanoPage() {
                         </li>
                       ))}
                     </ul>
-                    <Link
-                      href="/planos"
-                      className="mt-4 block w-full rounded-lg bg-violet-600 py-2 text-center text-sm font-medium text-white hover:bg-violet-700 transition-colors"
-                    >
-                      Ver detalhes
-                    </Link>
+                    <UpgradeButton plan={planKey} />
                   </CardContent>
                 </Card>
               );
             })}
           </div>
           <p className="mt-4 text-center text-sm text-gray-400">
-            Para fazer upgrade, entre em contato:{" "}
-            <a
-              href="mailto:contato@enghub.com.br"
-              className="text-violet-600 hover:underline"
-            >
-              contato@enghub.com.br
-            </a>
+            Pagamento seguro via Stripe. Cancele a qualquer momento.
           </p>
         </div>
       )}
