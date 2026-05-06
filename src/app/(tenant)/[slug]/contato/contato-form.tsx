@@ -25,12 +25,17 @@ export function ContatoForm({ tenantId, tenantName }: ContatoFormProps) {
     const formData = new FormData(form);
     const supabase = createClient();
 
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const phone = (formData.get("phone") as string) || null;
+    const message = formData.get("message") as string;
+
     const { error: err } = await supabase.from("contact_messages").insert({
       tenant_id: tenantId,
-      name: formData.get("name"),
-      email: formData.get("email"),
-      phone: formData.get("phone") || null,
-      message: formData.get("message"),
+      name,
+      email,
+      phone,
+      message,
     });
 
     if (err) {
@@ -38,6 +43,12 @@ export function ContatoForm({ tenantId, tenantName }: ContatoFormProps) {
     } else {
       setSuccess(true);
       form.reset();
+      // Fire-and-forget — não bloqueia o UX se o email falhar
+      fetch("/api/notify/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tenantId, senderName: name, senderEmail: email, senderPhone: phone, message }),
+      }).catch(() => {});
     }
     setLoading(false);
   }
