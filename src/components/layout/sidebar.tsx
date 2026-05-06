@@ -46,7 +46,7 @@ export function Sidebar({ tenant, user }: SidebarProps) {
   return (
     <aside className="flex h-screen w-64 flex-col border-r border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-900">
       <div className="flex h-16 items-center gap-2 border-b border-gray-200 px-6 dark:border-slate-800">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600">
           <span className="font-bold text-white">E</span>
         </div>
         <span className="text-lg font-bold text-gray-900 dark:text-slate-100">EngHub</span>
@@ -55,7 +55,7 @@ export function Sidebar({ tenant, user }: SidebarProps) {
       {tenant && (
         <div className="border-b border-gray-200 px-4 py-3 dark:border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-400">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-violet-100 text-sm font-semibold text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
               {getInitials(tenant.name)}
             </div>
             <div className="min-w-0">
@@ -68,7 +68,7 @@ export function Sidebar({ tenant, user }: SidebarProps) {
           <Link
             href={`/${tenant.slug}`}
             target="_blank"
-            className="mt-2 flex items-center gap-1 text-xs text-blue-600 hover:underline dark:text-blue-400"
+            className="mt-2 flex items-center gap-1 text-xs text-violet-600 hover:underline dark:text-violet-400"
           >
             <ExternalLink size={11} />
             Ver meu perfil público
@@ -89,7 +89,7 @@ export function Sidebar({ tenant, user }: SidebarProps) {
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                  ? "bg-violet-50 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400"
                   : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
               )}
             >

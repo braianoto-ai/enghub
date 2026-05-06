@@ -221,7 +221,7 @@ export default function EditarProjeto() {
                   <div key={img.id} className="relative aspect-square">
                     <Image src={img.url} alt={`Imagem ${i + 1}`} fill className="rounded-lg object-cover" />
                     {i === 0 && existingImages.length + newImages.length > 0 && (
-                      <span className="absolute left-1 top-1 rounded bg-blue-600 px-1 py-0.5 text-[10px] font-semibold text-white">Capa</span>
+                      <span className="absolute left-1 top-1 rounded bg-violet-600 px-1 py-0.5 text-[10px] font-semibold text-white">Capa</span>
                     )}
                     <button type="button" onClick={() => removeExisting(img.id)} className="absolute right-1 top-1 rounded-full bg-black/60 p-0.5 text-white hover:bg-black/80">
                       <X size={12} />
@@ -232,7 +232,7 @@ export default function EditarProjeto() {
                   <div key={i} className="relative aspect-square">
                     <Image src={img.preview} alt={`Nova ${i + 1}`} fill className="rounded-lg object-cover" />
                     {existingImages.length === 0 && i === 0 && (
-                      <span className="absolute left-1 top-1 rounded bg-blue-600 px-1 py-0.5 text-[10px] font-semibold text-white">Capa</span>
+                      <span className="absolute left-1 top-1 rounded bg-violet-600 px-1 py-0.5 text-[10px] font-semibold text-white">Capa</span>
                     )}
                     <button type="button" onClick={() => removeNew(i)} className="absolute right-1 top-1 rounded-full bg-black/60 p-0.5 text-white hover:bg-black/80">
                       <X size={12} />
@@ -245,7 +245,7 @@ export default function EditarProjeto() {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="flex h-24 w-full flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-gray-300 text-gray-400 transition-colors hover:border-blue-400 hover:text-blue-500"
+                className="flex h-24 w-full flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-gray-300 text-gray-400 transition-colors hover:border-violet-400 hover:text-violet-500"
               >
                 <ImagePlus size={24} />
                 <span className="text-sm">
@@ -263,7 +263,7 @@ export default function EditarProjeto() {
             <Input id="title" label="Título" value={title} onChange={(e) => setTitle(e.target.value)} required />
             <div className="space-y-1">
               <label className="block text-sm font-medium text-gray-700">Área</label>
-              <select value={area} onChange={(e) => setArea(e.target.value)} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" required>
+              <select value={area} onChange={(e) => setArea(e.target.value)} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500" required>
                 <option value="">Selecione a área</option>
                 {Object.entries(engineeringAreaLabels).map(([key, label]) => (
                   <option key={key} value={key}>{label}</option>
@@ -272,13 +272,13 @@ export default function EditarProjeto() {
             </div>
             <div className="space-y-1">
               <label className="block text-sm font-medium text-gray-700">Descrição</label>
-              <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" rows={4} />
+              <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500" rows={4} />
             </div>
             <Input id="location" label="Localização" value={location} onChange={(e) => setLocation(e.target.value)} />
             <Input id="client" label="Cliente" value={client} onChange={(e) => setClient(e.target.value)} />
             <div className="space-y-1">
               <label className="block text-sm font-medium text-gray-700">Status</label>
-              <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+              <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500">
                 <option value="DRAFT">Rascunho</option>
                 <option value="PUBLISHED">Publicado</option>
                 <option value="ARCHIVED">Arquivado</option>

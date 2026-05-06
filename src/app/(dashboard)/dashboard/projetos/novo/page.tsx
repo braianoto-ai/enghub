@@ -169,7 +169,7 @@ export default function NovoProjeto() {
                       className="rounded-lg object-cover"
                     />
                     {i === 0 && (
-                      <span className="absolute left-1 top-1 rounded bg-blue-600 px-1 py-0.5 text-[10px] font-semibold text-white">
+                      <span className="absolute left-1 top-1 rounded bg-violet-600 px-1 py-0.5 text-[10px] font-semibold text-white">
                         Capa
                       </span>
                     )}
@@ -189,7 +189,7 @@ export default function NovoProjeto() {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="flex h-24 w-full flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-gray-300 text-gray-400 transition-colors hover:border-blue-400 hover:text-blue-500"
+                className="flex h-24 w-full flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed border-gray-300 text-gray-400 transition-colors hover:border-violet-400 hover:text-violet-500"
               >
                 <ImagePlus size={24} />
                 <span className="text-sm">
@@ -232,7 +232,7 @@ export default function NovoProjeto() {
               </label>
               <select
                 name="area"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
                 required
               >
                 <option value="">Selecione a área</option>
@@ -249,7 +249,7 @@ export default function NovoProjeto() {
               </label>
               <textarea
                 name="description"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
                 rows={4}
                 placeholder="Descreva o projeto..."
               />

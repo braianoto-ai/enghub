@@ -156,7 +156,7 @@ export default async function PlanoPage() {
       {nextPlans.length > 0 && (
         <div className="mt-10">
           <div className="flex items-center gap-2">
-            <Zap size={18} className="text-blue-600" />
+            <Zap size={18} className="text-violet-600" />
             <h2 className="text-lg font-semibold text-gray-900">
               Faça upgrade
             </h2>
@@ -170,7 +170,7 @@ export default async function PlanoPage() {
               return (
                 <Card
                   key={planKey}
-                  className={planKey === "PRO" ? "border-blue-500 ring-1 ring-blue-500" : ""}
+                  className={planKey === "PRO" ? "border-violet-500 ring-1 ring-violet-500" : ""}
                 >
                   <CardHeader>
                     <div className="flex items-center justify-between">
@@ -195,7 +195,7 @@ export default async function PlanoPage() {
                     </ul>
                     <Link
                       href="/planos"
-                      className="mt-4 block w-full rounded-lg bg-blue-600 py-2 text-center text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+                      className="mt-4 block w-full rounded-lg bg-violet-600 py-2 text-center text-sm font-medium text-white hover:bg-violet-700 transition-colors"
                     >
                       Ver detalhes
                     </Link>
@@ -208,7 +208,7 @@ export default async function PlanoPage() {
             Para fazer upgrade, entre em contato:{" "}
             <a
               href="mailto:contato@enghub.com.br"
-              className="text-blue-600 hover:underline"
+              className="text-violet-600 hover:underline"
             >
               contato@enghub.com.br
             </a>
@@ -260,7 +260,7 @@ function UsageStat({
                   ? "bg-red-500"
                   : pct >= 80
                   ? "bg-orange-400"
-                  : "bg-blue-500"
+                  : "bg-violet-500"
               }`}
               style={{ width: `${pct}%` }}
             />

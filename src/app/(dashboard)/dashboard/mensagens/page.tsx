@@ -32,7 +32,7 @@ export default async function MensagensPage() {
           </p>
         </div>
         {unread > 0 && (
-          <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
+          <span className="rounded-full bg-violet-100 px-3 py-1 text-sm font-medium text-violet-700">
             {unread} não {unread === 1 ? "lida" : "lidas"}
           </span>
         )}
@@ -44,7 +44,7 @@ export default async function MensagensPage() {
             {messages.map((msg) => (
               <Card
                 key={msg.id}
-                className={msg.read ? "" : "border-blue-200 bg-blue-50/30"}
+                className={msg.read ? "" : "border-violet-200 bg-violet-50/30"}
               >
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between gap-4">
@@ -52,13 +52,13 @@ export default async function MensagensPage() {
                       <div className="flex items-center gap-2">
                         <p className="font-semibold text-gray-900">{msg.name}</p>
                         {!msg.read && (
-                          <span className="h-2 w-2 rounded-full bg-blue-500" />
+                          <span className="h-2 w-2 rounded-full bg-violet-500" />
                         )}
                       </div>
                       <div className="mt-1 flex flex-wrap gap-3 text-sm text-gray-500">
                         <a
                           href={`mailto:${msg.email}`}
-                          className="flex items-center gap-1 hover:text-blue-600"
+                          className="flex items-center gap-1 hover:text-violet-600"
                         >
                           <Mail size={14} />
                           {msg.email}
@@ -66,7 +66,7 @@ export default async function MensagensPage() {
                         {msg.phone && (
                           <a
                             href={`tel:${msg.phone}`}
-                            className="flex items-center gap-1 hover:text-blue-600"
+                            className="flex items-center gap-1 hover:text-violet-600"
                           >
                             <Phone size={14} />
                             {msg.phone}
