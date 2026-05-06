@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/layout/sidebar";
+import { NotificationBell } from "@/components/layout/notification-bell";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 export default async function DashboardLayout({
   children,
@@ -21,7 +23,16 @@ export default async function DashboardLayout({
   return (
     <div className="flex h-screen">
       <Sidebar tenant={tenant} user={user} />
-      <main className="flex-1 overflow-y-auto bg-gray-50 p-8 dark:bg-slate-950">{children}</main>
+      <div className="flex flex-1 flex-col overflow-hidden">
+        {/* Top bar */}
+        <header className="flex h-14 shrink-0 items-center justify-end gap-2 border-b border-gray-200 bg-white px-6 dark:border-slate-800 dark:bg-slate-900">
+          <ThemeToggle />
+          <NotificationBell />
+        </header>
+        <main className="flex-1 overflow-y-auto bg-gray-50 p-8 dark:bg-slate-950">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

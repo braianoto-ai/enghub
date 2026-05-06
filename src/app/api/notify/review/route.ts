@@ -32,14 +32,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Owner email not found" }, { status: 404 });
     }
 
-    await sendReviewNotification({
-      to: profile.email,
-      professionalName: tenant.name,
-      reviewerName,
-      rating,
-      comment,
-      slug: tenant.slug,
-    });
+    const stars = "★".repeat(rating) + "☆".repeat(5 - rating);
+
+    await Promise.all([
+      sendReviewNotification({
+        to: profile.email,
+        professionalName: tenant.name,
+        reviewerName,
+        rating,
+        comment,
+        slug: tenant.slug,
+      }),
+      supabase.from("notifications").insert({
+        tenant_id: tenantId,
+        type: "review",
+        title: `Nova avaliação ${stars} de ${reviewerName}`,
+        body: comment ? comment.slice(0, 120) : `${rating}/5 estrelas`,
+        href: "/dashboard/avaliacoes",
+        read: false,
+      }),
+    ]);
 
     return NextResponse.json({ ok: true });
   } catch (err) {

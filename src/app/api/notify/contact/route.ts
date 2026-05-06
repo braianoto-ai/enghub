@@ -33,15 +33,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Owner email not found" }, { status: 404 });
     }
 
-    await sendContactNotification({
-      to: profile.email,
-      professionalName: tenant.name,
-      senderName,
-      senderEmail,
-      senderPhone,
-      message,
-      slug: tenant.slug,
-    });
+    await Promise.all([
+      sendContactNotification({
+        to: profile.email,
+        professionalName: tenant.name,
+        senderName,
+        senderEmail,
+        senderPhone,
+        message,
+        slug: tenant.slug,
+      }),
+      supabase.from("notifications").insert({
+        tenant_id: tenantId,
+        type: "message",
+        title: `Nova mensagem de ${senderName}`,
+        body: message.slice(0, 120),
+        href: "/dashboard/mensagens",
+        read: false,
+      }),
+    ]);
 
     return NextResponse.json({ ok: true });
   } catch (err) {
