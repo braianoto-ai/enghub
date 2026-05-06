@@ -10,6 +10,7 @@ import { ReviewForm } from "./review-form";
 import { ImageGallery } from "./image-gallery";
 import { ViewTracker } from "./view-tracker";
 import { WhatsAppButton } from "./whatsapp-button";
+import { AvailabilityBadge, type AvailabilityStatus } from "@/components/availability-switcher";
 import {
   MapPin,
   Phone,
@@ -125,7 +126,7 @@ export default async function TenantPage({
     supabase
       .from("professional_profiles")
       .select(
-        "bio, phone, whatsapp, website, linkedin, instagram, crea, cau, areas, city, state, years_experience, certifications, education"
+        "bio, phone, whatsapp, website, linkedin, instagram, crea, cau, areas, city, state, years_experience, certifications, education, availability"
       )
       .eq("tenant_id", tenant.id)
       .maybeSingle(),
@@ -192,6 +193,9 @@ export default async function TenantPage({
                     <Shield size={12} className="text-violet-400" />
                     {registrationBadge}
                   </span>
+                )}
+                {prof?.availability && (
+                  <AvailabilityBadge status={prof.availability as AvailabilityStatus} />
                 )}
               </div>
               {(prof?.city || prof?.state) && (

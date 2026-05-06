@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, FolderOpen, Star, MessageSquare } from "lucide-react";
 import { redirect } from "next/navigation";
 import { OnboardingCard } from "./onboarding-card";
+import { AvailabilitySwitcher, type AvailabilityStatus } from "@/components/availability-switcher";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -45,7 +46,7 @@ export default async function DashboardPage() {
       .limit(5),
     supabase
       .from("profiles")
-      .select("bio, phone, whatsapp, linkedin")
+      .select("bio, phone, whatsapp, linkedin, availability")
       .eq("tenant_id", tenantId ?? "")
       .maybeSingle(),
   ]);
@@ -103,6 +104,21 @@ export default async function DashboardPage() {
       <div className="mt-6">
         <OnboardingCard steps={onboardingSteps} slug={tenant?.slug ?? ""} />
       </div>
+
+      {/* Widget de disponibilidade rápida */}
+      {tenant?.id && (
+        <div className="mb-6 flex items-center justify-between rounded-2xl border border-zinc-200 bg-white px-5 py-4 dark:border-zinc-800 dark:bg-zinc-900">
+          <div>
+            <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Sua disponibilidade</p>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">Visível no seu perfil público</p>
+          </div>
+          <AvailabilitySwitcher
+            tenantId={tenant.id}
+            initial={(profile?.availability as AvailabilityStatus) ?? "available"}
+            compact
+          />
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (

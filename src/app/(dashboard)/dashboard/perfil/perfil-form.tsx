@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/client";
 import { engineeringAreaLabels } from "@/lib/utils";
+import { AvailabilitySwitcher, type AvailabilityStatus } from "@/components/availability-switcher";
 
 interface PerfilFormProps {
   tenant: { id: string; name: string; slug: string; description?: string | null } | null;
@@ -23,6 +24,7 @@ interface PerfilFormProps {
     state?: string | null;
     years_experience?: number | null;
     education?: string | null;
+    availability?: AvailabilityStatus | null;
     tenant_id?: string;
   } | null;
 }
@@ -210,6 +212,23 @@ export function PerfilForm({ tenant, profile }: PerfilFormProps) {
             placeholder="@seuperfil"
             defaultValue={profile?.instagram ?? ""}
           />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Disponibilidade</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="mb-3 text-sm text-gray-500 dark:text-slate-400">
+            Este status aparece no seu perfil público para que clientes saibam sua disponibilidade.
+          </p>
+          {tenant?.id && (
+            <AvailabilitySwitcher
+              tenantId={tenant.id}
+              initial={(profile?.availability as AvailabilityStatus) ?? "available"}
+            />
+          )}
         </CardContent>
       </Card>
 
