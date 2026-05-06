@@ -16,14 +16,14 @@ import {
   Cpu,
 } from "lucide-react";
 
-const AREA_CONFIG: Record<string, { label: string; icon: React.ElementType; border: string; iconColor: string }> = {
-  CIVIL:      { label: "Eng. Civil",       icon: Building2,    border: "from-blue-500 via-blue-400 to-cyan-400",     iconColor: "text-blue-500 dark:text-blue-400" },
-  MECANICA:   { label: "Eng. Mecânica",    icon: HardHat,      border: "from-orange-500 via-orange-400 to-amber-300", iconColor: "text-orange-500 dark:text-orange-400" },
-  ELETRICA:   { label: "Eng. Elétrica",    icon: Zap,          border: "from-yellow-400 via-amber-400 to-orange-400", iconColor: "text-yellow-500 dark:text-yellow-400" },
-  ARQUITETURA:{ label: "Arquitetura",      icon: Building2,    border: "from-purple-500 via-violet-400 to-fuchsia-400",iconColor: "text-purple-500 dark:text-purple-400" },
-  AMBIENTAL:  { label: "Eng. Ambiental",   icon: Leaf,         border: "from-green-500 via-emerald-400 to-teal-400",  iconColor: "text-green-500 dark:text-green-400" },
-  QUIMICA:    { label: "Eng. Química",     icon: FlaskConical, border: "from-pink-500 via-rose-400 to-red-400",       iconColor: "text-pink-500 dark:text-pink-400" },
-  PRODUCAO:   { label: "Eng. de Produção", icon: Cpu,          border: "from-indigo-500 via-blue-400 to-violet-400",  iconColor: "text-indigo-500 dark:text-indigo-400" },
+const AREA_CONFIG: Record<string, { label: string; icon: React.ElementType; iconColor: string }> = {
+  CIVIL:      { label: "Eng. Civil",       icon: Building2,    iconColor: "text-violet-400" },
+  MECANICA:   { label: "Eng. Mecânica",    icon: HardHat,      iconColor: "text-violet-500" },
+  ELETRICA:   { label: "Eng. Elétrica",    icon: Zap,          iconColor: "text-violet-300" },
+  ARQUITETURA:{ label: "Arquitetura",      icon: Building2,    iconColor: "text-violet-400" },
+  AMBIENTAL:  { label: "Eng. Ambiental",   icon: Leaf,         iconColor: "text-violet-500" },
+  QUIMICA:    { label: "Eng. Química",     icon: FlaskConical, iconColor: "text-violet-300" },
+  PRODUCAO:   { label: "Eng. de Produção", icon: Cpu,          iconColor: "text-violet-400" },
 };
 
 export default async function HomePage() {
@@ -81,23 +81,23 @@ export default async function HomePage() {
   return (
     <div className="overflow-x-hidden">
       {/* ── HERO ─────────────────────────────────────────── */}
-      <section className="relative bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950 px-4 pb-32 pt-20 text-white">
+      <section className="relative bg-gradient-to-br from-zinc-950 via-zinc-900 to-violet-950/60 px-4 pb-32 pt-20 text-white">
         {/* Background blobs */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -left-40 -top-40 h-96 w-96 rounded-full bg-blue-600/20 blur-3xl" />
-          <div className="absolute -right-40 top-20 h-96 w-96 rounded-full bg-indigo-600/20 blur-3xl" />
-          <div className="absolute bottom-0 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-blue-500/10 blur-3xl" />
+          <div className="absolute -left-40 -top-40 h-96 w-96 rounded-full bg-violet-700/15 blur-3xl" />
+          <div className="absolute -right-40 top-20 h-96 w-96 rounded-full bg-violet-500/10 blur-3xl" />
+          <div className="absolute bottom-0 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-violet-600/10 blur-3xl" />
         </div>
 
         <div className="relative mx-auto max-w-4xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-1.5 text-sm text-blue-300 backdrop-blur-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-400/20 bg-violet-500/10 px-4 py-1.5 text-sm text-violet-300 backdrop-blur-sm">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
             {totalProfessionals ?? 0} profissionais ativos na plataforma
           </div>
 
           <h1 className="mt-4 text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
             Encontre o profissional
-            <span className="block bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-violet-400 to-violet-200 bg-clip-text text-transparent">
               certo para sua obra
             </span>
           </h1>
@@ -154,11 +154,11 @@ export default async function HomePage() {
                 className="group relative"
               >
                 {/* gradient border wrapper */}
-                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${area.border} opacity-0 transition-opacity duration-300 group-hover:opacity-100`} />
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-500 via-violet-400 to-purple-400 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="absolute inset-[1px] rounded-2xl bg-white dark:bg-slate-900" />
 
                 {/* card content */}
-                <div className="relative rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 group-hover:border-transparent group-hover:-translate-y-1 group-hover:shadow-lg dark:border-slate-700/60 dark:bg-slate-900">
+                <div className="relative rounded-2xl border border-zinc-200 bg-white p-6 transition-all duration-300 group-hover:border-transparent group-hover:-translate-y-1 group-hover:shadow-xl dark:border-zinc-700/60 dark:bg-zinc-900">
                   <area.icon
                     size={32}
                     strokeWidth={1.5}
@@ -268,7 +268,7 @@ export default async function HomePage() {
           <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2">
             {/* For clients */}
             <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-slate-700 dark:bg-slate-900">
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-violet-50 px-3 py-1 text-sm font-medium text-violet-700 dark:bg-violet-900/30 dark:text-violet-400">
                 <Users size={14} />
                 Para clientes
               </div>
@@ -279,7 +279,7 @@ export default async function HomePage() {
                   { step: "3", title: "Entre em contato", desc: "Mensagem, WhatsApp ou solicitação de orçamento" },
                 ].map((item) => (
                   <div key={item.step} className="flex gap-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-600 text-sm font-bold text-white">
                       {item.step}
                     </div>
                     <div>
@@ -290,7 +290,7 @@ export default async function HomePage() {
                 ))}
               </div>
               <Link href="/buscar" className="mt-8 block">
-                <Button className="w-full">
+                <Button className="w-full bg-violet-600 hover:bg-violet-500">
                   Buscar profissionais
                   <ArrowRight size={16} className="ml-2" />
                 </Button>
@@ -299,9 +299,9 @@ export default async function HomePage() {
 
             {/* For engineers */}
             <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-slate-700 dark:bg-slate-900">
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-violet-50 px-3 py-1 text-sm font-medium text-violet-700 dark:bg-violet-900/30 dark:text-violet-400">
                 <HardHat size={14} />
-                Para engenheiros
+                Para profissionais
               </div>
               <div className="space-y-6">
                 {[
@@ -310,7 +310,7 @@ export default async function HomePage() {
                   { step: "3", title: "Receba clientes", desc: "Mensagens e orçamentos direto no dashboard" },
                 ].map((item) => (
                   <div key={item.step} className="flex gap-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-sm font-bold text-white">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-700 text-sm font-bold text-white">
                       {item.step}
                     </div>
                     <div>
@@ -358,9 +358,9 @@ export default async function HomePage() {
                 desc: "Rede crescente de engenheiros de todo o Brasil",
               },
             ].map((f) => (
-              <div key={f.title} className="rounded-2xl border border-gray-200 bg-white p-6 text-center dark:border-slate-700 dark:bg-slate-800">
-                <div className={`mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full ${f.color}`}>
-                  <f.icon size={26} />
+              <div key={f.title} className="rounded-2xl border border-zinc-200 bg-white p-6 text-center dark:border-zinc-700 dark:bg-zinc-900">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-violet-50 dark:bg-violet-900/20">
+                  <f.icon size={26} className="text-violet-600 dark:text-violet-400" />
                 </div>
                 <h3 className="font-semibold text-gray-900 dark:text-slate-100">{f.title}</h3>
                 <p className="mt-2 text-sm text-gray-500 dark:text-slate-400">{f.desc}</p>
@@ -371,26 +371,26 @@ export default async function HomePage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700 px-4 py-24 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-zinc-950 via-violet-950 to-zinc-900 px-4 py-24 text-white">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/5 blur-3xl" />
-          <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-white/5 blur-3xl" />
+          <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-500/10 blur-3xl" />
+          <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-violet-600/10 blur-3xl" />
         </div>
         <div className="relative mx-auto max-w-2xl text-center">
           <h2 className="text-4xl font-bold">Pronto para começar?</h2>
-          <p className="mt-4 text-lg text-blue-100">
+          <p className="mt-4 text-lg text-zinc-400">
             Cadastro gratuito. Sem cartão de crédito. Comece em 5 minutos.
           </p>
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link href="/cadastro">
-              <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
+              <Button size="lg" className="bg-violet-600 text-white hover:bg-violet-500">
                 Criar perfil grátis
                 <ArrowRight size={18} className="ml-2" />
               </Button>
             </Link>
             <Link href="/buscar">
-              <Button size="lg" variant="ghost" className="!text-white hover:!bg-white/10">
-                Buscar engenheiros
+              <Button size="lg" variant="ghost" className="!text-zinc-300 hover:!bg-white/5">
+                Buscar profissionais
               </Button>
             </Link>
           </div>
