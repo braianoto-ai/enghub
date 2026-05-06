@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,6 +21,83 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { engineeringAreaLabels } from "@/lib/utils";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+
+  const { data: tenant } = await supabase
+    .from("tenants")
+    .select("id, name")
+    .eq("slug", slug)
+    .eq("status", "ACTIVE")
+    .maybeSingle();
+
+  if (!tenant) return { title: "Profissional não encontrado" };
+
+  const [{ data: prof }, { data: firstProject }] = await Promise.all([
+    supabase
+      .from("professional_profiles")
+      .select("bio, areas, city, state")
+      .eq("tenant_id", tenant.id)
+      .maybeSingle(),
+    supabase
+      .from("projects")
+      .select("image_url")
+      .eq("tenant_id", tenant.id)
+      .eq("status", "PUBLISHED")
+      .not("image_url", "is", null)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+  ]);
+
+  const primaryArea = prof?.areas?.[0]
+    ? engineeringAreaLabels[prof.areas[0]] ?? prof.areas[0]
+    : null;
+
+  const location = [prof?.city, prof?.state].filter(Boolean).join(", ");
+  const titleParts = [tenant.name, primaryArea].filter(Boolean).join(" — ");
+  const description =
+    prof?.bio?.slice(0, 155) ??
+    [
+      `Perfil profissional de ${tenant.name}`,
+      primaryArea && `especialista em ${primaryArea}`,
+      location && `em ${location}`,
+      "no EngHub. Veja projetos, serviços e avaliações.",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+  const ogImage = firstProject?.image_url
+    ? { url: firstProject.image_url, width: 1200, height: 630, alt: tenant.name }
+    : undefined;
+
+  return {
+    title: titleParts,
+    description,
+    alternates: {
+      canonical: `/${slug}`,
+    },
+    openGraph: {
+      title: titleParts,
+      description,
+      type: "profile",
+      url: `/${slug}`,
+      ...(ogImage && { images: [ogImage] }),
+    },
+    twitter: {
+      card: ogImage ? "summary_large_image" : "summary",
+      title: titleParts,
+      description,
+      ...(ogImage && { images: [ogImage.url] }),
+    },
+  };
+}
 
 export default async function TenantPage({
   params,
