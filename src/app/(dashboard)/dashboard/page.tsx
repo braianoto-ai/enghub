@@ -81,8 +81,8 @@ export default async function DashboardPage() {
                     {stat.value}
                   </p>
                 </div>
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50">
-                  <stat.icon size={24} className="text-blue-600" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-violet-50">
+                  <stat.icon size={24} className="text-violet-600" />
                 </div>
               </div>
             </CardContent>
@@ -129,19 +129,19 @@ export default async function DashboardPage() {
           <CardContent>
             <ul className="space-y-3 text-sm text-gray-600">
               <li className="flex items-start gap-2">
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600">1</span>
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-600">1</span>
                 Complete seu perfil com bio e informações de contato
               </li>
               <li className="flex items-start gap-2">
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600">2</span>
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-600">2</span>
                 Adicione projetos ao seu portfólio
               </li>
               <li className="flex items-start gap-2">
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600">3</span>
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-600">3</span>
                 Cadastre os serviços que você oferece
               </li>
               <li className="flex items-start gap-2">
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600">4</span>
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-600">4</span>
                 Compartilhe seu perfil público com clientes
               </li>
             </ul>

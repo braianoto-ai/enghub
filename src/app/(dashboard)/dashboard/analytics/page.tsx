@@ -100,10 +100,10 @@ export default async function AnalyticsPage() {
       {/* Stats cards */}
       <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard
-          icon={<Eye size={20} className="text-blue-600" />}
+          icon={<Eye size={20} className="text-violet-600" />}
           label="Visitas totais"
           value={totalViews}
-          bg="bg-blue-50"
+          bg="bg-violet-50"
         />
         <StatCard
           icon={<TrendingUp size={20} className="text-indigo-600" />}
@@ -141,7 +141,7 @@ export default async function AnalyticsPage() {
                   </span>
                   <div className="relative w-full">
                     <div
-                      className="w-full rounded-t-md bg-blue-500 transition-all"
+                      className="w-full rounded-t-md bg-violet-500 transition-all"
                       style={{ height: `${Math.max(pct, 4)}px`, minHeight: d.count > 0 ? "8px" : "4px" }}
                     />
                   </div>
@@ -175,7 +175,7 @@ export default async function AnalyticsPage() {
                 <div
                   key={day}
                   title={`${day}: ${count} visita${count !== 1 ? "s" : ""}`}
-                  className="flex-1 rounded-t-sm bg-blue-400 transition-all hover:bg-blue-600"
+                  className="flex-1 rounded-t-sm bg-violet-400 transition-all hover:bg-violet-600"
                   style={{ height: `${Math.max(pct, 2)}%`, minHeight: count > 0 ? "6px" : "2px", opacity: count > 0 ? 1 : 0.2 }}
                 />
               );
@@ -256,7 +256,7 @@ function ConversionRow({
       </div>
       <div className="h-2 w-full rounded-full bg-gray-100">
         <div
-          className="h-2 rounded-full bg-blue-500 transition-all"
+          className="h-2 rounded-full bg-violet-500 transition-all"
           style={{ width: `${barPct}%` }}
         />
       </div>
