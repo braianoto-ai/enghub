@@ -7,10 +7,10 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div>
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600">
                 <span className="font-bold text-white">E</span>
               </div>
-              <span className="text-lg font-bold text-gray-900 dark:text-slate-100">EngHub</span>
+              <span className="text-lg font-bold text-gray-900 dark:text-slate-100">Eng<span className="text-violet-600 dark:text-violet-400">Hub</span></span>
             </div>
             <p className="mt-3 text-sm text-gray-500 dark:text-slate-400">
               A plataforma que conecta engenheiros e clientes. Mostre seu
