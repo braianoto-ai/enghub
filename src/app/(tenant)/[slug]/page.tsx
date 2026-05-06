@@ -18,6 +18,7 @@ import {
   ExternalLink,
   Shield,
   MessageSquare,
+  FileText,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -126,7 +127,7 @@ export default async function TenantPage({
     supabase
       .from("professional_profiles")
       .select(
-        "bio, phone, whatsapp, website, linkedin, instagram, crea, cau, areas, city, state, years_experience, certifications, education, availability"
+        "bio, phone, whatsapp, website, linkedin, instagram, crea, cau, areas, city, state, years_experience, certifications, education, availability, curriculum_url"
       )
       .eq("tenant_id", tenant.id)
       .maybeSingle(),
@@ -236,6 +237,18 @@ export default async function TenantPage({
                 <MessageSquare size={15} />
               </button>
             </Link>
+
+            {prof?.curriculum_url && (
+              <a
+                href={prof.curriculum_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white py-3 text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              >
+                <FileText size={15} />
+                Baixar currículo (PDF)
+              </a>
+            )}
 
             {/* Contato */}
             <div className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">

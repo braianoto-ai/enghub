@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/client";
 import { engineeringAreaLabels } from "@/lib/utils";
 import { AvailabilitySwitcher, type AvailabilityStatus } from "@/components/availability-switcher";
+import { CurriculumUpload } from "@/components/curriculum-upload";
 
 interface PerfilFormProps {
   tenant: { id: string; name: string; slug: string; description?: string | null } | null;
@@ -25,6 +26,7 @@ interface PerfilFormProps {
     years_experience?: number | null;
     education?: string | null;
     availability?: AvailabilityStatus | null;
+    curriculum_url?: string | null;
     tenant_id?: string;
   } | null;
 }
@@ -212,6 +214,23 @@ export function PerfilForm({ tenant, profile }: PerfilFormProps) {
             placeholder="@seuperfil"
             defaultValue={profile?.instagram ?? ""}
           />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Currículo em PDF</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="mb-3 text-sm text-gray-500 dark:text-slate-400">
+            Suba seu currículo em PDF. Ele aparece como botão "Baixar currículo" no seu perfil público.
+          </p>
+          {tenant?.id && (
+            <CurriculumUpload
+              tenantId={tenant.id}
+              currentUrl={profile?.curriculum_url}
+            />
+          )}
         </CardContent>
       </Card>
 
