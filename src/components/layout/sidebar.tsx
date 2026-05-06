@@ -44,31 +44,31 @@ export function Sidebar({ tenant, user }: SidebarProps) {
   }
 
   return (
-    <aside className="flex h-screen w-64 flex-col border-r border-gray-200 bg-white">
-      <div className="flex h-16 items-center gap-2 border-b border-gray-200 px-6">
+    <aside className="flex h-screen w-64 flex-col border-r border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+      <div className="flex h-16 items-center gap-2 border-b border-gray-200 px-6 dark:border-slate-800">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
           <span className="font-bold text-white">E</span>
         </div>
-        <span className="text-lg font-bold text-gray-900">EngHub</span>
+        <span className="text-lg font-bold text-gray-900 dark:text-slate-100">EngHub</span>
       </div>
 
       {tenant && (
-        <div className="border-b border-gray-200 px-4 py-3">
+        <div className="border-b border-gray-200 px-4 py-3 dark:border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-700">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-400">
               {getInitials(tenant.name)}
             </div>
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium text-gray-900">
+              <p className="truncate text-sm font-medium text-gray-900 dark:text-slate-100">
                 {tenant.name}
               </p>
-              <p className="text-xs text-gray-500 capitalize">{tenant.plan.toLowerCase()}</p>
+              <p className="text-xs text-gray-500 capitalize dark:text-slate-400">{tenant.plan.toLowerCase()}</p>
             </div>
           </div>
           <Link
             href={`/${tenant.slug}`}
             target="_blank"
-            className="mt-2 flex items-center gap-1 text-xs text-blue-600 hover:underline"
+            className="mt-2 flex items-center gap-1 text-xs text-blue-600 hover:underline dark:text-blue-400"
           >
             <ExternalLink size={11} />
             Ver meu perfil público
@@ -89,8 +89,8 @@ export function Sidebar({ tenant, user }: SidebarProps) {
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-blue-50 text-blue-700"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
               )}
             >
               <item.icon size={20} />
@@ -100,11 +100,11 @@ export function Sidebar({ tenant, user }: SidebarProps) {
         })}
       </nav>
 
-      <div className="border-t border-gray-200 p-4">
-        <p className="truncate px-3 text-xs text-gray-400">{user?.email}</p>
+      <div className="border-t border-gray-200 p-4 dark:border-slate-800">
+        <p className="truncate px-3 text-xs text-gray-400 dark:text-slate-500">{user?.email}</p>
         <button
           onClick={handleLogout}
-          className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900"
+          className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
         >
           <LogOut size={20} />
           Sair

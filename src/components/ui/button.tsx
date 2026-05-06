@@ -16,11 +16,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           {
             "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500":
               variant === "primary",
-            "bg-gray-100 text-gray-900 hover:bg-gray-200 focus:ring-gray-500":
+            "bg-gray-100 text-gray-900 hover:bg-gray-200 focus:ring-gray-500 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600":
               variant === "secondary",
-            "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-blue-500":
+            "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700":
               variant === "outline",
-            "text-gray-700 hover:bg-gray-100 focus:ring-gray-500":
+            "text-gray-700 hover:bg-gray-100 focus:ring-gray-500 dark:text-slate-300 dark:hover:bg-slate-800":
               variant === "ghost",
             "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500":
               variant === "danger",
