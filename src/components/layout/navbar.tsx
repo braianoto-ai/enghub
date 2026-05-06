@@ -27,6 +27,9 @@ export function Navbar() {
             <Link href="/planos" className="text-sm text-gray-600 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-100">
               Planos
             </Link>
+            <Link href="/blog" className="text-sm text-gray-600 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-100">
+              Blog
+            </Link>
             <Link href="/sobre" className="text-sm text-gray-600 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-100">
               Sobre
             </Link>
@@ -58,6 +61,7 @@ export function Navbar() {
             <div className="flex flex-col gap-3">
               <Link href="/buscar" className="text-sm text-gray-600 dark:text-slate-400" onClick={() => setIsOpen(false)}>Buscar Profissionais</Link>
               <Link href="/planos" className="text-sm text-gray-600 dark:text-slate-400" onClick={() => setIsOpen(false)}>Planos</Link>
+              <Link href="/blog" className="text-sm text-gray-600 dark:text-slate-400" onClick={() => setIsOpen(false)}>Blog</Link>
               <Link href="/sobre" className="text-sm text-gray-600 dark:text-slate-400" onClick={() => setIsOpen(false)}>Sobre</Link>
               <div className="flex gap-3 pt-2">
                 <Link href="/login"><Button variant="outline" size="sm">Entrar</Button></Link>
