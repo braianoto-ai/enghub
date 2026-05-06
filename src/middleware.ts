@@ -10,11 +10,12 @@ export async function middleware(request: NextRequest) {
 
   const mainDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000";
 
-  const currentHost = hostname
-    .replace(`.${mainDomain}`, "")
-    .replace(`:${url.port}`, "");
+  // Only rewrite if hostname is a true subdomain of mainDomain
+  // e.g. "gabriel-engenheiro.enghub.com.br" ends with ".enghub.com.br"
+  const isSubdomain =
+    hostname !== mainDomain && hostname.endsWith(`.${mainDomain}`);
 
-  if (currentHost === mainDomain || currentHost === "localhost") {
+  if (!isSubdomain) {
     return supabaseResponse;
   }
 
@@ -26,7 +27,8 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse;
   }
 
-  url.pathname = `/${currentHost}${url.pathname}`;
+  const slug = hostname.replace(`.${mainDomain}`, "");
+  url.pathname = `/${slug}${url.pathname}`;
   return NextResponse.rewrite(url);
 }
 
