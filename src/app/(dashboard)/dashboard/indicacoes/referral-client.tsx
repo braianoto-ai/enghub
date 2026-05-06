@@ -57,7 +57,7 @@ export function ReferralClient({
             icon: Users,
             label: "Total de indicados",
             value: referrals.length,
-            color: "bg-blue-50 text-blue-600 dark:bg-blue-900/30",
+            color: "bg-gray-100 text-gray-600 dark:bg-gray-800/30",
           },
           {
             icon: Check,
@@ -69,7 +69,7 @@ export function ReferralClient({
             icon: Zap,
             label: "Dias de PRO ganhos",
             value: `${rewardedCount * 30}`,
-            color: "bg-violet-50 text-violet-600 dark:bg-violet-900/30",
+            color: "bg-gray-100 text-gray-700 dark:bg-gray-800/30",
           },
         ].map((stat) => (
           <div
@@ -111,7 +111,7 @@ export function ReferralClient({
             },
           ].map((item) => (
             <div key={item.step} className="flex items-start gap-3">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-100 text-sm font-bold text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gray-200 text-sm font-bold text-gray-800 dark:bg-gray-700/40 dark:text-gray-300">
                 {item.step}
               </span>
               <div>
@@ -124,23 +124,23 @@ export function ReferralClient({
       </div>
 
       {/* Link de indicação */}
-      <div className="rounded-2xl border border-violet-200 bg-violet-50 p-6 dark:border-violet-800/50 dark:bg-violet-900/20">
+      <div className="rounded-2xl border border-gray-300 bg-gray-100 p-6 dark:border-gray-700/50 dark:bg-gray-800/20">
         <div className="flex items-center gap-2">
-          <Gift size={18} className="text-violet-600 dark:text-violet-400" />
-          <h2 className="font-semibold text-violet-900 dark:text-violet-300">
+          <Gift size={18} className="text-gray-700 dark:text-gray-400" />
+          <h2 className="font-semibold text-gray-900 dark:text-gray-300">
             Seu link de indicação
           </h2>
         </div>
 
         <div className="mt-4 flex items-center gap-2">
-          <div className="flex flex-1 items-center gap-2 overflow-hidden rounded-xl border border-violet-200 bg-white px-4 py-3 dark:border-violet-700/50 dark:bg-zinc-900">
+          <div className="flex flex-1 items-center gap-2 overflow-hidden rounded-xl border border-gray-300 bg-white px-4 py-3 dark:border-gray-600/50 dark:bg-zinc-900">
             <span className="flex-1 truncate text-sm text-zinc-700 dark:text-zinc-300 font-mono">
               {referralUrl}
             </span>
           </div>
           <button
             onClick={copy}
-            className="flex shrink-0 items-center gap-2 rounded-xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-violet-500"
+            className="flex shrink-0 items-center gap-2 rounded-xl bg-gray-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-gray-600"
           >
             {copied ? <Check size={16} /> : <Copy size={16} />}
             {copied ? "Copiado!" : "Copiar"}
@@ -161,7 +161,7 @@ export function ReferralClient({
             href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralUrl)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500"
+            className="flex items-center gap-2 rounded-xl bg-gray-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-1000"
           >
             <ExternalLink size={15} />
             Compartilhar no LinkedIn

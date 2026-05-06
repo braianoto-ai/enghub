@@ -54,7 +54,7 @@ export function AvaliacoesAdminClient({ reviews }: { reviews: Review[] }) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por avaliador, profissional ou texto..."
-            className="w-full rounded-xl border border-gray-200 py-2.5 pl-9 pr-3 text-sm focus:border-violet-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500"
+            className="w-full rounded-xl border border-gray-200 py-2.5 pl-9 pr-3 text-sm focus:border-gray-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500"
           />
         </div>
         <div className="flex items-center gap-2">
@@ -62,7 +62,7 @@ export function AvaliacoesAdminClient({ reviews }: { reviews: Review[] }) {
           <select
             value={filterRating}
             onChange={(e) => setFilterRating(e.target.value)}
-            className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-violet-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+            className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-gray-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
           >
             <option value="all">Todas as notas</option>
             {[5, 4, 3, 2, 1].map((r) => (
@@ -102,7 +102,7 @@ export function AvaliacoesAdminClient({ reviews }: { reviews: Review[] }) {
                     <Link
                       href={`/${r.tenant_slug}`}
                       target="_blank"
-                      className="flex items-center gap-1 text-sm text-violet-600 hover:underline dark:text-violet-400"
+                      className="flex items-center gap-1 text-sm text-gray-700 hover:underline dark:text-gray-400"
                     >
                       {r.tenant_name}
                       <ExternalLink size={11} />

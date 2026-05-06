@@ -178,7 +178,7 @@ export function PerfilForm({ tenant, profile }: PerfilFormProps) {
             </label>
             <textarea
               name="description"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500"
               rows={2}
               placeholder="Breve descrição que aparece na busca"
               defaultValue={tenant?.description ?? ""}
@@ -190,7 +190,7 @@ export function PerfilForm({ tenant, profile }: PerfilFormProps) {
             </label>
             <textarea
               name="bio"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500"
               rows={4}
               placeholder="Descreva sua experiência e especialidades..."
               defaultValue={profile?.bio ?? ""}

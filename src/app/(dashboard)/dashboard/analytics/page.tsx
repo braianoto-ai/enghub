@@ -34,12 +34,12 @@ function categorizeReferrer(referrer: string | null): string {
 }
 
 const SOURCE_ICONS: Record<string, { icon: React.ReactNode; color: string; bg: string }> = {
-  "Direto":          { icon: <Globe size={15} />,      color: "text-violet-600",  bg: "bg-violet-100 dark:bg-violet-900/40" },
-  "Busca (Google)":  { icon: <Search size={15} />,     color: "text-blue-600",    bg: "bg-blue-100 dark:bg-blue-900/40" },
+  "Direto":          { icon: <Globe size={15} />,      color: "text-gray-700",  bg: "bg-gray-200 dark:bg-gray-700/40" },
+  "Busca (Google)":  { icon: <Search size={15} />,     color: "text-gray-600",    bg: "bg-gray-200 dark:bg-gray-700/40" },
   "WhatsApp":        { icon: <Smartphone size={15} />, color: "text-green-600",   bg: "bg-green-100 dark:bg-green-900/40" },
-  "LinkedIn":        { icon: <Share2 size={15} />,     color: "text-blue-700",    bg: "bg-blue-100 dark:bg-blue-900/40" },
+  "LinkedIn":        { icon: <Share2 size={15} />,     color: "text-gray-700",    bg: "bg-gray-200 dark:bg-gray-700/40" },
   "Redes Sociais":   { icon: <Share2 size={15} />,     color: "text-pink-600",    bg: "bg-pink-100 dark:bg-pink-900/40" },
-  "EngHub":          { icon: <Globe size={15} />,      color: "text-violet-700",  bg: "bg-violet-100 dark:bg-violet-900/40" },
+  "EngHub":          { icon: <Globe size={15} />,      color: "text-gray-800",  bg: "bg-gray-200 dark:bg-gray-700/40" },
   "Outro":           { icon: <Globe size={15} />,      color: "text-zinc-500",    bg: "bg-zinc-100 dark:bg-zinc-800" },
 };
 
@@ -144,8 +144,8 @@ export default async function AnalyticsPage() {
       {/* Stats */}
       <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
         {[
-          { icon: Eye, label: "Visitas totais", value: totalViews, color: "text-violet-600", bg: "bg-violet-50 dark:bg-violet-900/30" },
-          { icon: TrendingUp, label: "Este mês", value: viewsThisMonth, color: "text-blue-600", bg: "bg-blue-50 dark:bg-blue-900/30" },
+          { icon: Eye, label: "Visitas totais", value: totalViews, color: "text-gray-700", bg: "bg-gray-100 dark:bg-gray-800/30" },
+          { icon: TrendingUp, label: "Este mês", value: viewsThisMonth, color: "text-gray-600", bg: "bg-gray-100 dark:bg-gray-800/30" },
           { icon: MessageSquare, label: "Mensagens", value: totalMessages ?? 0, color: "text-green-600", bg: "bg-green-50 dark:bg-green-900/30" },
           { icon: Star, label: "Avaliações", value: totalReviews ?? 0, color: "text-amber-500", bg: "bg-amber-50 dark:bg-amber-900/30" },
         ].map((s) => (
@@ -189,11 +189,11 @@ export default async function AnalyticsPage() {
                   </span>
                   <div className="relative w-full flex-1 flex items-end">
                     <div
-                      className={`w-full rounded-t-lg transition-all ${isToday ? "bg-violet-600" : "bg-violet-300 dark:bg-violet-700 group-hover:bg-violet-500"}`}
+                      className={`w-full rounded-t-lg transition-all ${isToday ? "bg-gray-700" : "bg-gray-400 dark:bg-gray-800 group-hover:bg-gray-600"}`}
                       style={{ height: `${Math.max(pct, d.count > 0 ? 8 : 3)}%`, minHeight: d.count > 0 ? "8px" : "3px" }}
                     />
                   </div>
-                  <span className={`text-xs ${isToday ? "font-bold text-violet-600" : "text-zinc-400"}`}>
+                  <span className={`text-xs ${isToday ? "font-bold text-gray-700" : "text-zinc-400"}`}>
                     {d.label}
                   </span>
                 </div>
@@ -218,7 +218,7 @@ export default async function AnalyticsPage() {
                   <div
                     key={day}
                     title={`${day.slice(5)}: ${count} visita${count !== 1 ? "s" : ""}`}
-                    className="flex-1 rounded-t-sm bg-violet-400 dark:bg-violet-600 transition-all hover:bg-violet-600 dark:hover:bg-violet-400"
+                    className="flex-1 rounded-t-sm bg-gray-500 dark:bg-gray-700 transition-all hover:bg-gray-700 dark:hover:bg-gray-500"
                     style={{ height: `${Math.max(pct, 2)}%`, minHeight: count > 0 ? "4px" : "2px", opacity: count > 0 ? 1 : 0.15 }}
                   />
                 );
@@ -259,7 +259,7 @@ export default async function AnalyticsPage() {
                   </div>
                   <div className="h-1.5 w-full rounded-full bg-zinc-100 dark:bg-zinc-800">
                     <div
-                      className="h-1.5 rounded-full bg-violet-500 transition-all"
+                      className="h-1.5 rounded-full bg-gray-1000 transition-all"
                       style={{ width: `${s.pct}%` }}
                     />
                   </div>

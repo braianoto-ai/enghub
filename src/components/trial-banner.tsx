@@ -28,24 +28,24 @@ export function TrialBanner({ trialEndsAt, plan }: TrialBannerProps) {
       className={`mb-6 flex items-center justify-between gap-4 rounded-2xl border px-5 py-3.5 ${
         isUrgent
           ? "border-amber-200 bg-amber-50 dark:border-amber-800/50 dark:bg-amber-900/20"
-          : "border-violet-200 bg-violet-50 dark:border-violet-800/50 dark:bg-violet-900/20"
+          : "border-gray-300 bg-gray-100 dark:border-gray-700/50 dark:bg-gray-800/20"
       }`}
     >
       <div className="flex items-center gap-3">
         <div
           className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
-            isUrgent ? "bg-amber-100 dark:bg-amber-900/40" : "bg-violet-100 dark:bg-violet-900/40"
+            isUrgent ? "bg-amber-100 dark:bg-amber-900/40" : "bg-gray-200 dark:bg-gray-700/40"
           }`}
         >
           <Zap
             size={16}
-            className={isUrgent ? "text-amber-600 dark:text-amber-400" : "text-violet-600 dark:text-violet-400"}
+            className={isUrgent ? "text-amber-600 dark:text-amber-400" : "text-gray-700 dark:text-gray-400"}
           />
         </div>
         <div>
           <p
             className={`text-sm font-semibold ${
-              isUrgent ? "text-amber-800 dark:text-amber-300" : "text-violet-800 dark:text-violet-300"
+              isUrgent ? "text-amber-800 dark:text-amber-300" : "text-gray-800 dark:text-gray-300"
             }`}
           >
             {isUrgent
@@ -54,7 +54,7 @@ export function TrialBanner({ trialEndsAt, plan }: TrialBannerProps) {
           </p>
           <p
             className={`text-xs ${
-              isUrgent ? "text-amber-600 dark:text-amber-400" : "text-violet-600 dark:text-violet-400"
+              isUrgent ? "text-amber-600 dark:text-amber-400" : "text-gray-700 dark:text-gray-400"
             }`}
           >
             {isUrgent
@@ -68,7 +68,7 @@ export function TrialBanner({ trialEndsAt, plan }: TrialBannerProps) {
         <Link href="/dashboard/plano">
           <button
             className={`rounded-lg px-4 py-2 text-xs font-semibold text-white transition ${
-              isUrgent ? "bg-amber-500 hover:bg-amber-400" : "bg-violet-600 hover:bg-violet-500"
+              isUrgent ? "bg-amber-500 hover:bg-amber-400" : "bg-gray-700 hover:bg-gray-600"
             }`}
           >
             {isUrgent ? "Assinar agora" : "Ver planos"}
@@ -79,7 +79,7 @@ export function TrialBanner({ trialEndsAt, plan }: TrialBannerProps) {
           className={`rounded-lg p-1.5 transition ${
             isUrgent
               ? "text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/40"
-              : "text-violet-400 hover:bg-violet-100 dark:hover:bg-violet-900/40"
+              : "text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700/40"
           }`}
         >
           <X size={15} />

@@ -65,7 +65,7 @@ export function TenantActions({ tenantId, currentStatus, currentPlan, featured }
             <button
               key={plan}
               onClick={() => changePlan(plan)}
-              className={`flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-gray-50 ${plan === currentPlan ? "font-semibold text-blue-600" : "text-gray-700"}`}
+              className={`flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-gray-50 ${plan === currentPlan ? "font-semibold text-gray-600" : "text-gray-700"}`}
             >
               <CreditCard size={14} />
               {plan}

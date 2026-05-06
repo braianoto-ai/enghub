@@ -105,7 +105,7 @@ export function AvatarUpload({ tenantId, currentUrl, name, size = "lg" }: Avatar
             className="rounded-2xl object-cover"
           />
         ) : (
-          <div className={`flex ${dim} items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-violet-700 ${textSize} font-bold text-white`}>
+          <div className={`flex ${dim} items-center justify-center rounded-2xl bg-gradient-to-br from-gray-500 to-gray-700 ${textSize} font-bold text-white`}>
             {getInitials(name)}
           </div>
         )}
@@ -131,7 +131,7 @@ export function AvatarUpload({ tenantId, currentUrl, name, size = "lg" }: Avatar
       <div>
         <label
           htmlFor="avatar-upload"
-          className="cursor-pointer text-sm font-medium text-violet-600 hover:underline dark:text-violet-400"
+          className="cursor-pointer text-sm font-medium text-gray-700 hover:underline dark:text-gray-400"
         >
           {url ? "Trocar foto" : "Enviar foto de perfil"}
         </label>

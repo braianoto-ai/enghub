@@ -71,7 +71,7 @@ export function ShareModal({ slug, name }: ShareModalProps) {
     {
       label: "LinkedIn",
       icon: LinkedinIcon,
-      color: "bg-blue-600 hover:bg-blue-700",
+      color: "bg-gray-700 hover:bg-gray-800",
       href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(profileUrl)}`,
     },
     {

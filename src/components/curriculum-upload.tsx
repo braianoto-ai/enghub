@@ -131,14 +131,14 @@ export function CurriculumUpload({ tenantId, currentUrl }: CurriculumUploadProps
           htmlFor="curriculum-upload"
           className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-8 transition-colors ${
             uploading
-              ? "border-violet-300 bg-violet-50 dark:border-violet-700 dark:bg-violet-900/10"
-              : "border-zinc-300 bg-zinc-50 hover:border-violet-400 hover:bg-violet-50 dark:border-zinc-700 dark:bg-zinc-800/30 dark:hover:border-violet-600 dark:hover:bg-violet-900/10"
+              ? "border-gray-400 bg-gray-100 dark:border-gray-600 dark:bg-gray-800/10"
+              : "border-zinc-300 bg-zinc-50 hover:border-gray-400 hover:bg-gray-100 dark:border-zinc-700 dark:bg-zinc-800/30 dark:hover:border-gray-500 dark:hover:bg-gray-800/10"
           }`}
         >
           {uploading ? (
             <>
-              <Loader2 size={28} className="animate-spin text-violet-500" />
-              <p className="text-sm font-medium text-violet-700 dark:text-violet-300">
+              <Loader2 size={28} className="animate-spin text-gray-500" />
+              <p className="text-sm font-medium text-gray-800 dark:text-gray-300">
                 Enviando...
               </p>
             </>
