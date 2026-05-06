@@ -15,11 +15,17 @@ export default async function DashboardLayout({
 
   if (!user) redirect("/login");
 
-  const { data: tenant } = await supabase
+  const { data: tenantRaw } = await supabase
     .from("tenants")
-    .select("id, name, slug, plan, status, trial_ends_at")
+    .select("id, name, slug, plan, status, trial_ends_at, professional_profiles(avatar_url)")
     .eq("owner_id", user.id)
     .maybeSingle();
+
+  const profData = Array.isArray(tenantRaw?.professional_profiles)
+    ? tenantRaw?.professional_profiles[0]
+    : tenantRaw?.professional_profiles;
+
+  const tenant = tenantRaw ? { ...tenantRaw, avatar_url: profData?.avatar_url ?? null } : null;
 
   const isOnTrial = !!(
     tenant?.trial_ends_at &&

@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Search, MapPin, Star, Briefcase, Users, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
@@ -17,6 +18,7 @@ interface Professional {
   years_experience: number | null;
   avgRating: number;
   reviewCount: number;
+  avatar_url: string | null;
 }
 
 interface BuscarClientProps {
@@ -130,8 +132,12 @@ function ProfessionalCard({ professional: p }: { professional: Professional }) {
         </div>
       )}
       <div className="flex items-start gap-3">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
-          {initials}
+        <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-violet-700 text-sm font-bold text-white overflow-hidden">
+          {p.avatar_url ? (
+            <Image src={p.avatar_url} alt={p.name} fill className="object-cover" />
+          ) : (
+            initials
+          )}
         </div>
         <div className="min-w-0">
           <p className="truncate font-semibold text-gray-900 group-hover:text-blue-600">

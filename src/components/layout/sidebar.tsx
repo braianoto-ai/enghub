@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { cn, getInitials } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
@@ -32,7 +33,7 @@ const navItems = [
 ];
 
 interface SidebarProps {
-  tenant?: { id: string; name: string; slug: string; plan: string } | null;
+  tenant?: { id: string; name: string; slug: string; plan: string; avatar_url?: string | null } | null;
   user?: { email?: string } | null;
 }
 
@@ -58,8 +59,12 @@ export function Sidebar({ tenant, user }: SidebarProps) {
       {tenant && (
         <div className="border-b border-gray-200 px-4 py-3 dark:border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-violet-100 text-sm font-semibold text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
-              {getInitials(tenant.name)}
+            <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-100 text-sm font-semibold text-violet-700 dark:bg-violet-900/40 dark:text-violet-400 overflow-hidden">
+              {tenant.avatar_url ? (
+                <Image src={tenant.avatar_url} alt={tenant.name} fill className="object-cover" />
+              ) : (
+                getInitials(tenant.name)
+              )}
             </div>
             <div className="min-w-0">
               <p className="truncate text-sm font-medium text-gray-900 dark:text-slate-100">

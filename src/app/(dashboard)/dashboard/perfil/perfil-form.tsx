@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import { engineeringAreaLabels } from "@/lib/utils";
 import { AvailabilitySwitcher, type AvailabilityStatus } from "@/components/availability-switcher";
 import { CurriculumUpload } from "@/components/curriculum-upload";
+import { AvatarUpload } from "@/components/avatar-upload";
 
 interface PerfilFormProps {
   tenant: { id: string; name: string; slug: string; description?: string | null } | null;
@@ -27,6 +28,7 @@ interface PerfilFormProps {
     education?: string | null;
     availability?: AvailabilityStatus | null;
     curriculum_url?: string | null;
+    avatar_url?: string | null;
     tenant_id?: string;
   } | null;
 }
@@ -81,7 +83,16 @@ export function PerfilForm({ tenant, profile }: PerfilFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+    <form onSubmit={handleSubmit} className="mt-6 space-y-6">
+      {tenant?.id && (
+        <div className="flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+          <AvatarUpload
+            tenantId={tenant.id}
+            currentUrl={profile?.avatar_url}
+            name={tenant.name}
+          />
+        </div>
+      )}
       {success && (
         <div className="rounded-lg bg-green-50 p-3 text-sm text-green-700">
           Perfil atualizado com sucesso!

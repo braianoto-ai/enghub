@@ -127,7 +127,7 @@ export default async function TenantPage({
     supabase
       .from("professional_profiles")
       .select(
-        "bio, phone, whatsapp, website, linkedin, instagram, crea, cau, areas, city, state, years_experience, certifications, education, availability, curriculum_url"
+        "bio, phone, whatsapp, website, linkedin, instagram, crea, cau, areas, city, state, years_experience, certifications, education, availability, curriculum_url, avatar_url"
       )
       .eq("tenant_id", tenant.id)
       .maybeSingle(),
@@ -178,8 +178,17 @@ export default async function TenantPage({
         <div className="relative mx-auto max-w-7xl">
           <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:text-left">
             {/* Avatar */}
-            <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-violet-700 text-2xl font-bold text-white shadow-lg shadow-violet-900/30">
-              {initials}
+            <div className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-violet-700 text-2xl font-bold text-white shadow-lg shadow-violet-900/30 overflow-hidden">
+              {prof?.avatar_url ? (
+                <Image
+                  src={prof.avatar_url}
+                  alt={tenant.name}
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                initials
+              )}
             </div>
             <div>
               <h1 className="text-3xl font-extrabold text-white">{tenant.name}</h1>

@@ -34,7 +34,8 @@ export default async function BuscarPage({
         areas,
         city,
         state,
-        years_experience
+        years_experience,
+        avatar_url
       )
     `)
     .eq("status", "ACTIVE")
@@ -80,6 +81,7 @@ export default async function BuscarPage({
         years_experience: prof?.years_experience ?? null,
         avgRating: rating ? rating.sum / rating.count : 0,
         reviewCount: rating?.count ?? 0,
+        avatar_url: prof?.avatar_url ?? null,
       };
     });
 
