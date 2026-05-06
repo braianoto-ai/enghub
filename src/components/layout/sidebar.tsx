@@ -15,6 +15,7 @@ import {
   Inbox,
   CreditCard,
   BarChart2,
+  Gift,
 } from "lucide-react";
 import { ShareModal } from "@/components/share-modal";
 
@@ -26,6 +27,7 @@ const navItems = [
   { href: "/dashboard/avaliacoes", label: "Avaliações", icon: Star },
   { href: "/dashboard/mensagens", label: "Mensagens", icon: Inbox },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2 },
+  { href: "/dashboard/indicacoes", label: "Indicações", icon: Gift },
   { href: "/dashboard/plano", label: "Plano", icon: CreditCard },
 ];
 

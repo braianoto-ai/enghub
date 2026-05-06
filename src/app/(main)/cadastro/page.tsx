@@ -1,16 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect, Suspense } from "react";
 import { engineeringAreaLabels, slugify } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
-import { ArrowRight, CheckCircle } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { ArrowRight, CheckCircle, Gift } from "lucide-react";
 
 const inputClass = "w-full rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-zinc-400 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white";
 const labelClass = "block text-sm font-medium text-gray-700 dark:text-zinc-300";
 
-export default function CadastroPage() {
+function CadastroForm() {
+  const searchParams = useSearchParams();
+  const refCode = searchParams.get("ref") ?? "";
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -48,7 +51,15 @@ export default function CadastroPage() {
     const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { name, role, slug, area: area || "" } },
+      options: {
+        data: {
+          name,
+          role,
+          slug,
+          area: area || "",
+          referral_code: refCode || "",
+        },
+      },
     });
 
     if (signUpError) {
@@ -72,6 +83,12 @@ export default function CadastroPage() {
           <p className="mt-2 text-zinc-500">
             Verifique seu e-mail para confirmar a conta e fazer login.
           </p>
+          {refCode && (
+            <div className="mt-4 flex items-center justify-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-4 py-3 text-sm text-violet-700 dark:border-violet-800/50 dark:bg-violet-900/20 dark:text-violet-300">
+              <Gift size={16} />
+              Você ganhou +30 dias de PRO pelo link de indicação!
+            </div>
+          )}
           <Link href="/login">
             <button className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 py-2.5 text-sm font-semibold text-white hover:bg-violet-500">
               Ir para o login <ArrowRight size={15} />
@@ -94,9 +111,24 @@ export default function CadastroPage() {
         </Link>
 
         <div>
-          <h2 className="text-3xl font-extrabold text-white leading-tight">
-            Crie seu perfil<br />profissional grátis
-          </h2>
+          {refCode ? (
+            <>
+              <div className="mb-6 flex items-center gap-2 rounded-xl border border-violet-500/30 bg-violet-500/10 px-4 py-3">
+                <Gift size={18} className="shrink-0 text-violet-400" />
+                <div>
+                  <p className="text-sm font-semibold text-violet-300">Você foi indicado!</p>
+                  <p className="text-xs text-zinc-400">Cadastre-se e ganhe +30 dias de PRO grátis.</p>
+                </div>
+              </div>
+              <h2 className="text-3xl font-extrabold text-white leading-tight">
+                Crie seu perfil<br />profissional grátis
+              </h2>
+            </>
+          ) : (
+            <h2 className="text-3xl font-extrabold text-white leading-tight">
+              Crie seu perfil<br />profissional grátis
+            </h2>
+          )}
           <p className="mt-4 text-zinc-400">
             Mostre seus projetos, receba avaliações e conecte-se com clientes em todo o Brasil.
           </p>
@@ -129,6 +161,14 @@ export default function CadastroPage() {
             </div>
             <span className="text-lg font-bold text-gray-900 dark:text-white">Eng<span className="text-violet-600">Hub</span></span>
           </Link>
+
+          {/* Badge de indicação */}
+          {refCode && (
+            <div className="mb-6 flex items-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-4 py-3 text-sm text-violet-700 dark:border-violet-800/50 dark:bg-violet-900/20 dark:text-violet-300">
+              <Gift size={15} className="shrink-0" />
+              Você foi indicado por um colega — ganhe +30 dias de PRO ao se cadastrar!
+            </div>
+          )}
 
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Criar conta grátis</h1>
           <p className="mt-1 text-sm text-zinc-500">Preencha os dados para começar</p>
@@ -209,5 +249,13 @@ export default function CadastroPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CadastroPage() {
+  return (
+    <Suspense>
+      <CadastroForm />
+    </Suspense>
   );
 }
