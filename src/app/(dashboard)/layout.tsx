@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/layout/sidebar";
 import { NotificationBell } from "@/components/layout/notification-bell";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { TrialBanner } from "@/components/trial-banner";
 
 export default async function DashboardLayout({
   children,
@@ -16,9 +17,15 @@ export default async function DashboardLayout({
 
   const { data: tenant } = await supabase
     .from("tenants")
-    .select("id, name, slug, plan, status")
+    .select("id, name, slug, plan, status, trial_ends_at")
     .eq("owner_id", user.id)
     .maybeSingle();
+
+  const isOnTrial = !!(
+    tenant?.trial_ends_at &&
+    tenant.plan === "PRO" &&
+    new Date(tenant.trial_ends_at) > new Date()
+  );
 
   return (
     <div className="flex h-screen">
@@ -30,6 +37,9 @@ export default async function DashboardLayout({
           <NotificationBell />
         </header>
         <main className="flex-1 overflow-y-auto bg-gray-50 p-8 dark:bg-slate-950">
+          {isOnTrial && tenant?.trial_ends_at && (
+            <TrialBanner trialEndsAt={tenant.trial_ends_at} plan={tenant.plan} />
+          )}
           {children}
         </main>
       </div>
