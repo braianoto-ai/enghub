@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ReviewForm } from "./review-form";
 import { ImageGallery } from "./image-gallery";
 import { ViewTracker } from "./view-tracker";
+import { WhatsAppButton } from "./whatsapp-button";
 import {
   MapPin,
   Phone,
@@ -84,6 +85,9 @@ export default async function TenantPage({
   return (
     <div className="min-h-screen bg-gray-50">
       <ViewTracker tenantId={tenant.id} />
+      {prof?.whatsapp && (
+        <WhatsAppButton phone={prof.whatsapp} name={tenant.name} />
+      )}
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-4 py-16">
         <div className="mx-auto max-w-5xl">
