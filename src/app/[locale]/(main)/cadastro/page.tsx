@@ -5,7 +5,7 @@ import { engineeringAreaLabels, slugify } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ArrowRight, CheckCircle, Gift } from "lucide-react";
+import { ArrowRight, CheckCircle, Gift, Eye, EyeOff } from "lucide-react";
 
 const inputClass = "w-full rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-zinc-400 focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white";
 const labelClass = "block text-sm font-medium text-gray-700 dark:text-zinc-300";
@@ -17,6 +17,10 @@ function CadastroForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -30,6 +34,12 @@ function CadastroForm() {
     const role = formData.get("role") as string;
     const area = formData.get("area") as string;
     const slugInput = formData.get("slug") as string;
+
+    if (password !== confirmPassword) {
+      setError("As senhas não coincidem.");
+      setLoading(false);
+      return;
+    }
 
     const supabase = createClient();
     const slug = slugInput || slugify(name);
@@ -199,7 +209,78 @@ function CadastroForm() {
 
             <div className="space-y-1.5">
               <label className={labelClass}>Senha</label>
-              <input name="password" type="password" placeholder="Mínimo 6 caracteres" required minLength={6} className={inputClass} />
+              <div className="relative">
+                <input
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Mínimo 6 caracteres"
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`${inputClass} pr-10`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {password.length > 0 && (
+                <div className="mt-2 space-y-1">
+                  {[
+                    { label: "Mínimo 6 caracteres", met: password.length >= 6 },
+                    { label: "Uma letra maiúscula", met: /[A-Z]/.test(password) },
+                    { label: "Uma letra minúscula", met: /[a-z]/.test(password) },
+                    { label: "Um número", met: /[0-9]/.test(password) },
+                    { label: "Um caractere especial (!@#$...)", met: /[^A-Za-z0-9]/.test(password) },
+                  ].map((req) => (
+                    <div key={req.label} className="flex items-center gap-1.5 text-xs">
+                      <CheckCircle
+                        size={13}
+                        className={req.met ? "text-green-500" : "text-zinc-400 dark:text-zinc-600"}
+                      />
+                      <span className={req.met ? "text-green-600 dark:text-green-400" : "text-zinc-500 dark:text-zinc-500"}>
+                        {req.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-1.5">
+              <label className={labelClass}>Confirmar senha</label>
+              <div className="relative">
+                <input
+                  name="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Repita a senha"
+                  required
+                  minLength={6}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className={`${inputClass} pr-10 ${confirmPassword.length > 0 && confirmPassword !== password ? "border-red-400 dark:border-red-500" : ""}`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+                >
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {confirmPassword.length > 0 && confirmPassword !== password && (
+                <p className="text-xs text-red-500">As senhas não coincidem</p>
+              )}
+              {confirmPassword.length > 0 && confirmPassword === password && (
+                <div className="flex items-center gap-1.5 text-xs">
+                  <CheckCircle size={13} className="text-green-500" />
+                  <span className="text-green-600 dark:text-green-400">Senhas coincidem</span>
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-2 gap-3">
@@ -235,6 +316,25 @@ function CadastroForm() {
                 />
               </div>
             </div>
+
+            <label className="flex items-start gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                name="terms"
+                required
+                className="mt-0.5 h-4 w-4 rounded border-zinc-300 accent-gray-700 dark:border-zinc-600"
+              />
+              <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                Li e aceito os{" "}
+                <Link href="/termos" target="_blank" className="underline text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100">
+                  Termos de Uso
+                </Link>{" "}
+                e a{" "}
+                <Link href="/privacidade" target="_blank" className="underline text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100">
+                  Política de Privacidade
+                </Link>
+              </span>
+            </label>
 
             <button
               type="submit"
