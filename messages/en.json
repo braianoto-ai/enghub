@@ -73,8 +73,7 @@
   },
   "search": {
     "title": "Find an engineer",
-    "subtitle_one": "{{count}} registered professional",
-    "subtitle_other": "{{count}} registered professionals",
+    "subtitle": "{count, plural, one {{count} registered professional} other {{count} registered professionals}}",
     "placeholder": "Search by name, city or specialty...",
     "filters_btn": "Filters",
     "specialty": "Specialty",
@@ -86,8 +85,8 @@
     "sort_rating": "Highest rated",
     "sort_experience": "Most experienced",
     "clear_filters": "Clear filters",
-    "results_count": "{{count}} professionals",
-    "results_filtered": "{{filtered}} of {{total}} professionals",
+    "results_count": "{count} professionals",
+    "results_filtered": "{filtered} of {total} professionals",
     "no_results": "No professionals found",
     "no_results_tip": "Try adjusting your search filters",
     "featured": "Featured",
@@ -236,7 +235,7 @@
     "other_projects": "Other projects",
     "about_project": "About the project",
     "liked_project": "Did you like this project?",
-    "liked_project_sub": "Get in touch with {{name}} for a personalized quote."
+    "liked_project_sub": "Get in touch with {name} for a personalized quote."
   },
   "contact": {
     "title": "Send a message",

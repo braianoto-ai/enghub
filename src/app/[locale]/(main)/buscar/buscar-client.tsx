@@ -110,7 +110,7 @@ export function BuscarClient({ professionals, initialSearch = "", initialArea = 
           {t("title")}
         </h1>
         <p className="mt-2 text-gray-500 dark:text-zinc-400">
-          {professionals.length} {t(professionals.length !== 1 ? "subtitle_other" : "subtitle_one", { count: professionals.length })}
+          {t("subtitle", { count: professionals.length })}
         </p>
       </div>
 

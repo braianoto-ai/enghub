@@ -73,8 +73,7 @@
   },
   "search": {
     "title": "Encontre um engenheiro",
-    "subtitle_one": "{{count}} profissional cadastrado",
-    "subtitle_other": "{{count}} profissionais cadastrados",
+    "subtitle": "{count, plural, one {{count} profissional cadastrado} other {{count} profissionais cadastrados}}",
     "placeholder": "Buscar por nome, cidade, especialidade...",
     "filters_btn": "Filtros",
     "specialty": "Especialidade",
@@ -86,8 +85,8 @@
     "sort_rating": "Melhor avaliado",
     "sort_experience": "Mais experiente",
     "clear_filters": "Limpar filtros",
-    "results_count": "{{count}} profissionais",
-    "results_filtered": "{{filtered}} de {{total}} profissionais",
+    "results_count": "{count} profissionais",
+    "results_filtered": "{filtered} de {total} profissionais",
     "no_results": "Nenhum profissional encontrado",
     "no_results_tip": "Tente ajustar os filtros de busca",
     "featured": "Destaque",
@@ -236,7 +235,7 @@
     "other_projects": "Outros projetos",
     "about_project": "Sobre o projeto",
     "liked_project": "Gostou deste projeto?",
-    "liked_project_sub": "Entre em contato com {{name}} para um orçamento personalizado."
+    "liked_project_sub": "Entre em contato com {name} para um orçamento personalizado."
   },
   "contact": {
     "title": "Enviar mensagem",
