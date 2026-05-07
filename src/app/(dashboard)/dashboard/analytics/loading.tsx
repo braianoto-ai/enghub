@@ -15,7 +15,7 @@ export default function AnalyticsLoading() {
       {/* Stat cards */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+          <div key={i} className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
             <Skeleton className="mb-3 h-4 w-20" />
             <Skeleton className="mb-2 h-8 w-14" />
             <Skeleton className="h-3 w-24" />
@@ -24,7 +24,7 @@ export default function AnalyticsLoading() {
       </div>
 
       {/* Main chart */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
         <div className="mb-4 flex items-center justify-between">
           <Skeleton className="h-5 w-48" />
           <Skeleton className="h-5 w-24" />
@@ -45,7 +45,7 @@ export default function AnalyticsLoading() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Source breakdown */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
           <Skeleton className="mb-4 h-5 w-36" />
           <div className="space-y-3">
             {Array.from({ length: 4 }).map((_, i) => (
@@ -61,11 +61,11 @@ export default function AnalyticsLoading() {
         </div>
 
         {/* Conversion */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
           <Skeleton className="mb-4 h-5 w-32" />
           <div className="space-y-3">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="flex items-center justify-between rounded-xl border border-gray-100 p-4 dark:border-slate-800">
+              <div key={i} className="flex items-center justify-between rounded-xl border border-gray-100 p-4 dark:border-zinc-800">
                 <Skeleton className="h-4 w-32" />
                 <Skeleton className="h-6 w-12 rounded-full" />
               </div>

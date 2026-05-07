@@ -222,7 +222,7 @@ export default async function ProjectPage({
                   <Link
                     key={p.id}
                     href={`/${slug}/projetos/${p.id}`}
-                    className="group overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900"
+                    className="group overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-all hover:-tranzinc-y-0.5 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900"
                   >
                     {thumb ? (
                       <div className="relative aspect-video w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800">

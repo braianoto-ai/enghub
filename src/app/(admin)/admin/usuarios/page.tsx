@@ -20,7 +20,7 @@ export default function UsuariosAdminPage() {
         <div className="relative flex-1">
           <Search
             size={20}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute left-3 top-1/2 -tranzinc-y-1/2 text-gray-400"
           />
           <Input placeholder="Buscar usuários..." className="pl-10" />
         </div>

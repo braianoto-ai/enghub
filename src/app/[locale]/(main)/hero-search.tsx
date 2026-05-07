@@ -22,13 +22,13 @@ export function HeroSearch() {
       className="mx-auto flex max-w-xl overflow-hidden rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md focus-within:ring-2 focus-within:ring-white/40"
     >
       <div className="flex flex-1 items-center gap-3 px-5">
-        <Search size={18} className="shrink-0 text-slate-300" />
+        <Search size={18} className="shrink-0 text-zinc-300" />
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={t("hero_search_placeholder")}
-          className="w-full bg-transparent py-4 text-sm text-white placeholder:text-slate-400 focus:outline-none"
+          className="w-full bg-transparent py-4 text-sm text-white placeholder:text-zinc-400 focus:outline-none"
         />
       </div>
       <button

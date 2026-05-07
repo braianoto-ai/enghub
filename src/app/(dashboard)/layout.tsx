@@ -38,11 +38,11 @@ export default async function DashboardLayout({
       <Sidebar tenant={tenant} user={user} />
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="flex h-14 shrink-0 items-center justify-end gap-2 border-b border-gray-200 bg-white px-6 dark:border-slate-800 dark:bg-slate-900">
+        <header className="flex h-14 shrink-0 items-center justify-end gap-2 border-b border-gray-200 bg-white px-6 dark:border-zinc-800 dark:bg-zinc-900">
           <ThemeToggle />
           <NotificationBell />
         </header>
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-8 dark:bg-slate-950">
+        <main className="flex-1 overflow-y-auto bg-gray-50 p-8 dark:bg-zinc-950">
           {isOnTrial && tenant?.trial_ends_at && (
             <TrialBanner trialEndsAt={tenant.trial_ends_at} plan={tenant.plan} />
           )}

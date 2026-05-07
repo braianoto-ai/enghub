@@ -27,10 +27,10 @@ export default async function IndicacoesPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">
         Programa de Indicação
       </h1>
-      <p className="mt-1 text-gray-500 dark:text-slate-400">
+      <p className="mt-1 text-gray-500 dark:text-zinc-400">
         Convide colegas engenheiros e ganhe 30 dias de PRO para cada indicação confirmada.
       </p>
 

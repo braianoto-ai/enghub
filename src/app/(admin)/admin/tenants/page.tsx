@@ -31,8 +31,8 @@ export default async function TenantsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">Perfis / Tenants</h1>
-        <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">Perfis / Tenants</h1>
+        <p className="mt-1 text-sm text-gray-500 dark:text-zinc-400">
           {flat.length} perfil{flat.length !== 1 ? "is" : ""} cadastrado{flat.length !== 1 ? "s" : ""}
         </p>
       </div>

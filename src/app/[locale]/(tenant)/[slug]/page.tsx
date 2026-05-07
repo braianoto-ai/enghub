@@ -390,7 +390,7 @@ export default async function TenantPage({
                       <Link
                         key={project.id}
                         href={`/${slug}/projetos/${project.id}`}
-                        className="group overflow-hidden rounded-xl border border-zinc-100 transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-800"
+                        className="group overflow-hidden rounded-xl border border-zinc-100 transition-all hover:-tranzinc-y-0.5 hover:shadow-md dark:border-zinc-800"
                       >
                         {images.length > 0 && <ImageGallery images={images} title={project.title} />}
                         <div className="p-3">

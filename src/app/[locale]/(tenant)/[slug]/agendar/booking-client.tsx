@@ -237,7 +237,7 @@ export function BookingClient({ tenantId, tenantName, slots, bookedSlots }: Prop
               >
                 {day.getDate()}
                 {available && !isPast && !isSelected && (
-                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-green-400" />
+                  <span className="absolute bottom-1 left-1/2 -tranzinc-x-1/2 h-1 w-1 rounded-full bg-green-400" />
                 )}
               </button>
             );

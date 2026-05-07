@@ -183,8 +183,8 @@ export default function PlanosPage() {
       {/* Hero */}
       <div className="relative overflow-hidden bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 px-4 py-24 text-center">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/4 top-0 h-96 w-96 -translate-x-1/2 rounded-full bg-gray-700/10 blur-3xl" />
-          <div className="absolute right-1/4 bottom-0 h-96 w-96 translate-x-1/2 rounded-full bg-gray-1000/10 blur-3xl" />
+          <div className="absolute left-1/4 top-0 h-96 w-96 -tranzinc-x-1/2 rounded-full bg-gray-700/10 blur-3xl" />
+          <div className="absolute right-1/4 bottom-0 h-96 w-96 tranzinc-x-1/2 rounded-full bg-gray-1000/10 blur-3xl" />
         </div>
 
         <div className="relative mx-auto max-w-3xl">
@@ -246,7 +246,7 @@ export default function PlanosPage() {
                 }`}
               >
                 {plan.badge && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-gray-800 px-4 py-1 text-xs font-semibold text-gray-300 ring-1 ring-gray-500">
+                  <div className="absolute -top-3 left-1/2 -tranzinc-x-1/2 whitespace-nowrap rounded-full bg-gray-800 px-4 py-1 text-xs font-semibold text-gray-300 ring-1 ring-gray-500">
                     {plan.badge}
                   </div>
                 )}

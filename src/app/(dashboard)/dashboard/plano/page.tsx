@@ -119,7 +119,7 @@ export default async function PlanoPage({
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">Meu Plano</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">Meu Plano</h1>
       <p className="mt-1 text-gray-500">Gerencie seu plano e recursos</p>
 
       {success && (
@@ -145,10 +145,10 @@ export default async function PlanoPage({
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-gray-900 dark:text-slate-100">{plan.price}</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-zinc-100">{plan.price}</p>
             <ul className="mt-4 space-y-2">
               {plan.features.map((f) => (
-                <li key={f} className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-400">
+                <li key={f} className="flex items-center gap-2 text-sm text-gray-600 dark:text-zinc-400">
                   <Check size={15} className="text-green-500 shrink-0" />
                   {f}
                 </li>

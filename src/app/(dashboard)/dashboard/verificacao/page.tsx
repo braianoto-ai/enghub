@@ -23,8 +23,8 @@ export default async function VerificacaoPage() {
 
   return (
     <div className="max-w-2xl">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">Verificação CREA/CAU</h1>
-      <p className="mt-1 text-gray-500 dark:text-slate-400">
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">Verificação CREA/CAU</h1>
+      <p className="mt-1 text-gray-500 dark:text-zinc-400">
         Tenha seu registro profissional verificado e exiba o selo no seu perfil.
       </p>
       <VerificacaoClient

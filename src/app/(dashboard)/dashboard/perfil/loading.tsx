@@ -6,7 +6,7 @@ export default function PerfilLoading() {
       <Skeleton className="h-7 w-32" />
 
       {/* Avatar */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
         <div className="flex items-center gap-5">
           <Skeleton className="h-20 w-20 rounded-full shrink-0" />
           <div className="space-y-2 flex-1">
@@ -18,7 +18,7 @@ export default function PerfilLoading() {
       </div>
 
       {/* Form fields */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900 space-y-5">
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900 space-y-5">
         <Skeleton className="h-5 w-24" />
         <div className="grid gap-4 sm:grid-cols-2">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -36,7 +36,7 @@ export default function PerfilLoading() {
       </div>
 
       {/* Availability */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900 space-y-3">
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900 space-y-3">
         <Skeleton className="h-5 w-32" />
         <div className="flex gap-3">
           {Array.from({ length: 3 }).map((_, i) => (

@@ -38,7 +38,7 @@ export function LanguageSwitcher({ variant = "dark" }: LanguageSwitcherProps) {
   const cls =
     variant === "light"
       ? "flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-zinc-400 transition-colors hover:bg-white/10 hover:text-white"
-      : "flex items-center gap-1 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-50 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800";
+      : "flex items-center gap-1 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800";
 
   return (
     <button onClick={() => switchLocale(nextLocale)} className={cls} title={`Switch to ${nextLocale.toUpperCase()}`}>
