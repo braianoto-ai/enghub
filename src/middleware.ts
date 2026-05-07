@@ -11,8 +11,6 @@ const BYPASS_PREFIXES = [
   "/dashboard",
   "/admin",
   "/api",
-  "/login",
-  "/cadastro",
   "/_next",
   "/favicon",
   "/manifest",
