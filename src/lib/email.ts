@@ -25,9 +25,9 @@ export async function sendContactNotification({
     subject: `Nova mensagem de ${senderName} — EngHub`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #111;">
-        <div style="background: linear-gradient(135deg, #2563eb, #4338ca); padding: 32px 24px; border-radius: 12px 12px 0 0;">
+        <div style="background: linear-gradient(135deg, #4b5563, #374151); padding: 32px 24px; border-radius: 12px 12px 0 0;">
           <h1 style="color: #fff; margin: 0; font-size: 22px;">Nova mensagem recebida</h1>
-          <p style="color: #bfdbfe; margin: 8px 0 0; font-size: 14px;">Via EngHub — portfólio de ${professionalName}</p>
+          <p style="color: #d1d5db; margin: 8px 0 0; font-size: 14px;">Via EngHub — portfólio de ${professionalName}</p>
         </div>
         <div style="background: #f9fafb; padding: 24px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
@@ -37,7 +37,7 @@ export async function sendContactNotification({
             </tr>
             <tr>
               <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">E-mail</td>
-              <td style="padding: 8px 0; font-size: 14px;"><a href="mailto:${senderEmail}" style="color: #2563eb;">${senderEmail}</a></td>
+              <td style="padding: 8px 0; font-size: 14px;"><a href="mailto:${senderEmail}" style="color: #4b5563;">${senderEmail}</a></td>
             </tr>
             ${senderPhone ? `<tr><td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Telefone</td><td style="padding: 8px 0; font-size: 14px;">${senderPhone}</td></tr>` : ""}
           </table>
@@ -45,12 +45,12 @@ export async function sendContactNotification({
             <p style="margin: 0; font-size: 14px; color: #374151; line-height: 1.6; white-space: pre-wrap;">${message}</p>
           </div>
           <div style="text-align: center;">
-            <a href="https://enghub.com.br/dashboard/mensagens" style="display: inline-block; background: #2563eb; color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
+            <a href="https://enghub.com.br/dashboard/mensagens" style="display: inline-block; background: #4b5563; color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
               Ver no Dashboard
             </a>
           </div>
           <p style="text-align: center; margin-top: 24px; font-size: 12px; color: #9ca3af;">
-            Para responder, envie um e-mail para <a href="mailto:${senderEmail}" style="color: #2563eb;">${senderEmail}</a>
+            Para responder, envie um e-mail para <a href="mailto:${senderEmail}" style="color: #4b5563;">${senderEmail}</a>
           </p>
         </div>
       </div>
@@ -129,7 +129,7 @@ export async function sendTrialReminderEmail({
         <!-- Footer -->
         <p style="text-align: center; font-size: 12px; color: #9ca3af; margin: 0;">
           Você recebeu este e-mail pois tem uma conta no EngHub.<br/>
-          <a href="https://enghub.com.br" style="color: #7c3aed; text-decoration: none;">enghub.com.br</a>
+          <a href="https://enghub.com.br" style="color: #4b5563; text-decoration: none;">enghub.com.br</a>
         </p>
       </div>
     `,
@@ -157,12 +157,12 @@ export async function sendWelcomeEmail({
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #111; background: #f9fafb; padding: 24px; border-radius: 16px;">
         <!-- Header -->
-        <div style="background: linear-gradient(135deg, #7c3aed, #4f46e5); padding: 40px 32px; border-radius: 12px; text-align: center; margin-bottom: 24px;">
+        <div style="background: linear-gradient(135deg, #4b5563, #374151); padding: 40px 32px; border-radius: 12px; text-align: center; margin-bottom: 24px;">
           <div style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: rgba(255,255,255,0.15); border-radius: 10px; margin-bottom: 16px;">
             <span style="font-size: 22px; font-weight: 900; color: #fff;">E</span>
           </div>
           <h1 style="color: #fff; margin: 0; font-size: 26px; font-weight: 800;">Seja bem-vindo, ${name.split(" ")[0]}!</h1>
-          <p style="color: #ddd6fe; margin: 10px 0 0; font-size: 15px;">Seu perfil profissional no EngHub está pronto.</p>
+          <p style="color: #d1d5db; margin: 10px 0 0; font-size: 15px;">Seu perfil profissional no EngHub está pronto.</p>
         </div>
 
         <!-- Trial badge -->
@@ -182,7 +182,7 @@ export async function sendWelcomeEmail({
           <table style="width: 100%; border-collapse: collapse;">
             <tr>
               <td style="padding: 10px 0; border-bottom: 1px solid #f3f4f6; vertical-align: top; width: 36px;">
-                <div style="width: 28px; height: 28px; background: #ede9fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; font-weight: 700; color: #7c3aed; line-height: 28px;">1</div>
+                <div style="width: 28px; height: 28px; background: #f3f4f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; font-weight: 700; color: #374151; line-height: 28px;">1</div>
               </td>
               <td style="padding: 10px 0 10px 12px; border-bottom: 1px solid #f3f4f6;">
                 <p style="margin: 0; font-size: 14px; font-weight: 600; color: #111;">Complete seu perfil</p>
@@ -191,7 +191,7 @@ export async function sendWelcomeEmail({
             </tr>
             <tr>
               <td style="padding: 10px 0; border-bottom: 1px solid #f3f4f6; vertical-align: top;">
-                <div style="width: 28px; height: 28px; background: #ede9fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; font-weight: 700; color: #7c3aed; line-height: 28px;">2</div>
+                <div style="width: 28px; height: 28px; background: #f3f4f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; font-weight: 700; color: #374151; line-height: 28px;">2</div>
               </td>
               <td style="padding: 10px 0 10px 12px; border-bottom: 1px solid #f3f4f6;">
                 <p style="margin: 0; font-size: 14px; font-weight: 600; color: #111;">Adicione seus projetos</p>
@@ -200,7 +200,7 @@ export async function sendWelcomeEmail({
             </tr>
             <tr>
               <td style="padding: 10px 0; border-bottom: 1px solid #f3f4f6; vertical-align: top;">
-                <div style="width: 28px; height: 28px; background: #ede9fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; font-weight: 700; color: #7c3aed; line-height: 28px;">3</div>
+                <div style="width: 28px; height: 28px; background: #f3f4f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; font-weight: 700; color: #374151; line-height: 28px;">3</div>
               </td>
               <td style="padding: 10px 0 10px 12px; border-bottom: 1px solid #f3f4f6;">
                 <p style="margin: 0; font-size: 14px; font-weight: 600; color: #111;">Cadastre seus serviços</p>
@@ -209,7 +209,7 @@ export async function sendWelcomeEmail({
             </tr>
             <tr>
               <td style="padding: 10px 0; vertical-align: top;">
-                <div style="width: 28px; height: 28px; background: #ede9fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; font-weight: 700; color: #7c3aed; line-height: 28px;">4</div>
+                <div style="width: 28px; height: 28px; background: #f3f4f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; font-weight: 700; color: #374151; line-height: 28px;">4</div>
               </td>
               <td style="padding: 10px 0 10px 12px;">
                 <p style="margin: 0; font-size: 14px; font-weight: 600; color: #111;">Compartilhe seu perfil</p>
@@ -221,11 +221,11 @@ export async function sendWelcomeEmail({
 
         <!-- CTA buttons -->
         <div style="text-align: center; margin-bottom: 24px;">
-          <a href="${dashboardUrl}" style="display: inline-block; background: #7c3aed; color: #fff; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 700; margin-bottom: 12px;">
+          <a href="${dashboardUrl}" style="display: inline-block; background: #4b5563; color: #fff; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 700; margin-bottom: 12px;">
             Acessar o Dashboard →
           </a>
           <br/>
-          <a href="${profileUrl}" style="display: inline-block; color: #7c3aed; padding: 8px 16px; font-size: 13px; text-decoration: underline;">
+          <a href="${profileUrl}" style="display: inline-block; color: #4b5563; padding: 8px 16px; font-size: 13px; text-decoration: underline;">
             Ver meu perfil público
           </a>
         </div>
@@ -233,7 +233,7 @@ export async function sendWelcomeEmail({
         <!-- Footer -->
         <p style="text-align: center; font-size: 12px; color: #9ca3af; margin: 0;">
           Você recebeu este e-mail por se cadastrar no EngHub.<br/>
-          <a href="https://enghub.com.br" style="color: #7c3aed; text-decoration: none;">enghub.com.br</a>
+          <a href="https://enghub.com.br" style="color: #4b5563; text-decoration: none;">enghub.com.br</a>
         </p>
       </div>
     `,
@@ -264,9 +264,9 @@ export async function sendReviewNotification({
     subject: `Nova avaliação ${stars} de ${reviewerName} — EngHub`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #111;">
-        <div style="background: linear-gradient(135deg, #2563eb, #4338ca); padding: 32px 24px; border-radius: 12px 12px 0 0;">
+        <div style="background: linear-gradient(135deg, #4b5563, #374151); padding: 32px 24px; border-radius: 12px 12px 0 0;">
           <h1 style="color: #fff; margin: 0; font-size: 22px;">Nova avaliação recebida</h1>
-          <p style="color: #bfdbfe; margin: 8px 0 0; font-size: 14px;">Via EngHub — portfólio de ${professionalName}</p>
+          <p style="color: #d1d5db; margin: 8px 0 0; font-size: 14px;">Via EngHub — portfólio de ${professionalName}</p>
         </div>
         <div style="background: #f9fafb; padding: 24px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
           <div style="text-align: center; margin-bottom: 24px;">
@@ -280,7 +280,7 @@ export async function sendReviewNotification({
           </div>
           ` : ""}
           <div style="text-align: center;">
-            <a href="https://enghub.com.br/dashboard/avaliacoes" style="display: inline-block; background: #2563eb; color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
+            <a href="https://enghub.com.br/dashboard/avaliacoes" style="display: inline-block; background: #4b5563; color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
               Ver Avaliações
             </a>
           </div>
