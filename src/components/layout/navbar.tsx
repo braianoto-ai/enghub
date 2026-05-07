@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { LanguageSwitcher } from "@/components/language-switcher";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
@@ -39,7 +38,6 @@ export function Navbar() {
             <Link href={`${prefix}/sobre`} className="text-sm text-gray-600 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-zinc-100">
               {t("about")}
             </Link>
-            <LanguageSwitcher />
             <ThemeToggle />
             <div className="flex items-center gap-3">
               <Link href="/login">
@@ -52,7 +50,6 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
-            <LanguageSwitcher />
             <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
