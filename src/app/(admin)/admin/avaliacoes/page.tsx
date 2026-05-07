@@ -34,8 +34,8 @@ export default async function AvaliacoesAdminPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">Avaliações</h1>
-        <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">Avaliações</h1>
+        <p className="mt-1 text-sm text-gray-500 dark:text-zinc-400">
           {flat.length} avaliação{flat.length !== 1 ? "ões" : ""} · Nota média: {avgRating}
         </p>
       </div>
@@ -43,10 +43,10 @@ export default async function AvaliacoesAdminPage() {
       {/* Distribution */}
       <div className="grid grid-cols-5 gap-3">
         {dist.map((d) => (
-          <div key={d.star} className="rounded-2xl border border-gray-200 bg-white p-4 text-center dark:border-slate-800 dark:bg-slate-900">
+          <div key={d.star} className="rounded-2xl border border-gray-200 bg-white p-4 text-center dark:border-zinc-800 dark:bg-zinc-900">
             <p className="text-lg text-yellow-400">{"★".repeat(d.star)}</p>
-            <p className="text-xl font-bold text-gray-900 dark:text-slate-100">{d.count}</p>
-            <p className="text-xs text-gray-400 dark:text-slate-500">{d.star} estrela{d.star !== 1 ? "s" : ""}</p>
+            <p className="text-xl font-bold text-gray-900 dark:text-zinc-100">{d.count}</p>
+            <p className="text-xs text-gray-400 dark:text-zinc-500">{d.star} estrela{d.star !== 1 ? "s" : ""}</p>
           </div>
         ))}
       </div>

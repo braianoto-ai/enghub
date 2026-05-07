@@ -15,7 +15,7 @@ export function Badge({
       className={cn(
         "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
         {
-          "bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-slate-200": variant === "default",
+          "bg-gray-100 text-gray-800 dark:bg-zinc-700 dark:text-zinc-200": variant === "default",
           "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-400": variant === "success",
           "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-400": variant === "warning",
           "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-400": variant === "danger",

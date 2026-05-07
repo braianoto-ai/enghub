@@ -9,7 +9,7 @@ export default function ProjetosLoading() {
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+          <div key={i} className="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
             <Skeleton className="h-48 w-full rounded-none" />
             <div className="p-4 space-y-2">
               <Skeleton className="h-5 w-3/4" />

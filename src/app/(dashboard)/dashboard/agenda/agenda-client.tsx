@@ -24,7 +24,7 @@ const STATUS_CONFIG = {
   PENDING:   { label: "Pendente",   color: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400" },
   CONFIRMED: { label: "Confirmado", color: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" },
   CANCELLED: { label: "Cancelado",  color: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" },
-  COMPLETED: { label: "Concluído",  color: "bg-gray-100 text-gray-600 dark:bg-slate-800 dark:text-slate-400" },
+  COMPLETED: { label: "Concluído",  color: "bg-gray-100 text-gray-600 dark:bg-zinc-800 dark:text-zinc-400" },
 };
 
 interface Slot {
@@ -151,7 +151,7 @@ export function AgendaClient({ tenantId, tenantSlug, slots, appointments }: Prop
   return (
     <div className="mt-6">
       {/* Tabs */}
-      <div className="flex gap-1 rounded-xl border border-gray-200 bg-white p-1 dark:border-slate-800 dark:bg-slate-900 w-fit">
+      <div className="flex gap-1 rounded-xl border border-gray-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-900 w-fit">
         {(["disponibilidade", "agendamentos"] as const).map((t) => (
           <button
             key={t}
@@ -159,7 +159,7 @@ export function AgendaClient({ tenantId, tenantSlug, slots, appointments }: Prop
             className={`rounded-lg px-4 py-2 text-sm font-medium capitalize transition-all ${
               tab === t
                 ? "bg-gray-700 text-white shadow-sm"
-                : "text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-200"
+                : "text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200"
             }`}
           >
             {t === "disponibilidade" ? "Disponibilidade" : `Agendamentos ${upcoming.length > 0 ? `(${upcoming.length})` : ""}`}
@@ -168,9 +168,9 @@ export function AgendaClient({ tenantId, tenantSlug, slots, appointments }: Prop
       </div>
 
       {/* Share link */}
-      <div className="mt-4 flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900/50">
+      <div className="mt-4 flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900/50">
         <Calendar size={15} className="shrink-0 text-gray-400" />
-        <span className="text-sm text-gray-500 dark:text-slate-400">
+        <span className="text-sm text-gray-500 dark:text-zinc-400">
           Link de agendamento público:
         </span>
         <Link
@@ -193,23 +193,23 @@ export function AgendaClient({ tenantId, tenantSlug, slots, appointments }: Prop
             return (
               <div
                 key={i}
-                className="rounded-2xl border border-gray-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900"
+                className="rounded-2xl border border-gray-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900"
               >
                 <div className="flex items-center justify-between">
-                  <span className="w-28 text-sm font-semibold text-gray-700 dark:text-slate-300">
+                  <span className="w-28 text-sm font-semibold text-gray-700 dark:text-zinc-300">
                     {DAYS_FULL[i]}
                   </span>
                   <div className="flex flex-wrap items-center gap-2 flex-1 mx-4">
                     {daySlots.length === 0 ? (
-                      <span className="text-xs text-gray-400 dark:text-slate-500">Sem horários</span>
+                      <span className="text-xs text-gray-400 dark:text-zinc-500">Sem horários</span>
                     ) : (
                       daySlots.map((slot) => (
                         <div
                           key={slot.id}
                           className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-medium transition-opacity ${
                             slot.is_active
-                              ? "border-gray-300 bg-gray-50 text-gray-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
-                              : "border-dashed border-gray-200 text-gray-400 opacity-60 dark:border-slate-700 dark:text-slate-500"
+                              ? "border-gray-300 bg-gray-50 text-gray-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+                              : "border-dashed border-gray-200 text-gray-400 opacity-60 dark:border-zinc-700 dark:text-zinc-500"
                           }`}
                         >
                           <Clock size={11} />
@@ -233,7 +233,7 @@ export function AgendaClient({ tenantId, tenantSlug, slots, appointments }: Prop
                   </div>
                   <button
                     onClick={() => setAddingDay(isAdding ? null : i)}
-                    className="flex items-center gap-1 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800"
+                    className="flex items-center gap-1 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
                   >
                     <Plus size={13} />
                     Horário
@@ -241,14 +241,14 @@ export function AgendaClient({ tenantId, tenantSlug, slots, appointments }: Prop
                 </div>
 
                 {isAdding && (
-                  <div className="mt-3 flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 p-3 dark:border-slate-700 dark:bg-slate-800">
+                  <div className="mt-3 flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 p-3 dark:border-zinc-700 dark:bg-zinc-800">
                     <div className="flex items-center gap-2">
                       <label className="text-xs text-gray-500">Das</label>
                       <input
                         type="time"
                         value={newStart}
                         onChange={(e) => setNewStart(e.target.value)}
-                        className="rounded-lg border border-gray-200 px-2 py-1.5 text-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                        className="rounded-lg border border-gray-200 px-2 py-1.5 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
                       />
                     </div>
                     <div className="flex items-center gap-2">
@@ -257,7 +257,7 @@ export function AgendaClient({ tenantId, tenantSlug, slots, appointments }: Prop
                         type="time"
                         value={newEnd}
                         onChange={(e) => setNewEnd(e.target.value)}
-                        className="rounded-lg border border-gray-200 px-2 py-1.5 text-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                        className="rounded-lg border border-gray-200 px-2 py-1.5 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
                       />
                     </div>
                     {newStart >= newEnd && (
@@ -289,13 +289,13 @@ export function AgendaClient({ tenantId, tenantSlug, slots, appointments }: Prop
         <div className="mt-6 space-y-6">
           {/* Upcoming */}
           <section>
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-400 dark:text-slate-500">
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-400 dark:text-zinc-500">
               Próximos ({upcoming.length})
             </h3>
             {upcoming.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-gray-200 py-10 text-center dark:border-slate-700">
-                <Calendar size={28} className="mx-auto mb-2 text-gray-300 dark:text-slate-600" />
-                <p className="text-sm text-gray-400 dark:text-slate-500">Nenhum agendamento próximo</p>
+              <div className="rounded-2xl border border-dashed border-gray-200 py-10 text-center dark:border-zinc-700">
+                <Calendar size={28} className="mx-auto mb-2 text-gray-300 dark:text-zinc-600" />
+                <p className="text-sm text-gray-400 dark:text-zinc-500">Nenhum agendamento próximo</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -314,7 +314,7 @@ export function AgendaClient({ tenantId, tenantSlug, slots, appointments }: Prop
           {/* Past */}
           {past.length > 0 && (
             <section>
-              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-400 dark:text-slate-500">
+              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-400 dark:text-zinc-500">
                 Histórico ({past.length})
               </h3>
               <div className="space-y-2">
@@ -352,25 +352,25 @@ function AppointmentCard({
   const isPast = date < new Date();
 
   return (
-    <div className={`rounded-2xl border border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-900 ${compact ? "p-4" : "p-5"}`}>
+    <div className={`rounded-2xl border border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 ${compact ? "p-4" : "p-5"}`}>
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-100 dark:bg-slate-800">
-            <User size={18} className="text-gray-500 dark:text-slate-400" />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-100 dark:bg-zinc-800">
+            <User size={18} className="text-gray-500 dark:text-zinc-400" />
           </div>
           <div>
-            <p className="font-semibold text-gray-900 dark:text-slate-100">{appt.client_name}</p>
-            <p className="text-xs text-gray-400 dark:text-slate-500">{appt.client_email}</p>
+            <p className="font-semibold text-gray-900 dark:text-zinc-100">{appt.client_name}</p>
+            <p className="text-xs text-gray-400 dark:text-zinc-500">{appt.client_email}</p>
             {appt.client_phone && (
-              <p className="text-xs text-gray-400 dark:text-slate-500">{appt.client_phone}</p>
+              <p className="text-xs text-gray-400 dark:text-zinc-500">{appt.client_phone}</p>
             )}
           </div>
         </div>
         <div className="text-right shrink-0">
-          <p className="text-sm font-semibold text-gray-800 dark:text-slate-200">
+          <p className="text-sm font-semibold text-gray-800 dark:text-zinc-200">
             {date.toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "short" })}
           </p>
-          <p className="text-sm text-gray-500 dark:text-slate-400">
+          <p className="text-sm text-gray-500 dark:text-zinc-400">
             {date.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
             {" "}· {appt.duration_minutes} min
           </p>
@@ -378,7 +378,7 @@ function AppointmentCard({
       </div>
 
       {appt.notes && !compact && (
-        <p className="mt-3 rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-600 dark:bg-slate-800 dark:text-slate-400">
+        <p className="mt-3 rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-600 dark:bg-zinc-800 dark:text-zinc-400">
           {appt.notes}
         </p>
       )}

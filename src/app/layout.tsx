@@ -62,7 +62,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-white dark:bg-slate-950 text-gray-900 dark:text-slate-100">
+      <body className="min-h-full flex flex-col bg-white dark:bg-zinc-950 text-gray-900 dark:text-zinc-100">
         {children}
       </body>
     </html>

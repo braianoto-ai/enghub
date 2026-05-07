@@ -92,7 +92,7 @@ export default async function HomePage() {
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute -left-40 -top-40 h-96 w-96 rounded-full bg-gray-800/15 blur-3xl" />
           <div className="absolute -right-40 top-20 h-96 w-96 rounded-full bg-gray-1000/10 blur-3xl" />
-          <div className="absolute bottom-0 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-gray-700/10 blur-3xl" />
+          <div className="absolute bottom-0 left-1/2 h-64 w-64 -tranzinc-x-1/2 rounded-full bg-gray-700/10 blur-3xl" />
         </div>
 
         <div className="relative mx-auto max-w-5xl text-center">
@@ -108,7 +108,7 @@ export default async function HomePage() {
             </span>
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-300">
             {t("hero_subtitle")}
           </p>
 
@@ -116,7 +116,7 @@ export default async function HomePage() {
             <HeroSearch />
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-slate-400">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-zinc-400">
             <span className="flex items-center gap-1.5"><CheckCircle size={14} className="text-green-400" />{t("hero_trust_free")}</span>
             <span className="flex items-center gap-1.5"><CheckCircle size={14} className="text-green-400" />{t("hero_trust_no_middle")}</span>
             <span className="flex items-center gap-1.5"><CheckCircle size={14} className="text-green-400" />{t("hero_trust_verified")}</span>
@@ -133,7 +133,7 @@ export default async function HomePage() {
             ].map((stat) => (
               <div key={stat.label} className="px-6 py-5 text-center">
                 <p className="text-3xl font-bold text-white">{stat.value.toLocaleString("pt-BR")}</p>
-                <p className="mt-1 text-sm text-slate-400">{stat.label}</p>
+                <p className="mt-1 text-sm text-zinc-400">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -141,13 +141,13 @@ export default async function HomePage() {
       </section>
 
       {/* ── AREAS ────────────────────────────────────────── */}
-      <section className="px-4 py-24 dark:bg-slate-950">
+      <section className="px-4 py-24 dark:bg-zinc-950">
         <div className="mx-auto max-w-7xl">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-slate-100 sm:text-4xl">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-100 sm:text-4xl">
               {t("areas_title")}
             </h2>
-            <p className="mt-3 text-gray-500 dark:text-slate-400">
+            <p className="mt-3 text-gray-500 dark:text-zinc-400">
               {t("areas_subtitle")}
             </p>
           </div>
@@ -161,17 +161,17 @@ export default async function HomePage() {
               >
                 {/* gradient border wrapper */}
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-500 via-gray-400 to-gray-400 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <div className="absolute inset-[1px] rounded-2xl bg-white dark:bg-slate-900" />
+                <div className="absolute inset-[1px] rounded-2xl bg-white dark:bg-zinc-900" />
 
                 {/* card content */}
-                <div className="relative rounded-2xl border border-zinc-200 bg-white p-6 transition-all duration-300 group-hover:border-transparent group-hover:-translate-y-1 group-hover:shadow-xl dark:border-zinc-700/60 dark:bg-zinc-900">
+                <div className="relative rounded-2xl border border-zinc-200 bg-white p-6 transition-all duration-300 group-hover:border-transparent group-hover:-tranzinc-y-1 group-hover:shadow-xl dark:border-zinc-700/60 dark:bg-zinc-900">
                   <area.icon
                     size={32}
                     strokeWidth={1.5}
                     className={`mb-4 ${area.iconColor} transition-transform duration-300 group-hover:scale-110`}
                   />
-                  <h3 className="font-semibold text-gray-900 dark:text-slate-100">{area.label}</h3>
-                  <p className="mt-1 text-sm text-gray-400 dark:text-slate-500">
+                  <h3 className="font-semibold text-gray-900 dark:text-zinc-100">{area.label}</h3>
+                  <p className="mt-1 text-sm text-gray-400 dark:text-zinc-500">
                     {t(area.count !== 1 ? "areas_count_other" : "areas_count_one", { count: area.count })}
                   </p>
                 </div>
@@ -183,14 +183,14 @@ export default async function HomePage() {
 
       {/* ── TOP PROFESSIONALS ────────────────────────────── */}
       {professionalsWithRating.length > 0 && (
-        <section className="bg-gray-50 px-4 py-24 dark:bg-slate-900">
+        <section className="bg-gray-50 px-4 py-24 dark:bg-zinc-900">
           <div className="mx-auto max-w-7xl">
             <div className="flex items-end justify-between">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-slate-100 sm:text-4xl">
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-100 sm:text-4xl">
                   {t("featured_title")}
                 </h2>
-                <p className="mt-2 text-gray-500 dark:text-slate-400">
+                <p className="mt-2 text-gray-500 dark:text-zinc-400">
                   {t("featured_subtitle")}
                 </p>
               </div>
@@ -207,18 +207,18 @@ export default async function HomePage() {
                   <Link
                     key={p.id}
                     href={`/${p.slug}`}
-                    className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
+                    className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-tranzinc-y-1 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-800"
                   >
                     <div className="flex items-center gap-4">
                       <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-gray-500 to-gray-700 text-lg font-bold text-white shadow">
                         {initials}
                       </div>
                       <div className="min-w-0">
-                        <p className="truncate font-semibold text-gray-900 group-hover:text-gray-600 dark:text-slate-100 dark:group-hover:text-gray-400">
+                        <p className="truncate font-semibold text-gray-900 group-hover:text-gray-600 dark:text-zinc-100 dark:group-hover:text-gray-400">
                           {p.name}
                         </p>
                         {(p.prof?.city || p.prof?.state) && (
-                          <p className="truncate text-xs text-gray-400 dark:text-slate-500">
+                          <p className="truncate text-xs text-gray-400 dark:text-zinc-500">
                             {[p.prof.city, p.prof.state].filter(Boolean).join(", ")}
                           </p>
                         )}
@@ -226,7 +226,7 @@ export default async function HomePage() {
                     </div>
 
                     {p.prof?.bio && (
-                      <p className="mt-3 line-clamp-2 text-sm text-gray-500 dark:text-slate-400">{p.prof.bio}</p>
+                      <p className="mt-3 line-clamp-2 text-sm text-gray-500 dark:text-zinc-400">{p.prof.bio}</p>
                     )}
 
                     {areas.length > 0 && (
@@ -239,14 +239,14 @@ export default async function HomePage() {
                       </div>
                     )}
 
-                    <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-3 dark:border-slate-700">
+                    <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-3 dark:border-zinc-700">
                       <div className="flex items-center gap-1">
                         <Star size={14} className="fill-yellow-400 text-yellow-400" />
-                        <span className="text-sm font-medium text-gray-700 dark:text-slate-300">
+                        <span className="text-sm font-medium text-gray-700 dark:text-zinc-300">
                           {p.avg > 0 ? p.avg.toFixed(1) : "—"}
                         </span>
                         {p.reviewCount > 0 && (
-                          <span className="text-xs text-gray-400 dark:text-slate-500">({p.reviewCount})</span>
+                          <span className="text-xs text-gray-400 dark:text-zinc-500">({p.reviewCount})</span>
                         )}
                       </div>
                       <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
@@ -262,18 +262,18 @@ export default async function HomePage() {
       )}
 
       {/* ── HOW IT WORKS ─────────────────────────────────── */}
-      <section className="px-4 py-24 dark:bg-slate-950">
+      <section className="px-4 py-24 dark:bg-zinc-950">
         <div className="mx-auto max-w-7xl">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-slate-100 sm:text-4xl">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-100 sm:text-4xl">
               {t("how_title")}
             </h2>
-            <p className="mt-3 text-gray-500 dark:text-slate-400">{t("how_subtitle")}</p>
+            <p className="mt-3 text-gray-500 dark:text-zinc-400">{t("how_subtitle")}</p>
           </div>
 
           <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2">
             {/* For clients */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-slate-700 dark:bg-slate-900">
+            <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-zinc-700 dark:bg-zinc-900">
               <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800 dark:bg-gray-800/30 dark:text-gray-400">
                 <Users size={14} />
                 {t("how_clients_badge")}
@@ -289,8 +289,8 @@ export default async function HomePage() {
                       {item.step}
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900 dark:text-slate-100">{item.title}</p>
-                      <p className="mt-0.5 text-sm text-gray-500 dark:text-slate-400">{item.desc}</p>
+                      <p className="font-semibold text-gray-900 dark:text-zinc-100">{item.title}</p>
+                      <p className="mt-0.5 text-sm text-gray-500 dark:text-zinc-400">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -304,7 +304,7 @@ export default async function HomePage() {
             </div>
 
             {/* For engineers */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-slate-700 dark:bg-slate-900">
+            <div className="rounded-2xl border border-gray-200 bg-white p-8 dark:border-zinc-700 dark:bg-zinc-900">
               <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800 dark:bg-gray-800/30 dark:text-gray-400">
                 <HardHat size={14} />
                 {t("how_engineers_badge")}
@@ -320,8 +320,8 @@ export default async function HomePage() {
                       {item.step}
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900 dark:text-slate-100">{item.title}</p>
-                      <p className="mt-0.5 text-sm text-gray-500 dark:text-slate-400">{item.desc}</p>
+                      <p className="font-semibold text-gray-900 dark:text-zinc-100">{item.title}</p>
+                      <p className="mt-0.5 text-sm text-gray-500 dark:text-zinc-400">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -338,9 +338,9 @@ export default async function HomePage() {
       </section>
 
       {/* ── WHY ENGHUB ───────────────────────────────────── */}
-      <section className="bg-gray-50 px-4 py-24 dark:bg-slate-900">
+      <section className="bg-gray-50 px-4 py-24 dark:bg-zinc-900">
         <div className="mx-auto max-w-7xl">
-          <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-slate-100 sm:text-4xl">
+          <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-zinc-100 sm:text-4xl">
             {t("why_title")}
           </h2>
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
@@ -368,8 +368,8 @@ export default async function HomePage() {
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800/20">
                   <f.icon size={26} className="text-gray-700 dark:text-gray-400" />
                 </div>
-                <h3 className="font-semibold text-gray-900 dark:text-slate-100">{f.title}</h3>
-                <p className="mt-2 text-sm text-gray-500 dark:text-slate-400">{f.desc}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-zinc-100">{f.title}</h3>
+                <p className="mt-2 text-sm text-gray-500 dark:text-zinc-400">{f.desc}</p>
               </div>
             ))}
           </div>

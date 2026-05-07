@@ -7,7 +7,7 @@ export default function OfflinePage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 dark:bg-zinc-950">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gray-1000/5 blur-3xl" />
+        <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -tranzinc-x-1/2 -tranzinc-y-1/2 rounded-full bg-gray-1000/5 blur-3xl" />
       </div>
 
       <div className="relative z-10 max-w-sm text-center">

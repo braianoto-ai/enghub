@@ -38,13 +38,13 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
             <>
               <button
                 onClick={(e) => { e.stopPropagation(); prev(); }}
-                className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-1.5 text-white hover:bg-black/60 transition-colors"
+                className="absolute left-2 top-1/2 -tranzinc-y-1/2 rounded-full bg-black/40 p-1.5 text-white hover:bg-black/60 transition-colors"
               >
                 <ChevronLeft size={18} />
               </button>
               <button
                 onClick={(e) => { e.stopPropagation(); next(); }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-1.5 text-white hover:bg-black/60 transition-colors"
+                className="absolute right-2 top-1/2 -tranzinc-y-1/2 rounded-full bg-black/40 p-1.5 text-white hover:bg-black/60 transition-colors"
               >
                 <ChevronRight size={18} />
               </button>
@@ -97,13 +97,13 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
           {images.length > 1 && (
             <>
               <button
-                className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+                className="absolute left-4 top-1/2 -tranzinc-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
                 onClick={(e) => { e.stopPropagation(); prev(); }}
               >
                 <ChevronLeft size={24} />
               </button>
               <button
-                className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+                className="absolute right-4 top-1/2 -tranzinc-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
                 onClick={(e) => { e.stopPropagation(); next(); }}
               >
                 <ChevronRight size={24} />
@@ -124,7 +124,7 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
             />
           </div>
 
-          <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-white/60">
+          <span className="absolute bottom-4 left-1/2 -tranzinc-x-1/2 text-sm text-white/60">
             {current + 1} / {images.length}
           </span>
         </div>

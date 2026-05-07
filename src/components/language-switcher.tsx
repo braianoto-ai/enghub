@@ -1,49 +1,40 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { useRouter, usePathname } from "next/navigation";
-import { routing } from "@/i18n/routing";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
-const FLAG: Record<string, string> = { pt: "🇧🇷", en: "🇺🇸" };
-const LABEL: Record<string, string> = { pt: "PT", en: "EN" };
-
-interface LanguageSwitcherProps {
-  variant?: "light" | "dark";
-}
-
-export function LanguageSwitcher({ variant = "dark" }: LanguageSwitcherProps) {
+export function LanguageSwitcher() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
 
-  function switchLocale(next: string) {
+  function switchTo(next: "pt" | "en") {
     if (next === locale) return;
-
-    // Strip current locale prefix if present
-    let path = pathname;
-    for (const l of routing.locales) {
-      if (l !== routing.defaultLocale && path.startsWith(`/${l}`)) {
-        path = path.slice(`/${l}`.length) || "/";
-        break;
-      }
-    }
-
-    // Add new locale prefix if not default
-    const newPath = next === routing.defaultLocale ? path : `/${next}${path}`;
-    router.push(newPath);
+    router.replace(pathname, { locale: next });
   }
 
-  const nextLocale = locale === "pt" ? "en" : "pt";
-
-  const cls =
-    variant === "light"
-      ? "flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-zinc-400 transition-colors hover:bg-white/10 hover:text-white"
-      : "flex items-center gap-1 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-50 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800";
-
   return (
-    <button onClick={() => switchLocale(nextLocale)} className={cls} title={`Switch to ${nextLocale.toUpperCase()}`}>
-      <span>{FLAG[nextLocale]}</span>
-      <span>{LABEL[nextLocale]}</span>
-    </button>
+    <div className="flex items-center rounded-lg border border-gray-200 dark:border-zinc-700">
+      <button
+        onClick={() => switchTo("pt")}
+        className={`rounded-l-[7px] px-2.5 py-1.5 text-xs font-semibold transition-colors ${
+          locale === "pt"
+            ? "bg-gray-700 text-white"
+            : "text-gray-500 hover:bg-gray-50 dark:text-zinc-400 dark:hover:bg-zinc-800"
+        }`}
+      >
+        PT
+      </button>
+      <button
+        onClick={() => switchTo("en")}
+        className={`rounded-r-[7px] px-2.5 py-1.5 text-xs font-semibold transition-colors ${
+          locale === "en"
+            ? "bg-gray-700 text-white"
+            : "text-gray-500 hover:bg-gray-50 dark:text-zinc-400 dark:hover:bg-zinc-800"
+        }`}
+      >
+        EN
+      </button>
+    </div>
   );
 }

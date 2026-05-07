@@ -8,7 +8,7 @@ export default function NotFound() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 dark:bg-zinc-950">
       {/* Background decoration */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gray-1000/5 blur-3xl" />
+        <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -tranzinc-x-1/2 -tranzinc-y-1/2 rounded-full bg-gray-1000/5 blur-3xl" />
       </div>
 
       <div className="relative z-10 w-full max-w-md text-center">

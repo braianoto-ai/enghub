@@ -233,7 +233,7 @@ export function PerfilForm({ tenant, profile }: PerfilFormProps) {
           <CardTitle>Currículo em PDF</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="mb-3 text-sm text-gray-500 dark:text-slate-400">
+          <p className="mb-3 text-sm text-gray-500 dark:text-zinc-400">
             Suba seu currículo em PDF. Ele aparece como botão "Baixar currículo" no seu perfil público.
           </p>
           {tenant?.id && (
@@ -250,7 +250,7 @@ export function PerfilForm({ tenant, profile }: PerfilFormProps) {
           <CardTitle>Disponibilidade</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="mb-3 text-sm text-gray-500 dark:text-slate-400">
+          <p className="mb-3 text-sm text-gray-500 dark:text-zinc-400">
             Este status aparece no seu perfil público para que clientes saibam sua disponibilidade.
           </p>
           {tenant?.id && (

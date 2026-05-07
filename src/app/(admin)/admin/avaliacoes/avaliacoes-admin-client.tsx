@@ -49,12 +49,12 @@ export function AvaliacoesAdminClient({ reviews }: { reviews: Review[] }) {
       {/* Filters */}
       <div className="mb-6 flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={15} className="absolute left-3 top-1/2 -tranzinc-y-1/2 text-gray-400" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por avaliador, profissional ou texto..."
-            className="w-full rounded-xl border border-gray-200 py-2.5 pl-9 pr-3 text-sm focus:border-gray-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500"
+            className="w-full rounded-xl border border-gray-200 py-2.5 pl-9 pr-3 text-sm focus:border-gray-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder-zinc-500"
           />
         </div>
         <div className="flex items-center gap-2">
@@ -62,7 +62,7 @@ export function AvaliacoesAdminClient({ reviews }: { reviews: Review[] }) {
           <select
             value={filterRating}
             onChange={(e) => setFilterRating(e.target.value)}
-            className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-gray-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+            className="rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-gray-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
           >
             <option value="all">Todas as notas</option>
             {[5, 4, 3, 2, 1].map((r) => (
@@ -72,31 +72,31 @@ export function AvaliacoesAdminClient({ reviews }: { reviews: Review[] }) {
         </div>
       </div>
 
-      <p className="mb-4 text-sm text-gray-500 dark:text-slate-400">
+      <p className="mb-4 text-sm text-gray-500 dark:text-zinc-400">
         {filtered.length} de {reviews.length} avaliações
       </p>
 
-      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-gray-200 dark:border-slate-800">
+            <tr className="border-b border-gray-200 dark:border-zinc-800">
               {["Avaliador", "Profissional", "Nota", "Comentário", "Data", ""].map((h) => (
-                <th key={h} className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-slate-400">{h}</th>
+                <th key={h} className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-zinc-400">{h}</th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100 dark:divide-slate-800">
+          <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-5 py-12 text-center text-sm text-gray-400 dark:text-slate-500">
+                <td colSpan={6} className="px-5 py-12 text-center text-sm text-gray-400 dark:text-zinc-500">
                   Nenhuma avaliação encontrada
                 </td>
               </tr>
             ) : (
               filtered.map((r) => (
-                <tr key={r.id} className="hover:bg-gray-50 dark:hover:bg-slate-800/50">
+                <tr key={r.id} className="hover:bg-gray-50 dark:hover:bg-zinc-800/50">
                   <td className="px-5 py-4">
-                    <p className="text-sm font-medium text-gray-900 dark:text-slate-100">{r.reviewer_name}</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-zinc-100">{r.reviewer_name}</p>
                   </td>
                   <td className="px-5 py-4">
                     <Link
@@ -115,11 +115,11 @@ export function AvaliacoesAdminClient({ reviews }: { reviews: Review[] }) {
                     </div>
                   </td>
                   <td className="max-w-xs px-5 py-4">
-                    <p className="truncate text-sm text-gray-600 dark:text-slate-400">
-                      {r.comment ?? <span className="italic text-gray-300 dark:text-slate-600">Sem comentário</span>}
+                    <p className="truncate text-sm text-gray-600 dark:text-zinc-400">
+                      {r.comment ?? <span className="italic text-gray-300 dark:text-zinc-600">Sem comentário</span>}
                     </p>
                   </td>
-                  <td className="px-5 py-4 text-xs text-gray-400 dark:text-slate-500 whitespace-nowrap">
+                  <td className="px-5 py-4 text-xs text-gray-400 dark:text-zinc-500 whitespace-nowrap">
                     {new Date(r.created_at).toLocaleDateString("pt-BR")}
                   </td>
                   <td className="px-5 py-4">
@@ -134,7 +134,7 @@ export function AvaliacoesAdminClient({ reviews }: { reviews: Review[] }) {
                         </button>
                         <button
                           onClick={() => setConfirmId(null)}
-                          className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs text-gray-500 hover:bg-gray-50 dark:border-slate-700 dark:text-slate-400"
+                          className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs text-gray-500 hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-400"
                         >
                           Cancelar
                         </button>

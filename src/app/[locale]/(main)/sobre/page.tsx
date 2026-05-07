@@ -72,7 +72,7 @@ export default function SobrePage() {
       {/* Hero */}
       <div className="relative overflow-hidden bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 px-4 py-28 text-center">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/3 top-0 h-96 w-96 -translate-x-1/2 rounded-full bg-gray-700/10 blur-3xl" />
+          <div className="absolute left-1/3 top-0 h-96 w-96 -tranzinc-x-1/2 rounded-full bg-gray-700/10 blur-3xl" />
           <div className="absolute right-1/4 bottom-0 h-64 w-64 rounded-full bg-gray-1000/8 blur-3xl" />
         </div>
         <div className="relative mx-auto max-w-3xl">

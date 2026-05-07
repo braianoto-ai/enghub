@@ -138,8 +138,8 @@ export default async function AnalyticsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">Analytics</h1>
-      <p className="mt-1 text-gray-500 dark:text-slate-400">Desempenho do seu perfil público</p>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">Analytics</h1>
+      <p className="mt-1 text-gray-500 dark:text-zinc-400">Desempenho do seu perfil público</p>
 
       {/* Stats */}
       <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -153,10 +153,10 @@ export default async function AnalyticsPage() {
             <div className={`inline-flex rounded-xl p-2.5 ${s.bg}`}>
               <s.icon size={20} className={s.color} />
             </div>
-            <p className="mt-3 text-2xl font-bold text-gray-900 dark:text-slate-100">
+            <p className="mt-3 text-2xl font-bold text-gray-900 dark:text-zinc-100">
               {s.value.toLocaleString("pt-BR")}
             </p>
-            <p className="text-sm text-gray-500 dark:text-slate-400">{s.label}</p>
+            <p className="text-sm text-gray-500 dark:text-zinc-400">{s.label}</p>
           </div>
         ))}
       </div>

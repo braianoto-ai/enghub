@@ -9,7 +9,7 @@ export default function DashboardLoading() {
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+          <div key={i} className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
             <Skeleton className="mb-3 h-4 w-20" />
             <Skeleton className="h-8 w-12" />
           </div>
@@ -18,7 +18,7 @@ export default function DashboardLoading() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Availability */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
           <Skeleton className="mb-4 h-4 w-32" />
           <div className="space-y-2">
             {Array.from({ length: 3 }).map((_, i) => (
@@ -28,9 +28,9 @@ export default function DashboardLoading() {
         </div>
 
         {/* Recent reviews */}
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900 lg:col-span-2">
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900 lg:col-span-2">
           <Skeleton className="mb-4 h-4 w-40" />
-          <div className="divide-y divide-gray-100 dark:divide-slate-800">
+          <div className="divide-y divide-gray-100 dark:divide-zinc-800">
             {Array.from({ length: 3 }).map((_, i) => (
               <div key={i} className="py-4 first:pt-0">
                 <div className="flex items-start justify-between gap-4">

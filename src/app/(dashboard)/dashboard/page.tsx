@@ -98,8 +98,8 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">Painel</h1>
-      <p className="mt-1 text-gray-500 dark:text-slate-400">Bem-vindo ao seu painel de controle</p>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">Painel</h1>
+      <p className="mt-1 text-gray-500 dark:text-zinc-400">Bem-vindo ao seu painel de controle</p>
 
       <div className="mt-6">
         <OnboardingCard steps={onboardingSteps} slug={tenant?.slug ?? ""} />
@@ -126,8 +126,8 @@ export default async function DashboardPage() {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-slate-400">{stat.label}</p>
-                  <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-slate-100">
+                  <p className="text-sm text-gray-500 dark:text-zinc-400">{stat.label}</p>
+                  <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-zinc-100">
                     {stat.value}
                   </p>
                 </div>
@@ -151,7 +151,7 @@ export default async function DashboardPage() {
                 {reviews.map((r, i) => (
                   <li key={i} className="border-b border-gray-100 pb-3 last:border-0 dark:border-zinc-800">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-900 dark:text-slate-100">
+                      <span className="text-sm font-medium text-gray-900 dark:text-zinc-100">
                         {(r.author as unknown as { name: string } | null)?.name ?? "Anônimo"}
                       </span>
                       <span className="text-sm text-yellow-500">
@@ -159,7 +159,7 @@ export default async function DashboardPage() {
                       </span>
                     </div>
                     {r.comment && (
-                      <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">{r.comment}</p>
+                      <p className="mt-1 text-sm text-gray-500 dark:text-zinc-400">{r.comment}</p>
                     )}
                   </li>
                 ))}
@@ -177,7 +177,7 @@ export default async function DashboardPage() {
             <CardTitle>Dicas para crescer</CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="space-y-3 text-sm text-gray-600 dark:text-slate-400">
+            <ul className="space-y-3 text-sm text-gray-600 dark:text-zinc-400">
               {[
                 "Adicione fotos reais dos seus projetos — perfis com imagens recebem 3x mais contatos",
                 "Preencha o número do CREA/CAU para aumentar a confiança dos clientes",

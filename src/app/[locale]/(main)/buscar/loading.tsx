@@ -18,7 +18,7 @@ export default function BuscarLoading() {
       {/* Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 9 }).map((_, i) => (
-          <div key={i} className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <div key={i} className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
             <div className="flex items-start gap-3">
               <Skeleton className="h-12 w-12 rounded-full shrink-0" />
               <div className="flex-1 space-y-2">
@@ -33,7 +33,7 @@ export default function BuscarLoading() {
               <Skeleton className="h-6 w-16 rounded-full" />
               <Skeleton className="h-6 w-14 rounded-full" />
             </div>
-            <div className="mt-4 flex justify-between border-t border-gray-100 pt-3 dark:border-slate-800">
+            <div className="mt-4 flex justify-between border-t border-gray-100 pt-3 dark:border-zinc-800">
               <Skeleton className="h-4 w-16" />
               <Skeleton className="h-4 w-20" />
             </div>
