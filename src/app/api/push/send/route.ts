@@ -2,13 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import webpush from "web-push";
 
-webpush.setVapidDetails(
-  "mailto:contato@enghub.com.br",
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-  process.env.VAPID_PRIVATE_KEY!
-);
+export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
+  const vapidPublic = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+  const vapidPrivate = process.env.VAPID_PRIVATE_KEY;
+
+  if (!vapidPublic || !vapidPrivate) {
+    return NextResponse.json({ error: "VAPID keys not configured" }, { status: 500 });
+  }
+
+  webpush.setVapidDetails("mailto:contato@enghub.com.br", vapidPublic, vapidPrivate);
+
   try {
     // Internal only — check for secret or authenticated admin
     const authHeader = request.headers.get("authorization");
