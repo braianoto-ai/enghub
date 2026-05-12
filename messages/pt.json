@@ -4,6 +4,7 @@
     "plans": "Planos",
     "about": "Sobre",
     "blog": "Blog",
+    "news": "Notícias",
     "login": "Entrar",
     "signup": "Criar conta grátis",
     "dashboard": "Dashboard"
@@ -267,6 +268,27 @@
     "support_heading": "Suporte",
     "support_about": "Sobre nós",
     "support_contact": "Contato"
+  },
+  "auth": {
+    "forgot_title": "Esqueci minha senha",
+    "forgot_subtitle": "Informe seu e-mail e enviaremos um link para redefinir sua senha.",
+    "forgot_send": "Enviar link de recuperação",
+    "forgot_sending": "Enviando...",
+    "forgot_sent_title": "E-mail enviado!",
+    "forgot_sent_desc": "Se existe uma conta com esse e-mail, você receberá um link para redefinir sua senha.",
+    "forgot_spam_tip": "Não recebeu? Verifique sua caixa de spam ou tente novamente.",
+    "forgot_try_another": "Tentar outro e-mail",
+    "forgot_back_login": "Voltar ao login",
+    "forgot_link": "Esqueci minha senha",
+    "reset_title": "Redefinir senha",
+    "reset_subtitle": "Crie uma nova senha para sua conta.",
+    "reset_new_password": "Nova senha",
+    "reset_confirm_password": "Confirmar nova senha",
+    "reset_submit": "Redefinir senha",
+    "reset_saving": "Salvando...",
+    "reset_success_title": "Senha redefinida!",
+    "reset_success_desc": "Sua senha foi alterada com sucesso. Você já pode acessar sua conta.",
+    "reset_go_dashboard": "Ir para o dashboard"
   },
   "common": {
     "loading": "Carregando...",

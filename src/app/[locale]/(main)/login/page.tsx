@@ -156,10 +156,15 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -tranzinc-y-1/2 text-zinc-400 hover:text-zinc-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
                 >
                   {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>
+              </div>
+              <div className="mt-1 text-right">
+                <Link href="/esqueci-senha" className="text-xs text-gray-500 hover:text-gray-700 hover:underline dark:text-zinc-400 dark:hover:text-zinc-200">
+                  Esqueci minha senha
+                </Link>
               </div>
             </div>
 
