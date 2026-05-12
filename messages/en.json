@@ -4,6 +4,7 @@
     "plans": "Pricing",
     "about": "About",
     "blog": "Blog",
+    "news": "News",
     "login": "Sign in",
     "signup": "Get started free",
     "dashboard": "Dashboard"
@@ -267,6 +268,27 @@
     "support_heading": "Support",
     "support_about": "About us",
     "support_contact": "Contact"
+  },
+  "auth": {
+    "forgot_title": "Forgot my password",
+    "forgot_subtitle": "Enter your email and we'll send you a link to reset your password.",
+    "forgot_send": "Send recovery link",
+    "forgot_sending": "Sending...",
+    "forgot_sent_title": "Email sent!",
+    "forgot_sent_desc": "If an account exists with that email, you'll receive a link to reset your password.",
+    "forgot_spam_tip": "Didn't receive it? Check your spam folder or try again.",
+    "forgot_try_another": "Try another email",
+    "forgot_back_login": "Back to login",
+    "forgot_link": "Forgot my password",
+    "reset_title": "Reset password",
+    "reset_subtitle": "Create a new password for your account.",
+    "reset_new_password": "New password",
+    "reset_confirm_password": "Confirm new password",
+    "reset_submit": "Reset password",
+    "reset_saving": "Saving...",
+    "reset_success_title": "Password reset!",
+    "reset_success_desc": "Your password has been changed successfully. You can now access your account.",
+    "reset_go_dashboard": "Go to dashboard"
   },
   "common": {
     "loading": "Loading...",
