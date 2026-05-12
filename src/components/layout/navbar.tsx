@@ -32,8 +32,14 @@ export function Navbar() {
             <Link href={`${prefix}/planos`} className="text-sm text-gray-600 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-zinc-100">
               {t("plans")}
             </Link>
+            <Link href={`${prefix}/projetos`} className="text-sm text-gray-600 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+              Projetos
+            </Link>
             <Link href={`${prefix}/blog`} className="text-sm text-gray-600 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-zinc-100">
               {t("blog")}
+            </Link>
+            <Link href={`${prefix}/noticias`} className="text-sm text-gray-600 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+              {t("news")}
             </Link>
             <Link href={`${prefix}/sobre`} className="text-sm text-gray-600 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-zinc-100">
               {t("about")}
@@ -66,7 +72,9 @@ export function Navbar() {
             <div className="flex flex-col gap-3">
               <Link href={`${prefix}/buscar`} className="text-sm text-gray-600 dark:text-zinc-400" onClick={() => setIsOpen(false)}>{t("search")}</Link>
               <Link href={`${prefix}/planos`} className="text-sm text-gray-600 dark:text-zinc-400" onClick={() => setIsOpen(false)}>{t("plans")}</Link>
+              <Link href={`${prefix}/projetos`} className="text-sm text-gray-600 dark:text-zinc-400" onClick={() => setIsOpen(false)}>Projetos</Link>
               <Link href={`${prefix}/blog`} className="text-sm text-gray-600 dark:text-zinc-400" onClick={() => setIsOpen(false)}>{t("blog")}</Link>
+              <Link href={`${prefix}/noticias`} className="text-sm text-gray-600 dark:text-zinc-400" onClick={() => setIsOpen(false)}>{t("news")}</Link>
               <Link href={`${prefix}/sobre`} className="text-sm text-gray-600 dark:text-zinc-400" onClick={() => setIsOpen(false)}>{t("about")}</Link>
               <div className="flex gap-3 pt-2">
                 <Link href="/login"><Button variant="outline" size="sm">{t("login")}</Button></Link>
