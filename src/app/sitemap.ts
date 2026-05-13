@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { blogPosts } from "@/lib/blog";
+import { areaSlugToKey, brazilianStates } from "@/lib/seo-locations";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://enghub.com.br";
 
@@ -58,5 +59,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     };
   });
 
-  return [...staticPages, ...blogPages, ...profilePages, ...projectPages];
+  // SEO pages: /engenheiros + /engenheiros/[area] + /engenheiros/[area]/[estado]
+  const areaPages: MetadataRoute.Sitemap = [
+    { url: `${BASE_URL}/engenheiros`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
+    ...Object.keys(areaSlugToKey).map((slug) => ({
+      url: `${BASE_URL}/engenheiros/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    })),
+    ...Object.keys(areaSlugToKey).flatMap((aSlug) =>
+      brazilianStates.map((s) => ({
+        url: `${BASE_URL}/engenheiros/${aSlug}/${s.slug}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.7,
+      }))
+    ),
+  ];
+
+  return [...staticPages, ...blogPages, ...areaPages, ...profilePages, ...projectPages];
 }
