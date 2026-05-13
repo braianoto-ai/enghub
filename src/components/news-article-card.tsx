@@ -68,12 +68,10 @@ export function NewsArticleCard({ article }: { article: NewsArticle }) {
             unoptimized
           />
         ) : (
-          <div className="flex h-full items-center justify-center">
-            {cat.icon && (
-              <span className="text-zinc-300 dark:text-zinc-600">
-                <Building2 size={40} />
-              </span>
-            )}
+          <div className="flex h-full items-center justify-center bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-700">
+            <span className="text-zinc-300 dark:text-zinc-600">
+              {cat.label === "Arquitetura" ? <Building2 size={48} /> : <HardHat size={48} />}
+            </span>
           </div>
         )}
       </div>
