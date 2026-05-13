@@ -4,6 +4,7 @@ import { Eye, FolderOpen, Star, MessageSquare } from "lucide-react";
 import { redirect } from "next/navigation";
 import { OnboardingCard } from "./onboarding-card";
 import { AvailabilitySwitcher, type AvailabilityStatus } from "@/components/availability-switcher";
+import { ProfileScoreCard } from "./profile-score";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -22,8 +23,9 @@ export default async function DashboardPage() {
     { count: projectCount },
     { count: serviceCount },
     { count: reviewCount },
+    { count: testimonialCount },
     { data: reviews },
-    { data: profile },
+    { data: prof },
   ] = await Promise.all([
     supabase
       .from("projects")
@@ -39,14 +41,18 @@ export default async function DashboardPage() {
       .select("*", { count: "exact", head: true })
       .eq("tenant_id", tenantId ?? ""),
     supabase
+      .from("testimonials")
+      .select("*", { count: "exact", head: true })
+      .eq("tenant_id", tenantId ?? ""),
+    supabase
       .from("reviews")
       .select("rating, comment, created_at, author:profiles(name)")
       .eq("tenant_id", tenantId ?? "")
       .order("created_at", { ascending: false })
       .limit(5),
     supabase
-      .from("profiles")
-      .select("bio, phone, whatsapp, linkedin, availability")
+      .from("professional_profiles")
+      .select("bio, phone, whatsapp, website, linkedin, avatar_url, city, state, years_experience, education, certifications, areas, crea_cau_number, availability")
       .eq("tenant_id", tenantId ?? "")
       .maybeSingle(),
   ]);
@@ -63,7 +69,7 @@ export default async function DashboardPage() {
     { label: "Visitas ao perfil",    value: "Em breve",         icon: Eye },
   ];
 
-  const hasContact = !!(profile?.phone || profile?.whatsapp || profile?.linkedin);
+  const hasContact = !!(prof?.phone || prof?.whatsapp || prof?.linkedin);
 
   const onboardingSteps = [
     {
@@ -71,7 +77,7 @@ export default async function DashboardPage() {
       label: "Complete seu perfil",
       description: "Adicione bio, cidade e anos de experiência",
       href: "/dashboard/perfil",
-      done: !!(profile?.bio && profile.bio.trim().length > 20),
+      done: !!(prof?.bio && prof.bio.trim().length > 20),
     },
     {
       id: "contato",
@@ -96,6 +102,101 @@ export default async function DashboardPage() {
     },
   ];
 
+  // ── Profile score items ──
+  const scoreItems = [
+    {
+      label: "Foto de perfil",
+      description: "Uma foto profissional aumenta a confiança do cliente",
+      done: !!prof?.avatar_url,
+      points: 10,
+      href: "/dashboard/perfil",
+    },
+    {
+      label: "Bio / apresentação",
+      description: "Conte quem você é e o que você faz (mín. 50 caracteres)",
+      done: !!(prof?.bio && prof.bio.trim().length >= 50),
+      points: 10,
+      href: "/dashboard/perfil",
+    },
+    {
+      label: "WhatsApp ou telefone",
+      description: "Facilite o contato direto com clientes",
+      done: !!(prof?.whatsapp || prof?.phone),
+      points: 10,
+      href: "/dashboard/perfil",
+    },
+    {
+      label: "Cidade e estado",
+      description: "Apareça em buscas por localização",
+      done: !!(prof?.city && prof?.state),
+      points: 5,
+      href: "/dashboard/perfil",
+    },
+    {
+      label: "Área(s) de especialidade",
+      description: "Informe suas especialidades de engenharia",
+      done: Array.isArray(prof?.areas) && prof.areas.length > 0,
+      points: 5,
+      href: "/dashboard/perfil",
+    },
+    {
+      label: "Anos de experiência",
+      description: "Mostre sua senioridade para os clientes",
+      done: !!(prof?.years_experience && prof.years_experience > 0),
+      points: 5,
+      href: "/dashboard/perfil",
+    },
+    {
+      label: "Número CREA / CAU",
+      description: "Comprova sua habilitação profissional",
+      done: !!prof?.crea_cau_number,
+      points: 10,
+      href: "/dashboard/verificacao",
+    },
+    {
+      label: "Website ou LinkedIn",
+      description: "Links externos reforçam sua credibilidade",
+      done: !!(prof?.website || prof?.linkedin),
+      points: 5,
+      href: "/dashboard/perfil",
+    },
+    {
+      label: "Formação acadêmica",
+      description: "Informe sua graduação ou pós-graduação",
+      done: !!(prof?.education && prof.education.trim().length > 0),
+      points: 5,
+      href: "/dashboard/perfil",
+    },
+    {
+      label: "1 projeto publicado",
+      description: "Projetos com foto recebem 3× mais contatos",
+      done: (projectCount ?? 0) >= 1,
+      points: 15,
+      href: "/dashboard/projetos/novo",
+    },
+    {
+      label: "3 projetos publicados",
+      description: "Uma galeria robusta conquista mais clientes",
+      done: (projectCount ?? 0) >= 3,
+      points: 5,
+      href: "/dashboard/projetos/novo",
+    },
+    {
+      label: "1 serviço cadastrado",
+      description: "Informe o que você oferece e os valores",
+      done: (serviceCount ?? 0) >= 1,
+      points: 10,
+      href: "/dashboard/servicos",
+    },
+    {
+      label: "1 depoimento adicionado",
+      description: "Citações de clientes aumentam a conversão",
+      done: (testimonialCount ?? 0) >= 1,
+      points: 5,
+      href: "/dashboard/depoimentos",
+    },
+  ];
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">Painel</h1>
@@ -114,7 +215,7 @@ export default async function DashboardPage() {
           </div>
           <AvailabilitySwitcher
             tenantId={tenant.id}
-            initial={(profile?.availability as AvailabilityStatus) ?? "available"}
+            initial={(prof?.availability as AvailabilityStatus) ?? "available"}
             compact
           />
         </div>
@@ -138,6 +239,11 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
         ))}
+      </div>
+
+      {/* Profile Score */}
+      <div className="mt-8">
+        <ProfileScoreCard items={scoreItems} slug={tenant?.slug ?? ""} />
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
