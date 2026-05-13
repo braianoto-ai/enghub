@@ -260,7 +260,7 @@ export default async function TenantPage({
         </Link>
         <div className="flex items-center gap-2">
           <Link
-            href={`/${slug}/contato`}
+            href={`/${slug}/orcamento`}
             className="rounded-lg bg-gray-700 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-gray-600"
           >
             {t("request_quote")}
@@ -348,10 +348,17 @@ export default async function TenantPage({
           {/* Sidebar */}
           <div className="space-y-4">
             {/* CTA */}
-            <Link href={`/${slug}/contato`}>
+            <Link href={`/${slug}/orcamento`}>
               <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-gray-700 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-600">
                 {t("request_quote")}
                 <MessageSquare size={15} />
+              </button>
+            </Link>
+
+            <Link href={`/${slug}/contato`}>
+              <button className="flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white py-3 text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
+                <MessageSquare size={15} />
+                Enviar mensagem
               </button>
             </Link>
 
