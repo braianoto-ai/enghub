@@ -34,8 +34,24 @@ interface BuscarClientProps {
 }
 
 type SortOption = "relevancia" | "avaliacao" | "experiencia";
+type MinRating = 0 | 3 | 4 | 4.5;
+type MinExp = 0 | 5 | 10 | 15;
 
 const MAX_COMPARE = 3;
+
+const MIN_RATING_LABELS: Record<string, string> = {
+  "0": "Qualquer avaliação",
+  "3": "3+ estrelas",
+  "4": "4+ estrelas",
+  "4.5": "4.5+ estrelas",
+};
+
+const MIN_EXP_LABELS: Record<string, string> = {
+  "0": "Qualquer experiência",
+  "5": "5+ anos",
+  "10": "10+ anos",
+  "15": "15+ anos",
+};
 
 export function BuscarClient({ professionals, initialSearch = "", initialArea = "" }: BuscarClientProps) {
   const t = useTranslations("search");
@@ -53,6 +69,9 @@ export function BuscarClient({ professionals, initialSearch = "", initialArea = 
   const [selectedArea, setSelectedArea] = useState(initialArea || ALL_AREAS);
   const [selectedState, setSelectedState] = useState(ALL_STATES);
   const [sort, setSort] = useState<SortOption>("relevancia");
+  const [onlyVerified, setOnlyVerified] = useState(false);
+  const [minRating, setMinRating] = useState<MinRating>(0);
+  const [minExp, setMinExp] = useState<MinExp>(0);
   const [showFilters, setShowFilters] = useState(false);
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [showCompareModal, setShowCompareModal] = useState(false);
@@ -73,6 +92,9 @@ export function BuscarClient({ professionals, initialSearch = "", initialArea = 
     selectedArea !== ALL_AREAS,
     selectedState !== ALL_STATES,
     sort !== "relevancia",
+    onlyVerified,
+    minRating > 0,
+    minExp > 0,
   ].filter(Boolean).length;
 
   const filtered = useMemo(() => {
@@ -87,7 +109,10 @@ export function BuscarClient({ professionals, initialSearch = "", initialArea = 
         p.areas.some((a) => a.toLowerCase().includes(q));
       const matchArea = selectedArea === ALL_AREAS || p.areas.includes(selectedArea);
       const matchState = selectedState === ALL_STATES || p.state === selectedState;
-      return matchSearch && matchArea && matchState;
+      const matchVerified = !onlyVerified || p.verified;
+      const matchRating = minRating === 0 || p.avgRating >= minRating;
+      const matchExp = minExp === 0 || (p.years_experience ?? 0) >= minExp;
+      return matchSearch && matchArea && matchState && matchVerified && matchRating && matchExp;
     });
 
     if (sort === "avaliacao") {
@@ -102,12 +127,15 @@ export function BuscarClient({ professionals, initialSearch = "", initialArea = 
     }
 
     return results;
-  }, [professionals, search, selectedArea, selectedState, sort, ALL_AREAS, ALL_STATES]);
+  }, [professionals, search, selectedArea, selectedState, sort, onlyVerified, minRating, minExp, ALL_AREAS, ALL_STATES]);
 
   function clearFilters() {
     setSelectedArea(ALL_AREAS);
     setSelectedState(ALL_STATES);
     setSort("relevancia");
+    setOnlyVerified(false);
+    setMinRating(0);
+    setMinExp(0);
     setSearch("");
   }
 
@@ -234,6 +262,60 @@ export function BuscarClient({ professionals, initialSearch = "", initialArea = 
                 <ChevronDown size={14} className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
               </div>
             </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-gray-500 dark:text-zinc-400">
+                Avaliação mínima
+              </label>
+              <div className="relative">
+                <select
+                  value={String(minRating)}
+                  onChange={(e) => setMinRating(Number(e.target.value) as MinRating)}
+                  className="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2 pl-3 pr-8 text-sm text-gray-700 focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
+                >
+                  {Object.entries(MIN_RATING_LABELS).map(([value, label]) => (
+                    <option key={value} value={value}>{label}</option>
+                  ))}
+                </select>
+                <ChevronDown size={14} className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
+              </div>
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-gray-500 dark:text-zinc-400">
+                Experiência mínima
+              </label>
+              <div className="relative">
+                <select
+                  value={String(minExp)}
+                  onChange={(e) => setMinExp(Number(e.target.value) as MinExp)}
+                  className="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2 pl-3 pr-8 text-sm text-gray-700 focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
+                >
+                  {Object.entries(MIN_EXP_LABELS).map(([value, label]) => (
+                    <option key={value} value={value}>{label}</option>
+                  ))}
+                </select>
+                <ChevronDown size={14} className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
+              </div>
+            </div>
+            <div className="flex items-end">
+              <button
+                onClick={() => setOnlyVerified((v) => !v)}
+                className={`flex w-full items-center justify-between gap-2 rounded-lg border px-3 py-2 text-sm transition-colors ${
+                  onlyVerified
+                    ? "border-green-300 bg-green-50 text-green-700 dark:border-green-700 dark:bg-green-900/20 dark:text-green-400"
+                    : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <ShieldCheck size={14} />
+                  Somente verificados
+                </span>
+                <div className={`h-4 w-4 rounded-sm border-2 flex items-center justify-center transition-colors ${
+                  onlyVerified ? "border-green-500 bg-green-500" : "border-gray-300 dark:border-zinc-600"
+                }`}>
+                  {onlyVerified && <X size={10} className="text-white" strokeWidth={3} />}
+                </div>
+              </button>
+            </div>
           </div>
           {activeFilterCount > 0 && (
             <button
@@ -248,7 +330,7 @@ export function BuscarClient({ professionals, initialSearch = "", initialArea = 
       )}
 
       {/* Active filter chips */}
-      {(selectedArea !== ALL_AREAS || selectedState !== ALL_STATES || sort !== "relevancia") && (
+      {activeFilterCount > 0 && (
         <div className="mb-5 flex flex-wrap gap-2">
           {selectedArea !== ALL_AREAS && (
             <span className="flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-800/20 dark:text-gray-400">
@@ -266,6 +348,24 @@ export function BuscarClient({ professionals, initialSearch = "", initialArea = 
             <span className="flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-800/20 dark:text-gray-400">
               {SORT_LABELS[sort]}
               <button onClick={() => setSort("relevancia")} className="ml-0.5 hover:text-gray-900"><X size={11} /></button>
+            </span>
+          )}
+          {onlyVerified && (
+            <span className="flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700 dark:bg-green-900/20 dark:text-green-400">
+              <ShieldCheck size={11} /> Verificados
+              <button onClick={() => setOnlyVerified(false)} className="ml-0.5 hover:text-green-900"><X size={11} /></button>
+            </span>
+          )}
+          {minRating > 0 && (
+            <span className="flex items-center gap-1 rounded-full bg-yellow-50 px-3 py-1 text-xs font-medium text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400">
+              <Star size={11} className="fill-yellow-400 text-yellow-400" /> {MIN_RATING_LABELS[String(minRating)]}
+              <button onClick={() => setMinRating(0)} className="ml-0.5 hover:text-yellow-900"><X size={11} /></button>
+            </span>
+          )}
+          {minExp > 0 && (
+            <span className="flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-800/20 dark:text-gray-400">
+              <Briefcase size={11} /> {MIN_EXP_LABELS[String(minExp)]}
+              <button onClick={() => setMinExp(0)} className="ml-0.5 hover:text-gray-900"><X size={11} /></button>
             </span>
           )}
         </div>
