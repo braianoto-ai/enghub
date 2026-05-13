@@ -27,6 +27,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { engineeringAreaLabels } from "@/lib/utils";
+import { MapSection } from "./map-section";
 
 export async function generateMetadata({
   params,
@@ -392,6 +393,13 @@ export default async function TenantPage({
                 )}
               </div>
             </div>
+
+            {/* Mapa */}
+            <MapSection
+              city={prof?.city ?? null}
+              state={prof?.state ?? null}
+              name={tenant.name}
+            />
 
             {/* Especialidades */}
             {prof?.areas && prof.areas.length > 0 && (
