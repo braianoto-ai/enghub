@@ -5,6 +5,7 @@ import { Search, Newspaper, RefreshCw } from "lucide-react";
 import { NewsArticleCard } from "@/components/news-article-card";
 
 type NewsCategory = "ALL" | "ENGINEERING" | "ARCHITECTURE" | "NORMS" | "TECHNOLOGY";
+type Language = "all" | "pt" | "en";
 
 interface Article {
   id: string;
@@ -14,7 +15,7 @@ interface Article {
   image_url: string | null;
   published_at: string;
   category: Exclude<NewsCategory, "ALL">;
-  news_sources: { name: string; url: string };
+  news_sources: { name: string; url: string; language: string };
 }
 
 const CATEGORIES: { value: NewsCategory; label: string }[] = [
@@ -25,26 +26,31 @@ const CATEGORIES: { value: NewsCategory; label: string }[] = [
   { value: "TECHNOLOGY", label: "Tecnologia / BIM" },
 ];
 
+const LANGUAGES: { value: Language; label: string; flag: string }[] = [
+  { value: "all", label: "Todos", flag: "🌐" },
+  { value: "pt", label: "Português", flag: "🇧🇷" },
+  { value: "en", label: "English", flag: "🇺🇸" },
+];
+
 export function NewsClient() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [category, setCategory] = useState<NewsCategory>("ALL");
+  const [language, setLanguage] = useState<Language>("all");
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
 
-  // Debounce de 400ms no campo de busca
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQuery(query), 400);
     return () => clearTimeout(t);
   }, [query]);
 
-  // Reset paginação ao mudar filtros
   useEffect(() => {
     setPage(1);
     setArticles([]);
-  }, [category, debouncedQuery]);
+  }, [category, language, debouncedQuery]);
 
   const fetchArticles = useCallback(async (reset: boolean) => {
     setLoading(true);
@@ -52,6 +58,7 @@ export function NewsClient() {
     const params = new URLSearchParams({
       page: String(currentPage),
       ...(category !== "ALL" && { category }),
+      ...(language !== "all" && { language }),
       ...(debouncedQuery && { q: debouncedQuery }),
     });
 
@@ -69,12 +76,30 @@ export function NewsClient() {
   useEffect(() => {
     fetchArticles(page === 1);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, debouncedQuery, page]);
+  }, [category, language, debouncedQuery, page]);
 
   const loadMore = () => setPage((p) => p + 1);
 
   return (
     <div>
+      {/* Abas de idioma */}
+      <div className="mb-4 flex gap-2">
+        {LANGUAGES.map((lang) => (
+          <button
+            key={lang.value}
+            onClick={() => setLanguage(lang.value)}
+            className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+              language === lang.value
+                ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
+                : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+            }`}
+          >
+            <span>{lang.flag}</span>
+            {lang.label}
+          </button>
+        ))}
+      </div>
+
       {/* Filtros */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         {/* Categorias */}
