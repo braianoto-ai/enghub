@@ -128,6 +128,7 @@ export default async function TenantPage({
     { data: projects },
     { data: services },
     { data: reviews },
+    { data: testimonials },
   ] = await Promise.all([
     supabase
       .from("professional_profiles")
@@ -156,6 +157,13 @@ export default async function TenantPage({
       .eq("tenant_id", tenant.id)
       .order("created_at", { ascending: false })
       .limit(5),
+    supabase
+      .from("testimonials")
+      .select("id, author_name, author_title, content, avatar_url, featured")
+      .eq("tenant_id", tenant.id)
+      .order("featured", { ascending: false })
+      .order("position", { ascending: true })
+      .limit(6),
   ]);
 
   const avgRating =
@@ -432,6 +440,47 @@ export default async function TenantPage({
                     {prof.education && <span className="text-sm text-zinc-500">{prof.education}</span>}
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* Depoimentos */}
+            {testimonials && testimonials.length > 0 && (
+              <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+                <h2 className="mb-5 font-semibold text-zinc-900 dark:text-zinc-100">O que dizem sobre mim</h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {testimonials.map((tm) => (
+                    <div
+                      key={tm.id}
+                      className={`relative rounded-xl p-4 ${
+                        tm.featured
+                          ? "border border-yellow-200 bg-yellow-50/50 dark:border-yellow-700/30 dark:bg-yellow-900/10"
+                          : "border border-zinc-100 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
+                      }`}
+                    >
+                      <span className="absolute right-3 top-3 text-2xl leading-none text-zinc-200 dark:text-zinc-700">&ldquo;</span>
+                      <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 line-clamp-4">
+                        {tm.content}
+                      </p>
+                      <div className="mt-3 flex items-center gap-2.5">
+                        {tm.avatar_url ? (
+                          <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full">
+                            <Image src={tm.avatar_url} alt={tm.author_name} fill className="object-cover" />
+                          </div>
+                        ) : (
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-xs font-bold text-zinc-600 dark:bg-zinc-700 dark:text-zinc-300">
+                            {tm.author_name.charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                        <div>
+                          <p className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">{tm.author_name}</p>
+                          {tm.author_title && (
+                            <p className="text-[10px] text-zinc-500 dark:text-zinc-400">{tm.author_title}</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
