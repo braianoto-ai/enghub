@@ -69,19 +69,31 @@ export function QuoteForm({ tenantId, tenantName, tenantSlug, areas }: QuoteForm
 
     const message = lines.join("\n");
 
-    const { error: dbErr } = await supabase.from("contact_messages").insert({
-      tenant_id: tenantId,
-      name: contact.name.trim(),
-      email: contact.email.trim(),
-      phone: contact.phone.trim() || null,
-      message,
-    });
+    // Create conversation + first message
+    const { data: conv, error: convErr } = await supabase
+      .from("conversations")
+      .insert({
+        tenant_id: tenantId,
+        visitor_name: contact.name.trim(),
+        visitor_email: contact.email.trim(),
+        visitor_phone: contact.phone.trim() || null,
+      })
+      .select("id")
+      .single();
 
-    if (dbErr) {
+    if (convErr || !conv) {
       setError("Erro ao enviar. Tente novamente.");
       setLoading(false);
       return;
     }
+
+    await supabase.from("messages").insert({
+      conversation_id: conv.id,
+      tenant_id: tenantId,
+      sender: "visitor",
+      content: message,
+      read: false,
+    });
 
     // Notification (fire and forget)
     void supabase.from("notifications").insert({

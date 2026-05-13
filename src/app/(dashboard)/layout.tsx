@@ -27,6 +27,18 @@ export default async function DashboardLayout({
 
   const tenant = tenantRaw ? { ...tenantRaw, avatar_url: profData?.avatar_url ?? null } : null;
 
+  // Unread messages count
+  let unreadMessages = 0;
+  if (tenant?.id) {
+    const { count } = await supabase
+      .from("messages")
+      .select("*", { count: "exact", head: true })
+      .eq("tenant_id", tenant.id)
+      .eq("sender", "visitor")
+      .eq("read", false);
+    unreadMessages = count ?? 0;
+  }
+
   const isOnTrial = !!(
     tenant?.trial_ends_at &&
     tenant.plan === "PRO" &&
@@ -35,7 +47,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex h-screen">
-      <Sidebar tenant={tenant} user={user} />
+      <Sidebar tenant={tenant} user={user} unreadMessages={unreadMessages} />
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
         <header className="flex h-14 shrink-0 items-center justify-end gap-2 border-b border-gray-200 bg-white px-6 dark:border-zinc-800 dark:bg-zinc-900">

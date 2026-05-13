@@ -30,17 +30,25 @@ export function ContatoForm({ tenantId, tenantName }: ContatoFormProps) {
     const phone = (formData.get("phone") as string) || null;
     const message = formData.get("message") as string;
 
-    const { error: err } = await supabase.from("contact_messages").insert({
-      tenant_id: tenantId,
-      name,
-      email,
-      phone,
-      message,
-    });
+    // Create conversation
+    const { data: conv, error: convErr } = await supabase
+      .from("conversations")
+      .insert({ tenant_id: tenantId, visitor_name: name, visitor_email: email, visitor_phone: phone })
+      .select("id")
+      .single();
 
-    if (err) {
+    if (convErr || !conv) {
       setError("Erro ao enviar mensagem. Tente novamente.");
     } else {
+      // Create first message
+      await supabase.from("messages").insert({
+        conversation_id: conv.id,
+        tenant_id: tenantId,
+        sender: "visitor",
+        content: message,
+        read: false,
+      });
+
       setSuccess(true);
       form.reset();
       // Fire-and-forget — não bloqueia o UX se o email falhar
