@@ -35,7 +35,8 @@ export default async function BuscarPage({
         city,
         state,
         years_experience,
-        avatar_url
+        avatar_url,
+        crea_cau_verified
       )
     `)
     .eq("status", "ACTIVE")
@@ -82,6 +83,7 @@ export default async function BuscarPage({
         avgRating: rating ? rating.sum / rating.count : 0,
         reviewCount: rating?.count ?? 0,
         avatar_url: prof?.avatar_url ?? null,
+        verified: prof?.crea_cau_verified === true,
       };
     });
 

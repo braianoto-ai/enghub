@@ -84,7 +84,39 @@ export default async function HomePage() {
     count: areaCountMap[key] ?? 0,
   }));
 
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? "enghub.com.br";
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "EngHub",
+    url: `https://${rootDomain}`,
+    description: "Plataforma para encontrar engenheiros e arquitetos com portfólios verificados e avaliações reais.",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `https://${rootDomain}/buscar?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+    inLanguage: "pt-BR",
+  };
+
+  const orgJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "EngHub",
+    url: `https://${rootDomain}`,
+    logo: `https://${rootDomain}/icon-512.png`,
+    description: "Marketplace de engenheiros e arquitetos do Brasil com portfólios verificados.",
+    foundingLocation: { "@type": "Place", addressCountry: "BR" },
+    ...(totalProfessionals ? { numberOfEmployees: { "@type": "QuantitativeValue", value: totalProfessionals } } : {}),
+  };
+
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
     <div className="overflow-x-hidden">
       {/* ── HERO ─────────────────────────────────────────── */}
       <section className="relative bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800 px-4 pb-32 pt-20 text-white">
@@ -403,5 +435,6 @@ export default async function HomePage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

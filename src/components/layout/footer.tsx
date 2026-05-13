@@ -23,6 +23,7 @@ export async function Footer() {
             <h3 className="text-sm font-semibold text-gray-900 dark:text-zinc-200">{t("platform_heading")}</h3>
             <ul className="mt-3 space-y-2">
               <li><Link href="/buscar" className="text-sm text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200">{t("platform_search")}</Link></li>
+              <li><Link href="/projetos" className="text-sm text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200">Projetos</Link></li>
               <li><Link href="/planos" className="text-sm text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200">{t("platform_plans")}</Link></li>
               <li><Link href="/cadastro" className="text-sm text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200">{t("platform_signup")}</Link></li>
             </ul>

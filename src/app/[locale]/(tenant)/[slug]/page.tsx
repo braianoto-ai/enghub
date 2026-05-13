@@ -170,7 +170,75 @@ export default async function TenantPage({
 
   const initials = tenant.name.split(" ").slice(0, 2).map((w: string) => w[0]).join("").toUpperCase();
 
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? "enghub.com.br";
+  const profileUrl = `https://${rootDomain}/${slug}`;
+
+  // JSON-LD structured data for Google rich results
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: tenant.name,
+    url: profileUrl,
+    ...(prof?.avatar_url ? { image: prof.avatar_url } : {}),
+    ...(prof?.bio ? { description: prof.bio } : {}),
+    ...(primaryArea ? { jobTitle: engineeringAreaLabels[primaryArea] ?? primaryArea } : {}),
+    ...(prof?.city || prof?.state
+      ? {
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: prof?.city ?? undefined,
+            addressRegion: prof?.state ?? undefined,
+            addressCountry: "BR",
+          },
+        }
+      : {}),
+    ...(contactPhone ? { telephone: contactPhone } : {}),
+    ...(prof?.website ? { sameAs: [prof.website] } : {}),
+    ...(avgRating > 0 && reviews && reviews.length > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: avgRating.toFixed(1),
+            reviewCount: reviews.length,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        }
+      : {}),
+    ...(reviews && reviews.length > 0
+      ? {
+          review: reviews.slice(0, 3).map((r) => {
+            const authorRaw = r.author;
+            const authorName =
+              (Array.isArray(authorRaw) ? (authorRaw[0] as { name?: string })?.name : (authorRaw as { name?: string } | null)?.name) ??
+              r.reviewer_name ??
+              "Anônimo";
+            return {
+              "@type": "Review",
+              reviewRating: {
+                "@type": "Rating",
+                ratingValue: r.rating,
+                bestRating: 5,
+              },
+              author: { "@type": "Person", name: authorName },
+              ...(r.comment ? { reviewBody: r.comment } : {}),
+            };
+          }),
+        }
+      : {}),
+    worksFor: {
+      "@type": "Organization",
+      name: "EngHub",
+      url: `https://${rootDomain}`,
+    },
+  };
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
       <ViewTracker tenantId={tenant.id} />
       {prof?.whatsapp && <WhatsAppButton phone={prof.whatsapp} name={tenant.name} />}
@@ -493,5 +561,6 @@ export default async function TenantPage({
         </div>
       </div>
     </div>
+    </>
   );
 }
