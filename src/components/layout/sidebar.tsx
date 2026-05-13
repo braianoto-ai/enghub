@@ -41,9 +41,10 @@ const navItems = [
 interface SidebarProps {
   tenant?: { id: string; name: string; slug: string; plan: string; avatar_url?: string | null } | null;
   user?: { email?: string } | null;
+  unreadMessages?: number;
 }
 
-export function Sidebar({ tenant, user }: SidebarProps) {
+export function Sidebar({ tenant, user, unreadMessages = 0 }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -96,6 +97,7 @@ export function Sidebar({ tenant, user }: SidebarProps) {
             item.href === "/dashboard"
               ? pathname === "/dashboard"
               : pathname.startsWith(item.href);
+          const isMensagens = item.href === "/dashboard/mensagens";
           return (
             <Link
               key={item.href}
@@ -108,7 +110,12 @@ export function Sidebar({ tenant, user }: SidebarProps) {
               )}
             >
               <item.icon size={20} />
-              {item.label}
+              <span className="flex-1">{item.label}</span>
+              {isMensagens && unreadMessages > 0 && (
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-gray-700 px-1.5 text-[10px] font-bold text-white dark:bg-gray-500">
+                  {unreadMessages > 99 ? "99+" : unreadMessages}
+                </span>
+              )}
             </Link>
           );
         })}
