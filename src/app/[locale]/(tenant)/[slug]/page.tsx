@@ -23,6 +23,8 @@ import {
   MessageSquare,
   FileText,
   Calendar,
+  Star,
+  CornerDownRight,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -154,10 +156,10 @@ export default async function TenantPage({
       .limit(6),
     supabase
       .from("reviews")
-      .select("rating, comment, created_at, reviewer_name, author:profiles(name)")
+      .select("rating, comment, created_at, reviewer_name, reply, reply_at, author:profiles(name)")
       .eq("tenant_id", tenant.id)
       .order("created_at", { ascending: false })
-      .limit(5),
+      .limit(10),
     supabase
       .from("testimonials")
       .select("id, author_name, author_title, content, avatar_url, featured")
@@ -587,27 +589,66 @@ export default async function TenantPage({
             <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
               <h2 className="mb-4 font-semibold text-zinc-900 dark:text-zinc-100">{t("reviews")}</h2>
               {reviews && reviews.length > 0 ? (
-                <ul className="divide-y divide-zinc-100 dark:divide-zinc-800">
-                  {reviews.map((r, i) => {
-                    const author = r.author as unknown as { name: string } | null;
-                    const displayName = (r as { reviewer_name?: string | null }).reviewer_name ?? author?.name ?? "Anônimo";
-                    return (
-                      <li key={i} className="py-4 first:pt-0 last:pb-0">
-                        <div className="flex items-start justify-between gap-4">
-                          <div>
-                            <p className="font-medium text-zinc-900 dark:text-zinc-100">{displayName}</p>
-                            <p className="text-sm text-yellow-500">
-                              {"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}
-                              <span className="ml-1 text-xs text-zinc-400">{r.rating}/5</span>
-                            </p>
-                            {r.comment && <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{r.comment}</p>}
+                <>
+                  {/* Histogram */}
+                  {reviews.length >= 2 && (
+                    <div className="mb-5 space-y-1.5">
+                      {[5,4,3,2,1].map((star) => {
+                        const count = reviews.filter((r) => r.rating === star).length;
+                        const pct = Math.round((count / reviews.length) * 100);
+                        return (
+                          <div key={star} className="flex items-center gap-2 text-xs text-zinc-400">
+                            <span className="w-3 text-right">{star}</span>
+                            <Star size={10} className="shrink-0 fill-yellow-400 text-yellow-400" />
+                            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+                              <div className="h-full rounded-full bg-yellow-400 transition-all" style={{ width: `${pct}%` }} />
+                            </div>
+                            <span className="w-4">{count}</span>
                           </div>
-                          <p className="shrink-0 text-xs text-zinc-400">{new Date(r.created_at).toLocaleDateString("pt-BR")}</p>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
+                        );
+                      })}
+                    </div>
+                  )}
+                  <ul className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    {reviews.map((r, i) => {
+                      const author = r.author as unknown as { name: string } | null;
+                      const rExt = r as unknown as { reviewer_name?: string | null; reply?: string | null };
+                      const displayName = rExt.reviewer_name ?? author?.name ?? "Anônimo";
+                      const initials = displayName.split(" ").slice(0,2).map((w: string) => w[0]).join("").toUpperCase();
+                      return (
+                        <li key={i} className="py-4 first:pt-0 last:pb-0">
+                          <div className="flex gap-3">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-zinc-400 to-zinc-600 text-xs font-bold text-white">
+                              {initials}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-start justify-between gap-2">
+                                <p className="font-medium text-zinc-900 dark:text-zinc-100">{displayName}</p>
+                                <p className="shrink-0 text-xs text-zinc-400">{new Date(r.created_at).toLocaleDateString("pt-BR")}</p>
+                              </div>
+                              <div className="mt-0.5 flex gap-0.5">
+                                {[1,2,3,4,5].map((s) => (
+                                  <Star key={s} size={11} className={s <= r.rating ? "fill-yellow-400 text-yellow-400" : "text-zinc-200 dark:text-zinc-700"} />
+                                ))}
+                              </div>
+                              {r.comment && <p className="mt-1.5 text-sm text-zinc-600 dark:text-zinc-400">{r.comment}</p>}
+                              {/* Professional reply */}
+                              {rExt.reply && (
+                                <div className="mt-2 flex gap-2 rounded-xl border border-zinc-100 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/60">
+                                  <CornerDownRight size={12} className="mt-0.5 shrink-0 text-zinc-400" />
+                                  <div>
+                                    <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Resposta do profissional</p>
+                                    <p className="mt-0.5 text-sm text-zinc-700 dark:text-zinc-300">{rExt.reply}</p>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </>
               ) : (
                 <div className="flex flex-col items-center gap-2 py-8 text-center">
                   <MessageSquare size={24} className="text-zinc-300" />
