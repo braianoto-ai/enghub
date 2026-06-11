@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import webpush from "web-push";
 
 export const dynamic = "force-dynamic";
@@ -15,26 +16,45 @@ export async function POST(request: NextRequest) {
   webpush.setVapidDetails("mailto:contato@enghub.com.br", vapidPublic, vapidPrivate);
 
   try {
-    // Internal only — check for secret or authenticated admin
     const authHeader = request.headers.get("authorization");
     const isInternal = authHeader === `Bearer ${process.env.CRON_SECRET}`;
-
-    if (!isInternal) {
-      const supabase = await createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
-      }
-    }
 
     const { tenantId, title, body, url, tag } = await request.json();
 
     if (!tenantId || !title || !body) {
-      return NextResponse.json({ error: "Campos obrigatórios: tenantId, title, body" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Campos obrigatórios: tenantId, title, body" },
+        { status: 400 }
+      );
     }
 
     const supabase = await createClient();
-    const { data: subscriptions } = await supabase
+
+    if (!isInternal) {
+      // Verifica autenticação
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+      }
+
+      // Verifica que o usuário é dono do tenant (corrige IDOR)
+      const { data: ownerCheck } = await supabase
+        .from("tenants")
+        .select("id")
+        .eq("id", tenantId)
+        .eq("owner_id", user.id)
+        .maybeSingle();
+
+      if (!ownerCheck) {
+        return NextResponse.json({ error: "Acesso negado" }, { status: 403 });
+      }
+    }
+
+    // Admin client para buscar subscriptions sem RLS (service role)
+    const adminSupabase = createAdminClient();
+    const { data: subscriptions } = await adminSupabase
       .from("push_subscriptions")
       .select("endpoint, keys_p256dh, keys_auth")
       .eq("tenant_id", tenantId);
@@ -68,10 +88,10 @@ export async function POST(request: NextRequest) {
         sent++;
       } catch (err: unknown) {
         failed++;
-        // Remove expired subscriptions (410 Gone or 404)
+        // Remove subscriptions expiradas (410 Gone ou 404)
         const statusCode = (err as { statusCode?: number })?.statusCode;
         if (statusCode === 410 || statusCode === 404) {
-          await supabase
+          await adminSupabase
             .from("push_subscriptions")
             .delete()
             .eq("endpoint", sub.endpoint);
