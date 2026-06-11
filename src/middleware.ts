@@ -58,9 +58,12 @@ export async function middleware(request: NextRequest) {
   // Apply i18n routing for public pages
   const intlResponse = intlMiddleware(request);
 
-  // Merge Supabase auth cookies into intl response
+  // Merge Supabase auth cookies into intl response.
+  // IMPORTANTE: passar o objeto completo do cookie (com maxAge, path, httpOnly,
+  // secure, sameSite). Copiar só name+value fazia a sessão cair ao navegar
+  // de uma página autenticada para uma página pública.
   supabaseResponse.cookies.getAll().forEach((cookie) => {
-    intlResponse.cookies.set(cookie.name, cookie.value);
+    intlResponse.cookies.set(cookie);
   });
 
   return intlResponse;
