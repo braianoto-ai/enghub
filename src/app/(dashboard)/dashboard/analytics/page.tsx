@@ -56,7 +56,7 @@ export default async function AnalyticsPage() {
     .eq("owner_id", user.id)
     .maybeSingle();
 
-  if (!tenant) redirect("/login");
+  if (!tenant) redirect("/dashboard");
 
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);

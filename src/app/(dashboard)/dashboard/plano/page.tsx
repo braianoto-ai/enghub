@@ -98,7 +98,7 @@ export default async function PlanoPage({
     .eq("owner_id", user.id)
     .maybeSingle();
 
-  if (!tenant) redirect("/login");
+  if (!tenant) redirect("/dashboard");
 
   const [{ count: projectCount }, { count: serviceCount }] = await Promise.all([
     supabase
