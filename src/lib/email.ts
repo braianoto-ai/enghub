@@ -1,54 +1,13 @@
+import { Resend } from "resend";
+
 // Domínio do site e remetente — controlados por variável de ambiente.
 // Quando o domínio próprio (ex.: enghub.com.br) for conectado, basta
 // atualizar NEXT_PUBLIC_SITE_URL e EMAIL_FROM, sem mexer no código.
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://enghub.com.br";
-const EMAIL_FROM = process.env.EMAIL_FROM ?? "EngHub <notificacoes@enghub.com.br>";
+const EMAIL_FROM = process.env.EMAIL_FROM ?? "EngHub <onboarding@resend.dev>";
 
-// Extrai nome e e-mail do formato "Nome <email@dominio.com>"
-function parseFrom(from: string): { name: string; email: string } {
-  const match = from.match(/^(.+?)\s*<(.+?)>$/);
-  if (match) return { name: match[1].trim(), email: match[2].trim() };
-  return { name: "EngHub", email: from.trim() };
-}
-
-async function sendEmail({
-  to,
-  subject,
-  html,
-}: {
-  to: string;
-  subject: string;
-  html: string;
-}) {
-  const apiKey = process.env.BREVO_API_KEY;
-  if (!apiKey) {
-    console.warn("[email] BREVO_API_KEY não configurada — e-mail não enviado.");
-    return;
-  }
-
-  const sender = parseFrom(EMAIL_FROM);
-
-  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      "api-key": apiKey,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      sender,
-      to: [{ email: to }],
-      subject,
-      htmlContent: html,
-    }),
-  });
-
-  if (!res.ok) {
-    const body = await res.text();
-    console.error("[email] Brevo erro:", res.status, body);
-    throw new Error(`Brevo API error: ${res.status}`);
-  }
-
-  return res.json();
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY ?? "");
 }
 
 export async function sendContactNotification({
@@ -69,7 +28,8 @@ export async function sendContactNotification({
   slug: string;
 }) {
   void slug;
-  return sendEmail({
+  return getResend().emails.send({
+    from: EMAIL_FROM,
     to,
     subject: `Nova mensagem de ${senderName} — EngHub`,
     html: `
@@ -125,7 +85,8 @@ export async function sendTrialReminderEmail({
     year: "numeric",
   });
 
-  return sendEmail({
+  return getResend().emails.send({
+    from: EMAIL_FROM,
     to,
     subject: `Seu período PRO termina em ${daysLeft} dia${daysLeft !== 1 ? "s" : ""} — EngHub`,
     html: `
@@ -182,7 +143,8 @@ export async function sendWelcomeEmail({
   const profileUrl = `${SITE_URL}/${slug}`;
   const dashboardUrl = `${SITE_URL}/dashboard`;
 
-  return sendEmail({
+  return getResend().emails.send({
+    from: EMAIL_FROM,
     to,
     subject: `Bem-vindo ao EngHub, ${name.split(" ")[0]}!`,
     html: `
@@ -256,7 +218,8 @@ export async function sendReviewNotification({
   const stars = "★".repeat(rating) + "☆".repeat(5 - rating);
   const labels = ["", "Péssimo", "Ruim", "Regular", "Bom", "Excelente"];
 
-  return sendEmail({
+  return getResend().emails.send({
+    from: EMAIL_FROM,
     to,
     subject: `Nova avaliação ${stars} de ${reviewerName} — EngHub`,
     html: `
