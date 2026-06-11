@@ -12,6 +12,10 @@ export async function GET(request: Request) {
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`);
     }
+    // TEMP DEBUG: logar o erro real da troca de código
+    console.error("[auth/callback] exchangeCodeForSession FALHOU:", error.status, error.code, error.message);
+  } else {
+    console.error("[auth/callback] sem 'code' na URL:", request.url);
   }
 
   return NextResponse.redirect(`${origin}/login?error=auth`);
