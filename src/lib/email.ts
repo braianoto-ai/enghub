@@ -2,6 +2,12 @@ import { Resend } from "resend";
 
 export const resend = new Resend(process.env.RESEND_API_KEY ?? "placeholder");
 
+// Domínio do site e remetente — controlados por variável de ambiente.
+// Quando o domínio próprio (ex.: enghub.com.br) for conectado, basta
+// atualizar NEXT_PUBLIC_SITE_URL e EMAIL_FROM, sem mexer no código.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://enghub.com.br";
+const EMAIL_FROM = process.env.EMAIL_FROM ?? "EngHub <notificacoes@enghub.com.br>";
+
 export async function sendContactNotification({
   to,
   professionalName,
@@ -20,7 +26,7 @@ export async function sendContactNotification({
   slug: string;
 }) {
   return resend.emails.send({
-    from: "EngHub <notificacoes@enghub.com.br>",
+    from: EMAIL_FROM,
     to,
     subject: `Nova mensagem de ${senderName} — EngHub`,
     html: `
@@ -45,7 +51,7 @@ export async function sendContactNotification({
             <p style="margin: 0; font-size: 14px; color: #374151; line-height: 1.6; white-space: pre-wrap;">${message}</p>
           </div>
           <div style="text-align: center;">
-            <a href="https://enghub.com.br/dashboard/mensagens" style="display: inline-block; background: #4b5563; color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
+            <a href="${SITE_URL}/dashboard/mensagens" style="display: inline-block; background: #4b5563; color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
               Ver no Dashboard
             </a>
           </div>
@@ -77,7 +83,7 @@ export async function sendTrialReminderEmail({
   });
 
   return resend.emails.send({
-    from: "EngHub <notificacoes@enghub.com.br>",
+    from: EMAIL_FROM,
     to,
     subject: `Seu período PRO termina em ${daysLeft} dia${daysLeft !== 1 ? "s" : ""} — EngHub`,
     html: `
@@ -117,7 +123,7 @@ export async function sendTrialReminderEmail({
           </div>
 
           <div style="text-align: center;">
-            <a href="https://enghub.com.br/dashboard/plano" style="display: inline-block; background: #d97706; color: #fff; padding: 14px 36px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 700;">
+            <a href="${SITE_URL}/dashboard/plano" style="display: inline-block; background: #d97706; color: #fff; padding: 14px 36px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 700;">
               Assinar o Plano PRO →
             </a>
           </div>
@@ -129,7 +135,7 @@ export async function sendTrialReminderEmail({
         <!-- Footer -->
         <p style="text-align: center; font-size: 12px; color: #9ca3af; margin: 0;">
           Você recebeu este e-mail pois tem uma conta no EngHub.<br/>
-          <a href="https://enghub.com.br" style="color: #4b5563; text-decoration: none;">enghub.com.br</a>
+          <a href="${SITE_URL}" style="color: #4b5563; text-decoration: none;">EngHub</a>
         </p>
       </div>
     `,
@@ -147,11 +153,11 @@ export async function sendWelcomeEmail({
   slug: string;
   hasTrial: boolean;
 }) {
-  const profileUrl = `https://enghub.com.br/${slug}`;
-  const dashboardUrl = "https://enghub.com.br/dashboard";
+  const profileUrl = `${SITE_URL}/${slug}`;
+  const dashboardUrl = `${SITE_URL}/dashboard`;
 
   return resend.emails.send({
-    from: "EngHub <notificacoes@enghub.com.br>",
+    from: EMAIL_FROM,
     to,
     subject: `Bem-vindo ao EngHub, ${name.split(" ")[0]}! 🎉`,
     html: `
@@ -233,7 +239,7 @@ export async function sendWelcomeEmail({
         <!-- Footer -->
         <p style="text-align: center; font-size: 12px; color: #9ca3af; margin: 0;">
           Você recebeu este e-mail por se cadastrar no EngHub.<br/>
-          <a href="https://enghub.com.br" style="color: #4b5563; text-decoration: none;">enghub.com.br</a>
+          <a href="${SITE_URL}" style="color: #4b5563; text-decoration: none;">EngHub</a>
         </p>
       </div>
     `,
@@ -259,7 +265,7 @@ export async function sendReviewNotification({
   const labels = ["", "Péssimo", "Ruim", "Regular", "Bom", "Excelente"];
 
   return resend.emails.send({
-    from: "EngHub <notificacoes@enghub.com.br>",
+    from: EMAIL_FROM,
     to,
     subject: `Nova avaliação ${stars} de ${reviewerName} — EngHub`,
     html: `
@@ -280,7 +286,7 @@ export async function sendReviewNotification({
           </div>
           ` : ""}
           <div style="text-align: center;">
-            <a href="https://enghub.com.br/dashboard/avaliacoes" style="display: inline-block; background: #4b5563; color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
+            <a href="${SITE_URL}/dashboard/avaliacoes" style="display: inline-block; background: #4b5563; color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
               Ver Avaliações
             </a>
           </div>
