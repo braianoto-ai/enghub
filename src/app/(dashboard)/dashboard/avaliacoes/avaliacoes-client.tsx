@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Star, MessageSquare, CornerDownRight, Check, Loader2, Pencil } from "lucide-react";
+import { Star, MessageSquare, CornerDownRight, Check, Loader2, Pencil, Sparkles } from "lucide-react";
 
 interface Review {
   id: string;
@@ -19,11 +19,12 @@ interface Props {
   reviews: Review[];
   avgRating: number;
   tenantId: string;
+  aiSummary?: string | null;
 }
 
 const LABELS = ["", "Péssimo", "Ruim", "Regular", "Bom", "Excelente"];
 
-export function AvaliacoesClient({ reviews, avgRating, tenantId }: Props) {
+export function AvaliacoesClient({ reviews, avgRating, tenantId, aiSummary }: Props) {
   const supabase = createClient();
   const [replyingId, setReplyingId] = useState<string | null>(null);
   const [replyText, setReplyText] = useState("");
@@ -68,6 +69,14 @@ export function AvaliacoesClient({ reviews, avgRating, tenantId }: Props) {
     <div>
       <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">Avaliações</h1>
       <p className="mt-1 text-sm text-gray-500 dark:text-zinc-400">Gerencie e responda as avaliações dos seus clientes</p>
+
+      {/* AI summary */}
+      {aiSummary && (
+        <div className="mt-4 flex items-start gap-3 rounded-xl border border-purple-200 bg-purple-50 px-4 py-3 dark:border-purple-800 dark:bg-purple-950">
+          <Sparkles size={15} className="mt-0.5 shrink-0 text-purple-500 dark:text-purple-400" />
+          <p className="text-sm text-purple-800 dark:text-purple-200">{aiSummary}</p>
+        </div>
+      )}
 
       {/* Stats */}
       <div className="mt-6 grid gap-4 sm:grid-cols-3">

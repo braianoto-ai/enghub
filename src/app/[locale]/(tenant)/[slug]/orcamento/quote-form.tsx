@@ -5,6 +5,7 @@ import { ChevronRight, ChevronLeft, CheckCircle, Loader2, Send } from "lucide-re
 import { quoteFieldsByArea, defaultQuoteFields, type QuoteField } from "@/lib/quote-fields";
 import { createClient } from "@/lib/supabase/client";
 import { engineeringAreaLabels } from "@/lib/utils";
+import { AiQuoteAssistant } from "@/components/ai-quote-assistant";
 
 interface QuoteFormProps {
   tenantId: string;
@@ -256,6 +257,8 @@ export function QuoteForm({ tenantId, tenantName, tenantSlug, areas }: QuoteForm
               </div>
             ))}
           </div>
+
+          <AiQuoteAssistant tenantId={tenantId} area={selectedArea || undefined} />
 
           <div className="mt-6 flex gap-3">
             {!singleArea && (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +9,7 @@ import { engineeringAreaLabels } from "@/lib/utils";
 import { AvailabilitySwitcher, type AvailabilityStatus } from "@/components/availability-switcher";
 import { CurriculumUpload } from "@/components/curriculum-upload";
 import { AvatarUpload } from "@/components/avatar-upload";
+import { AiBioButton } from "@/components/ai-bio-button";
 
 interface PerfilFormProps {
   tenant: { id: string; name: string; slug: string; description?: string | null } | null;
@@ -37,6 +38,8 @@ export function PerfilForm({ tenant, profile }: PerfilFormProps) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [bio, setBio] = useState(profile?.bio ?? "");
+  const formRef = useRef<HTMLFormElement>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -82,8 +85,22 @@ export function PerfilForm({ tenant, profile }: PerfilFormProps) {
     setLoading(false);
   }
 
+  function getBioFormData() {
+    if (!formRef.current) return {};
+    const fd = new FormData(formRef.current);
+    return {
+      name: fd.get("name") as string,
+      areas: profile?.areas ?? [],
+      city: fd.get("city") as string,
+      state: fd.get("state") as string,
+      years_experience: Number(fd.get("years_experience")) || undefined,
+      education: fd.get("education") as string,
+      crea: fd.get("crea") as string,
+    };
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="mt-6 space-y-6">
+    <form ref={formRef} onSubmit={handleSubmit} className="mt-6 space-y-6">
       {tenant?.id && (
         <div className="flex items-center gap-4 rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
           <AvatarUpload
@@ -185,15 +202,19 @@ export function PerfilForm({ tenant, profile }: PerfilFormProps) {
             />
           </div>
           <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-700">
-              Bio completa
-            </label>
+            <div className="flex items-center justify-between">
+              <label className="block text-sm font-medium text-gray-700">
+                Bio completa
+              </label>
+              <AiBioButton getFormData={getBioFormData} onGenerated={setBio} />
+            </div>
             <textarea
               name="bio"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
               rows={4}
-              placeholder="Descreva sua experiência e especialidades..."
-              defaultValue={profile?.bio ?? ""}
+              placeholder="Descreva sua experiência e especialidades... ou clique em 'Gerar com IA'"
             />
           </div>
         </CardContent>
