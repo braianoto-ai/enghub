@@ -1,12 +1,12 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-let client: Anthropic | null = null;
+let client: GoogleGenerativeAI | null = null;
 
-export function getAI(): Anthropic {
+export function getAI(): GoogleGenerativeAI {
   if (!client) {
-    client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    client = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
   }
   return client;
 }
 
-export const AI_MODEL = "claude-haiku-4-5-20251001";
+export const AI_MODEL = "gemini-2.0-flash";

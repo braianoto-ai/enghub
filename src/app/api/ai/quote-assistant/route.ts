@@ -14,11 +14,10 @@ export async function POST(request: NextRequest) {
     return new Response("Parâmetros inválidos", { status: 400 });
   }
 
-  // Fetch professional context
   const admin = createAdminClient();
   const { data: profile } = await admin
     .from("professional_profiles")
-    .select("name, title, areas, city, state")
+    .select("name, areas, city, state")
     .eq("tenant_id", tenantId)
     .maybeSingle();
 
@@ -39,23 +38,26 @@ Seu papel:
 NÃO faça orçamentos de valores, pois isso é responsabilidade do profissional.`;
 
   const ai = getAI();
-  const stream = await ai.messages.stream({
+  const model = ai.getGenerativeModel({
     model: AI_MODEL,
-    max_tokens: 300,
-    system: systemPrompt,
-    messages: messages.slice(-10),
+    systemInstruction: systemPrompt,
   });
+
+  const history = messages.slice(0, -1).map((m) => ({
+    role: m.role === "assistant" ? "model" : "user",
+    parts: [{ text: m.content }],
+  }));
+
+  const lastMessage = messages[messages.length - 1].content;
+  const chat = model.startChat({ history });
+  const result = await chat.sendMessageStream(lastMessage);
 
   const encoder = new TextEncoder();
   const readable = new ReadableStream({
     async start(controller) {
-      for await (const chunk of stream) {
-        if (
-          chunk.type === "content_block_delta" &&
-          chunk.delta.type === "text_delta"
-        ) {
-          controller.enqueue(encoder.encode(chunk.delta.text));
-        }
+      for await (const chunk of result.stream) {
+        const text = chunk.text();
+        if (text) controller.enqueue(encoder.encode(text));
       }
       controller.close();
     },

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { AvaliacoesClient } from "./avaliacoes-client";
 import { getAI, AI_MODEL } from "@/lib/ai";
 
+
 export default async function AvaliacoesPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -30,22 +31,18 @@ export default async function AvaliacoesPage() {
   // AI summary (only when ≥3 reviews with comments)
   let aiSummary: string | null = null;
   const reviewsWithComments = list.filter((r) => r.comment);
-  if (reviewsWithComments.length >= 3 && process.env.ANTHROPIC_API_KEY) {
+  if (reviewsWithComments.length >= 3 && process.env.GEMINI_API_KEY) {
     try {
       const ai = getAI();
+      const model = ai.getGenerativeModel({ model: AI_MODEL });
       const reviewsText = reviewsWithComments
         .slice(0, 20)
         .map((r) => `[${r.rating}★] ${r.comment}`)
         .join("\n");
-      const msg = await ai.messages.create({
-        model: AI_MODEL,
-        max_tokens: 150,
-        messages: [{
-          role: "user",
-          content: `Analise as avaliações abaixo e escreva 1-2 frases destacando o que os clientes mais elogiam neste profissional. Seja específico. Responda só o resumo, sem título ou introdução.\n\n${reviewsText}`,
-        }],
-      });
-      if (msg.content[0].type === "text") aiSummary = msg.content[0].text.trim();
+      const result = await model.generateContent(
+        `Analise as avaliações abaixo e escreva 1-2 frases destacando o que os clientes mais elogiam neste profissional. Seja específico. Responda só o resumo, sem título ou introdução.\n\n${reviewsText}`
+      );
+      aiSummary = result.response.text().trim() || null;
     } catch {
       // silently skip if AI fails
     }

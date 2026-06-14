@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getAI, AI_MODEL } from "@/lib/ai";
 
@@ -7,10 +6,7 @@ export async function GET(request: NextRequest) {
   const tenantId = request.nextUrl.searchParams.get("tenantId");
   if (!tenantId) return NextResponse.json({ error: "tenantId obrigatório" }, { status: 400 });
 
-  // Auth: accept both logged-in user (dashboard) and public profile page
-  const supabase = await createClient();
   const admin = createAdminClient();
-
   const { data: reviews } = await admin
     .from("reviews")
     .select("rating, comment")
@@ -37,13 +33,9 @@ ${reviewsText}
 Responda APENAS com o resumo, sem introdução, sem aspas, sem título.`;
 
   const ai = getAI();
-  const message = await ai.messages.create({
-    model: AI_MODEL,
-    max_tokens: 150,
-    messages: [{ role: "user", content: prompt }],
-  });
-
-  const summary = message.content[0].type === "text" ? message.content[0].text.trim() : null;
+  const model = ai.getGenerativeModel({ model: AI_MODEL });
+  const result = await model.generateContent(prompt);
+  const summary = result.response.text().trim() || null;
 
   return NextResponse.json({ summary });
 }

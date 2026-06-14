@@ -8,11 +8,10 @@ export async function POST(request: NextRequest) {
   if (!user) return new Response("Não autenticado", { status: 401 });
 
   const body = await request.json();
-  const { name, areas, city, state, years_experience, education, crea, services } = body;
+  const { name, areas, city, state, years_experience, education, crea } = body;
 
   const areasText = (areas as string[] | undefined)?.join(", ") ?? "Engenharia";
   const locationText = [city, state].filter(Boolean).join(", ");
-  const servicesText = (services as string[] | undefined)?.slice(0, 5).join(", ");
 
   const prompt = `Você é um assistente de marketing para engenheiros e profissionais da construção civil brasileira.
 
@@ -24,7 +23,6 @@ Escreva uma bio profissional atraente e autêntica em português para o seguinte
 ${years_experience ? `- Anos de experiência: ${years_experience} anos` : ""}
 ${education ? `- Formação: ${education}` : ""}
 ${crea ? `- Registro: ${crea}` : ""}
-${servicesText ? `- Principais serviços: ${servicesText}` : ""}
 
 Instruções:
 - Escreva em primeira pessoa, tom profissional mas acessível
@@ -35,24 +33,15 @@ Instruções:
 - NÃO inclua cabeçalho nem título, apenas a bio diretamente`;
 
   const ai = getAI();
-
-  const stream = await ai.messages.stream({
-    model: AI_MODEL,
-    max_tokens: 400,
-    messages: [{ role: "user", content: prompt }],
-  });
+  const model = ai.getGenerativeModel({ model: AI_MODEL });
+  const result = await model.generateContentStream(prompt);
 
   const encoder = new TextEncoder();
-
   const readable = new ReadableStream({
     async start(controller) {
-      for await (const chunk of stream) {
-        if (
-          chunk.type === "content_block_delta" &&
-          chunk.delta.type === "text_delta"
-        ) {
-          controller.enqueue(encoder.encode(chunk.delta.text));
-        }
+      for await (const chunk of result.stream) {
+        const text = chunk.text();
+        if (text) controller.enqueue(encoder.encode(text));
       }
       controller.close();
     },
