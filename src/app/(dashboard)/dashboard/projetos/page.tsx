@@ -7,6 +7,7 @@ import { ProjetosActions } from "./projetos-actions";
 import { Plus, FolderOpen } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { PortfolioPdfButton } from "./portfolio-pdf-button";
 import Image from "next/image";
 
 export default async function ProjetosPage() {
@@ -33,12 +34,15 @@ export default async function ProjetosPage() {
           <h1 className="text-2xl font-bold text-gray-900">Projetos</h1>
           <p className="mt-1 text-gray-500">Gerencie seu portfólio de projetos</p>
         </div>
-        <Link href="/dashboard/projetos/novo">
-          <Button>
-            <Plus size={16} className="mr-2" />
-            Novo Projeto
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <PortfolioPdfButton />
+          <Link href="/dashboard/projetos/novo">
+            <Button>
+              <Plus size={16} className="mr-2" />
+              Novo Projeto
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <div className="mt-8">

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Send, Inbox, Circle, CheckCheck, Loader2, Search } from "lucide-react";
+import { Send, Inbox, Circle, CheckCheck, Loader2, Search, FileDown } from "lucide-react";
 
 interface Conversation {
   id: string;
@@ -36,6 +36,7 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [search, setSearch] = useState("");
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -182,6 +183,23 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
     inputRef.current?.focus();
   }
 
+  async function handleDownloadPdf(convId: string) {
+    setDownloadingPdf(true);
+    try {
+      const res = await fetch(`/api/pdf/quote/${convId}`);
+      if (!res.ok) throw new Error("Erro ao gerar PDF");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `orcamento-${convId.slice(0, 8)}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      setDownloadingPdf(false);
+    }
+  }
+
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -298,13 +316,24 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
                     )}
                   </div>
                 </div>
-                <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                  selected.status === "open"
-                    ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                    : "bg-gray-100 text-gray-600 dark:bg-zinc-800 dark:text-zinc-400"
-                }`}>
-                  {selected.status === "open" ? "Aberta" : "Fechada"}
-                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleDownloadPdf(selected.id)}
+                    disabled={downloadingPdf}
+                    className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                    title="Baixar PDF desta conversa"
+                  >
+                    {downloadingPdf ? <Loader2 size={12} className="animate-spin" /> : <FileDown size={12} />}
+                    PDF
+                  </button>
+                  <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                    selected.status === "open"
+                      ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                      : "bg-gray-100 text-gray-600 dark:bg-zinc-800 dark:text-zinc-400"
+                  }`}>
+                    {selected.status === "open" ? "Aberta" : "Fechada"}
+                  </span>
+                </div>
               </div>
 
               {/* Messages */}
