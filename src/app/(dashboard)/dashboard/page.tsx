@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, FolderOpen, Star, MessageSquare } from "lucide-react";
 import { redirect } from "next/navigation";
 import { OnboardingCard } from "./onboarding-card";
+import { WelcomeModal } from "./welcome-modal";
 import { AvailabilitySwitcher, type AvailabilityStatus } from "@/components/availability-switcher";
 import { ProfileScoreCard } from "./profile-score";
 import { ProfileLinkBar } from "./profile-link-bar";
@@ -205,6 +206,10 @@ export default async function DashboardPage() {
 
   return (
     <div>
+      {tenant?.slug && (
+        <WelcomeModal name={tenant.name} slug={tenant.slug} />
+      )}
+
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">Painel</h1>

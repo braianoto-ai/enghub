@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Check, ChevronRight, Rocket, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface OnboardingStep {
   id: string;
@@ -17,8 +17,21 @@ interface OnboardingCardProps {
   slug: string;
 }
 
+const STORAGE_KEY = "enghub_onboarding_dismissed";
+
 export function OnboardingCard({ steps, slug }: OnboardingCardProps) {
   const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setDismissed(localStorage.getItem(STORAGE_KEY) === "1");
+    }
+  }, []);
+
+  function dismiss() {
+    localStorage.setItem(STORAGE_KEY, "1");
+    setDismissed(true);
+  }
 
   const doneCount = steps.filter((s) => s.done).length;
   const total = steps.length;
@@ -51,7 +64,7 @@ export function OnboardingCard({ steps, slug }: OnboardingCardProps) {
           </div>
         </div>
         <button
-          onClick={() => setDismissed(true)}
+          onClick={dismiss}
           className="rounded-lg p-1.5 text-green-500 hover:bg-green-100 dark:hover:bg-green-800/40"
         >
           <X size={16} />
@@ -82,7 +95,7 @@ export function OnboardingCard({ steps, slug }: OnboardingCardProps) {
             <span className="text-2xl font-bold text-gray-700">{pct}%</span>
           </div>
           <button
-            onClick={() => setDismissed(true)}
+            onClick={dismiss}
             className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
           >
             <X size={16} />
