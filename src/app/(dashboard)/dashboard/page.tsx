@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { OnboardingCard } from "./onboarding-card";
 import { AvailabilitySwitcher, type AvailabilityStatus } from "@/components/availability-switcher";
 import { ProfileScoreCard } from "./profile-score";
+import { ProfileLinkBar } from "./profile-link-bar";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -199,8 +200,13 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">Painel</h1>
-      <p className="mt-1 text-gray-500 dark:text-zinc-400">Bem-vindo ao seu painel de controle</p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">Painel</h1>
+          <p className="mt-1 text-gray-500 dark:text-zinc-400">Bem-vindo ao seu painel de controle</p>
+        </div>
+        {tenant?.slug && <ProfileLinkBar slug={tenant.slug} />}
+      </div>
 
       <div className="mt-6">
         <OnboardingCard steps={onboardingSteps} slug={tenant?.slug ?? ""} />
