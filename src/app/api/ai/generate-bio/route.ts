@@ -32,22 +32,27 @@ Instruções:
 - NÃO use emojis, NÃO use asteriscos para negrito, apenas texto corrido
 - NÃO inclua cabeçalho nem título, apenas a bio diretamente`;
 
-  const ai = getAI();
-  const model = ai.getGenerativeModel({ model: AI_MODEL });
-  const result = await model.generateContentStream(prompt);
+  try {
+    const ai = getAI();
+    const model = ai.getGenerativeModel({ model: AI_MODEL });
+    const result = await model.generateContentStream(prompt);
 
-  const encoder = new TextEncoder();
-  const readable = new ReadableStream({
-    async start(controller) {
-      for await (const chunk of result.stream) {
-        const text = chunk.text();
-        if (text) controller.enqueue(encoder.encode(text));
-      }
-      controller.close();
-    },
-  });
+    const encoder = new TextEncoder();
+    const readable = new ReadableStream({
+      async start(controller) {
+        for await (const chunk of result.stream) {
+          const text = chunk.text();
+          if (text) controller.enqueue(encoder.encode(text));
+        }
+        controller.close();
+      },
+    });
 
-  return new Response(readable, {
-    headers: { "Content-Type": "text/plain; charset=utf-8" },
-  });
+    return new Response(readable, {
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
+  } catch (err) {
+    console.error("[generate-bio] Gemini error:", err);
+    return new Response(JSON.stringify({ error: String(err) }), { status: 500 });
+  }
 }
