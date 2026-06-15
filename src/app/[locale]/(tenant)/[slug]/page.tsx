@@ -130,6 +130,7 @@ export default async function TenantPage({
     { data: services },
     { data: reviews },
     { data: testimonials },
+    { data: replyTimes },
   ] = await Promise.all([
     supabase
       .from("professional_profiles")
@@ -165,7 +166,43 @@ export default async function TenantPage({
       .order("featured", { ascending: false })
       .order("position", { ascending: true })
       .limit(6),
+    // Busca primeira mensagem do profissional em cada conversa para calcular tempo de resposta
+    supabase
+      .from("messages")
+      .select("conversation_id, sender, created_at")
+      .eq("tenant_id", tenant.id)
+      .in("sender", ["visitor", "professional"])
+      .order("created_at", { ascending: true })
+      .limit(200),
   ]);
+
+  // Calcula tempo médio de resposta (minutos)
+  let avgReplyMinutes: number | null = null;
+  if (replyTimes && replyTimes.length > 0) {
+    const byConv: Record<string, { firstVisitor?: string; firstPro?: string }> = {};
+    for (const m of replyTimes) {
+      if (!byConv[m.conversation_id]) byConv[m.conversation_id] = {};
+      if (m.sender === "visitor" && !byConv[m.conversation_id].firstVisitor) {
+        byConv[m.conversation_id].firstVisitor = m.created_at;
+      }
+      if (m.sender === "professional" && !byConv[m.conversation_id].firstPro) {
+        byConv[m.conversation_id].firstPro = m.created_at;
+      }
+    }
+    const diffs = Object.values(byConv)
+      .filter((c) => c.firstVisitor && c.firstPro)
+      .map((c) => (new Date(c.firstPro!).getTime() - new Date(c.firstVisitor!).getTime()) / 60000)
+      .filter((d) => d > 0 && d < 10080); // ignora outliers > 7 dias
+    if (diffs.length >= 2) {
+      avgReplyMinutes = Math.round(diffs.reduce((a, b) => a + b, 0) / diffs.length);
+    }
+  }
+
+  function formatReplyTime(mins: number): string {
+    if (mins < 60) return `${mins} min`;
+    if (mins < 1440) return `${Math.round(mins / 60)}h`;
+    return `${Math.round(mins / 1440)} dias`;
+  }
 
   const avgRating =
     reviews && reviews.length > 0
@@ -314,6 +351,11 @@ export default async function TenantPage({
                 )}
                 {prof?.availability && (
                   <AvailabilityBadge status={prof.availability as AvailabilityStatus} />
+                )}
+                {avgReplyMinutes !== null && (
+                  <span className="flex items-center gap-1 rounded-full border border-blue-400/30 bg-blue-500/10 px-3 py-0.5 text-sm text-blue-300">
+                    ⚡ Responde em {formatReplyTime(avgReplyMinutes)}
+                  </span>
                 )}
               </div>
               {(prof?.city || prof?.state) && (
@@ -617,7 +659,7 @@ export default async function TenantPage({
             </div>
 
             {/* Formulário de avaliação */}
-            <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+            <div id="avaliar" className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900 scroll-mt-8">
               <h2 className="mb-4 font-semibold text-zinc-900 dark:text-zinc-100">{t("leave_review")}</h2>
               <ReviewForm tenantId={tenant.id} />
             </div>

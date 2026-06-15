@@ -199,6 +199,58 @@ export async function sendWelcomeEmail({
   });
 }
 
+export async function sendReviewRequestEmail({
+  to,
+  visitorName,
+  professionalName,
+  professionalSlug,
+}: {
+  to: string;
+  visitorName: string;
+  professionalName: string;
+  professionalSlug: string;
+}) {
+  const reviewUrl = `${SITE_URL}/pt/${professionalSlug}?name=${encodeURIComponent(visitorName)}&email=${encodeURIComponent(to)}#avaliar`;
+  return getResend().emails.send({
+    from: EMAIL_FROM,
+    to,
+    subject: `Como foi trabalhar com ${professionalName}? Deixe sua avaliação — EngHub`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #111;">
+        <div style="background: linear-gradient(135deg, #f59e0b, #d97706); padding: 32px 24px; border-radius: 12px 12px 0 0; text-align: center;">
+          <div style="font-size: 36px; margin-bottom: 8px;">⭐</div>
+          <h1 style="color: #fff; margin: 0; font-size: 22px;">Sua opinião importa!</h1>
+          <p style="color: #fef3c7; margin: 8px 0 0; font-size: 14px;">O serviço com ${professionalName} foi concluído</p>
+        </div>
+        <div style="background: #f9fafb; padding: 28px 24px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
+          <p style="margin: 0 0 16px; font-size: 15px; color: #374151; line-height: 1.6;">
+            Olá, <strong>${visitorName.split(" ")[0]}</strong>!
+          </p>
+          <p style="margin: 0 0 24px; font-size: 14px; color: #6b7280; line-height: 1.6;">
+            O serviço prestado por <strong>${professionalName}</strong> foi marcado como concluído. Leva menos de 1 minuto e ajuda outros clientes a encontrar bons profissionais.
+          </p>
+          <div style="text-align: center; margin-bottom: 24px;">
+            <a href="${reviewUrl}" style="display: inline-block; background: #f59e0b; color: #fff; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 700;">
+              ⭐ Avaliar ${professionalName}
+            </a>
+          </div>
+          <div style="background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+            <p style="margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #374151;">Por que avaliar?</p>
+            <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #6b7280; line-height: 1.8;">
+              <li>Ajuda outros clientes a escolher com segurança</li>
+              <li>Valoriza o trabalho do profissional</li>
+              <li>Sua experiência é única e importa</li>
+            </ul>
+          </div>
+          <p style="text-align: center; margin: 0; font-size: 12px; color: #9ca3af;">
+            Não quer avaliar? Sem problema — basta ignorar este e-mail.
+          </p>
+        </div>
+      </div>
+    `,
+  });
+}
+
 export async function sendReplyNotification({
   to,
   visitorName,

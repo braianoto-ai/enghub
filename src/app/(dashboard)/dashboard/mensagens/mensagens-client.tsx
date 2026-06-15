@@ -231,6 +231,14 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
     setConversations((prev) =>
       prev.map((c) => c.id === selected.id ? { ...c, status: newStatus } : c)
     );
+    // Pedido de avaliação automático ao marcar como concluído
+    if (newStatus === "completed") {
+      fetch("/api/notify/review-request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ conversationId: selected.id }),
+      }).catch(() => {});
+    }
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {

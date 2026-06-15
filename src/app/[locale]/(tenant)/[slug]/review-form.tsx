@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { StarRating } from "@/components/ui/star-rating";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,9 @@ interface ReviewFormProps {
 }
 
 export function ReviewForm({ tenantId }: ReviewFormProps) {
+  const searchParams = useSearchParams();
+  const defaultName = searchParams.get("name") ?? "";
+  const defaultEmail = searchParams.get("email") ?? "";
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -115,6 +119,7 @@ export function ReviewForm({ tenantId }: ReviewFormProps) {
           <input
             name="name"
             required
+            defaultValue={defaultName}
             placeholder="Seu nome"
             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500"
           />
@@ -127,6 +132,7 @@ export function ReviewForm({ tenantId }: ReviewFormProps) {
             name="email"
             type="email"
             required
+            defaultValue={defaultEmail}
             placeholder="seu@email.com"
             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500"
           />
