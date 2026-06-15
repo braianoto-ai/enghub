@@ -25,6 +25,7 @@ export default async function DashboardPage() {
     { count: serviceCount },
     { count: reviewCount },
     { count: testimonialCount },
+    { count: viewCount },
     { data: reviews },
     { data: prof },
   ] = await Promise.all([
@@ -43,6 +44,10 @@ export default async function DashboardPage() {
       .eq("tenant_id", tenantId ?? ""),
     supabase
       .from("testimonials")
+      .select("*", { count: "exact", head: true })
+      .eq("tenant_id", tenantId ?? ""),
+    supabase
+      .from("profile_views")
       .select("*", { count: "exact", head: true })
       .eq("tenant_id", tenantId ?? ""),
     supabase
@@ -67,7 +72,7 @@ export default async function DashboardPage() {
     { label: "Projetos publicados", value: projectCount ?? 0, icon: FolderOpen },
     { label: "Avaliação média",      value: avgRating ?? "-",  icon: Star },
     { label: "Avaliações recebidas", value: reviewCount ?? 0,  icon: MessageSquare },
-    { label: "Visitas ao perfil",    value: "Em breve",         icon: Eye },
+    { label: "Visitas ao perfil",    value: viewCount ?? 0,     icon: Eye },
   ];
 
   const hasContact = !!(prof?.phone || prof?.whatsapp || prof?.linkedin);
