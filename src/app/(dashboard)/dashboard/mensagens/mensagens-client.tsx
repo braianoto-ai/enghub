@@ -2,14 +2,24 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Send, Inbox, Circle, CheckCheck, Loader2, Search, FileDown } from "lucide-react";
+import { Send, Inbox, Circle, CheckCheck, Loader2, Search, FileDown, ChevronDown } from "lucide-react";
+
+type ConversationStatus = "pending" | "accepted" | "in_progress" | "completed" | "closed";
+
+const STATUS_CONFIG: Record<ConversationStatus, { label: string; color: string; dot: string }> = {
+  pending:     { label: "Em análise",    color: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400", dot: "bg-yellow-400" },
+  accepted:    { label: "Aceito",        color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",         dot: "bg-blue-400" },
+  in_progress: { label: "Em andamento",  color: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400", dot: "bg-purple-400" },
+  completed:   { label: "Concluído",     color: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",     dot: "bg-green-400" },
+  closed:      { label: "Recusado",      color: "bg-gray-100 text-gray-500 dark:bg-zinc-800 dark:text-zinc-400",            dot: "bg-gray-400" },
+};
 
 interface Conversation {
   id: string;
   visitor_name: string;
   visitor_email: string;
   visitor_phone: string | null;
-  status: string;
+  status: ConversationStatus;
   last_message_at: string;
   unread_count?: number;
   last_preview?: string;
@@ -37,6 +47,7 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
   const [sending, setSending] = useState(false);
   const [search, setSearch] = useState("");
   const [downloadingPdf, setDownloadingPdf] = useState(false);
+  const [statusOpen, setStatusOpen] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -207,6 +218,19 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
     }
   }
 
+  async function handleStatusChange(newStatus: ConversationStatus) {
+    if (!selected) return;
+    setStatusOpen(false);
+    await supabase
+      .from("conversations")
+      .update({ status: newStatus })
+      .eq("id", selected.id);
+    setSelected({ ...selected, status: newStatus });
+    setConversations((prev) =>
+      prev.map((c) => c.id === selected.id ? { ...c, status: newStatus } : c)
+    );
+  }
+
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -294,6 +318,12 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
                     </span>
                   </div>
                   <p className="mt-0.5 truncate text-xs text-gray-400 dark:text-zinc-500">{conv.visitor_email}</p>
+                  <div className="mt-1.5 flex items-center gap-1.5">
+                    <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium ${STATUS_CONFIG[conv.status]?.color ?? STATUS_CONFIG.pending.color}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${STATUS_CONFIG[conv.status]?.dot ?? ""}`} />
+                      {STATUS_CONFIG[conv.status]?.label ?? "Em análise"}
+                    </span>
+                  </div>
                   {conv.last_preview && (
                     <p className="mt-1 truncate text-xs text-gray-500 dark:text-zinc-400">{conv.last_preview}</p>
                   )}
@@ -333,13 +363,32 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
                     {downloadingPdf ? <Loader2 size={12} className="animate-spin" /> : <FileDown size={12} />}
                     PDF
                   </button>
-                  <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                    selected.status === "open"
-                      ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                      : "bg-gray-100 text-gray-600 dark:bg-zinc-800 dark:text-zinc-400"
-                  }`}>
-                    {selected.status === "open" ? "Aberta" : "Fechada"}
-                  </span>
+
+                  {/* Status dropdown */}
+                  <div className="relative">
+                    <button
+                      onClick={() => setStatusOpen((o) => !o)}
+                      className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${STATUS_CONFIG[selected.status]?.color ?? STATUS_CONFIG.pending.color}`}
+                    >
+                      <span className={`h-1.5 w-1.5 rounded-full ${STATUS_CONFIG[selected.status]?.dot ?? ""}`} />
+                      {STATUS_CONFIG[selected.status]?.label ?? "Em análise"}
+                      <ChevronDown size={11} />
+                    </button>
+                    {statusOpen && (
+                      <div className="absolute right-0 top-full z-20 mt-1 w-44 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+                        {(Object.entries(STATUS_CONFIG) as [ConversationStatus, typeof STATUS_CONFIG[ConversationStatus]][]).map(([key, cfg]) => (
+                          <button
+                            key={key}
+                            onClick={() => handleStatusChange(key)}
+                            className={`flex w-full items-center gap-2 px-3 py-2.5 text-left text-xs font-medium transition-colors hover:bg-gray-50 dark:hover:bg-zinc-800 ${selected.status === key ? "opacity-50 cursor-default" : ""}`}
+                          >
+                            <span className={`h-2 w-2 rounded-full ${cfg.dot}`} />
+                            {cfg.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
