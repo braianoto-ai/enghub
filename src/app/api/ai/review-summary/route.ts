@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { getAI, AI_MODEL } from "@/lib/ai";
+import { geminiGenerate } from "@/lib/ai";
 
 export async function GET(request: NextRequest) {
   const tenantId = request.nextUrl.searchParams.get("tenantId");
@@ -16,26 +16,20 @@ export async function GET(request: NextRequest) {
     .order("created_at", { ascending: false })
     .limit(30);
 
-  if (!reviews || reviews.length < 3) {
-    return NextResponse.json({ summary: null });
-  }
+  if (!reviews || reviews.length < 3) return NextResponse.json({ summary: null });
 
   const reviewsText = reviews
     .filter((r) => r.comment)
     .map((r) => `[${r.rating}★] ${r.comment}`)
     .join("\n");
 
-  const prompt = `Analise as seguintes avaliações de um profissional de engenharia e escreva um resumo conciso em português (máx. 2 frases) destacando os pontos mais elogiados pelos clientes. Seja específico e evite generalizações vagas.
+  const prompt = `Analise estas avaliações de um engenheiro e escreva 1-2 frases destacando os pontos mais elogiados. Seja específico. Só o resumo, sem título.\n\n${reviewsText}`;
 
-Avaliações:
-${reviewsText}
-
-Responda APENAS com o resumo, sem introdução, sem aspas, sem título.`;
-
-  const ai = getAI();
-  const model = ai.getGenerativeModel({ model: AI_MODEL });
-  const result = await model.generateContent(prompt);
-  const summary = result.response.text().trim() || null;
-
-  return NextResponse.json({ summary });
+  try {
+    const summary = await geminiGenerate(prompt);
+    return NextResponse.json({ summary: summary.trim() || null });
+  } catch (err) {
+    console.error("[review-summary]", err);
+    return NextResponse.json({ summary: null });
+  }
 }

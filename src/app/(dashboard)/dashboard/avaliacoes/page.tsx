@@ -1,8 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { AvaliacoesClient } from "./avaliacoes-client";
-import { getAI, AI_MODEL } from "@/lib/ai";
-
+import { geminiGenerate } from "@/lib/ai";
 
 export default async function AvaliacoesPage() {
   const supabase = await createClient();
@@ -33,16 +32,14 @@ export default async function AvaliacoesPage() {
   const reviewsWithComments = list.filter((r) => r.comment);
   if (reviewsWithComments.length >= 3 && process.env.GEMINI_API_KEY) {
     try {
-      const ai = getAI();
-      const model = ai.getGenerativeModel({ model: AI_MODEL });
       const reviewsText = reviewsWithComments
         .slice(0, 20)
         .map((r) => `[${r.rating}★] ${r.comment}`)
         .join("\n");
-      const result = await model.generateContent(
-        `Analise as avaliações abaixo e escreva 1-2 frases destacando o que os clientes mais elogiam neste profissional. Seja específico. Responda só o resumo, sem título ou introdução.\n\n${reviewsText}`
+      const text = await geminiGenerate(
+        `Analise estas avaliações e escreva 1-2 frases destacando o que os clientes mais elogiam. Seja específico. Só o resumo, sem título.\n\n${reviewsText}`
       );
-      aiSummary = result.response.text().trim() || null;
+      aiSummary = text.trim() || null;
     } catch {
       // silently skip if AI fails
     }

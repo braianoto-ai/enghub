@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
-import { getAI, AI_MODEL } from "@/lib/ai";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { geminiStream } from "@/lib/ai";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -9,10 +9,7 @@ export async function POST(request: NextRequest) {
     tenantId: string;
     area?: string;
   };
-
-  if (!messages?.length || !tenantId) {
-    return new Response("Parâmetros inválidos", { status: 400 });
-  }
+  if (!messages?.length || !tenantId) return new Response("Parâmetros inválidos", { status: 400 });
 
   const admin = createAdminClient();
   const { data: profile } = await admin
@@ -25,45 +22,22 @@ export async function POST(request: NextRequest) {
   const profAreas = (profile?.areas as string[] | null)?.join(", ") ?? area ?? "engenharia";
   const location = [profile?.city, profile?.state].filter(Boolean).join(", ");
 
-  const systemPrompt = `Você é um assistente de orçamento da plataforma EngHub, ajudando um cliente a descrever seu projeto para ${profName}, especialista em ${profAreas}${location ? ` em ${location}` : ""}.
+  const system = `Você é um assistente de orçamento da EngHub ajudando o cliente a descrever seu projeto para ${profName}, especialista em ${profAreas}${location ? ` em ${location}` : ""}. Faça no máximo 3 perguntas por resposta. Seja objetivo. Não faça orçamentos de valores.`;
 
-Seu papel:
-- Ajudar o cliente a detalhar bem o projeto (escopo, localização, prazo, orçamento estimado)
-- Fazer perguntas específicas e relevantes para a área de engenharia
-- Ser objetivo e amigável, sem enrolação
-- Responder em português brasileiro
-- Máximo de 3 perguntas por resposta
-- Se o cliente já deu detalhes suficientes, confirme e incentive-o a enviar o orçamento
+  // Monta historico + ultima mensagem como prompt único
+  const history = messages.slice(0, -1).map((m) =>
+    `${m.role === "user" ? "Cliente" : "Assistente"}: ${m.content}`
+  ).join("\n");
+  const last = messages[messages.length - 1].content;
+  const prompt = history ? `${history}\nCliente: ${last}\nAssistente:` : last;
 
-NÃO faça orçamentos de valores, pois isso é responsabilidade do profissional.`;
-
-  const ai = getAI();
-  const model = ai.getGenerativeModel({
-    model: AI_MODEL,
-    systemInstruction: systemPrompt,
-  });
-
-  const history = messages.slice(0, -1).map((m) => ({
-    role: m.role === "assistant" ? "model" : "user",
-    parts: [{ text: m.content }],
-  }));
-
-  const lastMessage = messages[messages.length - 1].content;
-  const chat = model.startChat({ history });
-  const result = await chat.sendMessageStream(lastMessage);
-
-  const encoder = new TextEncoder();
-  const readable = new ReadableStream({
-    async start(controller) {
-      for await (const chunk of result.stream) {
-        const text = chunk.text();
-        if (text) controller.enqueue(encoder.encode(text));
-      }
-      controller.close();
-    },
-  });
-
-  return new Response(readable, {
-    headers: { "Content-Type": "text/plain; charset=utf-8" },
-  });
+  try {
+    const stream = await geminiStream(prompt, system);
+    return new Response(stream, {
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
+  } catch (err) {
+    console.error("[quote-assistant]", err);
+    return new Response(String(err), { status: 500 });
+  }
 }
