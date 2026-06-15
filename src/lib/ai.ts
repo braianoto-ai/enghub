@@ -36,7 +36,7 @@ export async function geminiStream(prompt: string, system?: string): Promise<Rea
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       contents,
-      generationConfig: { maxOutputTokens: 400 },
+      generationConfig: { maxOutputTokens: 800 },
     }),
   });
   if (!res.ok || !res.body) {
