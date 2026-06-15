@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Send, Inbox, Circle, CheckCheck, Loader2, Search, FileDown, ChevronDown } from "lucide-react";
+import { Send, Inbox, Circle, CheckCheck, Loader2, Search, FileDown, ChevronDown, FileText } from "lucide-react";
+import { ProposalModal } from "./proposal-modal";
 
 type ConversationStatus = "pending" | "accepted" | "in_progress" | "completed" | "closed";
 
@@ -48,6 +49,7 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
   const [search, setSearch] = useState("");
   const [downloadingPdf, setDownloadingPdf] = useState(false);
   const [statusOpen, setStatusOpen] = useState(false);
+  const [proposalOpen, setProposalOpen] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -355,6 +357,14 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   <button
+                    onClick={() => setProposalOpen(true)}
+                    className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                    title="Criar proposta formal"
+                  >
+                    <FileText size={12} />
+                    Proposta
+                  </button>
+                  <button
                     onClick={() => handleDownloadPdf(selected.id)}
                     disabled={downloadingPdf}
                     className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
@@ -444,6 +454,14 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
             </div>
           )}
         </div>
+      )}
+
+      {proposalOpen && selected && (
+        <ProposalModal
+          conversationId={selected.id}
+          visitorName={selected.visitor_name}
+          onClose={() => setProposalOpen(false)}
+        />
       )}
     </div>
   );
