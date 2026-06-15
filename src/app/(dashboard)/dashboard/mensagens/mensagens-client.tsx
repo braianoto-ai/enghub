@@ -179,6 +179,13 @@ export function MensagensClient({ tenantId }: MensagensClientProps) {
       .update({ last_message_at: new Date().toISOString() })
       .eq("id", selected.id);
 
+    // Notifica o visitante por email (fire and forget)
+    fetch("/api/notify/reply", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ conversationId: selected.id, replyContent: content }),
+    }).catch(() => {});
+
     setSending(false);
     inputRef.current?.focus();
   }

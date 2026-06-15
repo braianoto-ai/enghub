@@ -199,6 +199,51 @@ export async function sendWelcomeEmail({
   });
 }
 
+export async function sendReplyNotification({
+  to,
+  visitorName,
+  professionalName,
+  professionalSlug,
+  replyContent,
+}: {
+  to: string;
+  visitorName: string;
+  professionalName: string;
+  professionalSlug: string;
+  replyContent: string;
+}) {
+  const profileUrl = `${SITE_URL}/pt/${professionalSlug}`;
+  return getResend().emails.send({
+    from: EMAIL_FROM,
+    to,
+    subject: `${professionalName} respondeu sua solicitação — EngHub`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #111;">
+        <div style="background: linear-gradient(135deg, #4b5563, #374151); padding: 32px 24px; border-radius: 12px 12px 0 0;">
+          <h1 style="color: #fff; margin: 0; font-size: 22px;">Você recebeu uma resposta!</h1>
+          <p style="color: #d1d5db; margin: 8px 0 0; font-size: 14px;">${professionalName} respondeu sua solicitação de orçamento</p>
+        </div>
+        <div style="background: #f9fafb; padding: 24px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
+          <p style="margin: 0 0 16px; font-size: 15px; color: #374151;">
+            Olá, <strong>${visitorName.split(" ")[0]}</strong>! O profissional <strong>${professionalName}</strong> acabou de responder sua solicitação:
+          </p>
+          <div style="background: #fff; border-left: 4px solid #4b5563; border-radius: 0 8px 8px 0; padding: 16px 20px; margin-bottom: 24px;">
+            <p style="margin: 0; font-size: 14px; color: #374151; line-height: 1.7; white-space: pre-wrap;">${replyContent}</p>
+          </div>
+          <div style="text-align: center; margin-bottom: 20px;">
+            <a href="${profileUrl}" style="display: inline-block; background: #4b5563; color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
+              Ver perfil de ${professionalName}
+            </a>
+          </div>
+          <p style="text-align: center; margin: 0; font-size: 12px; color: #9ca3af;">
+            Para responder, entre em contato diretamente com o profissional pelo e-mail ou WhatsApp informados no perfil.
+          </p>
+        </div>
+      </div>
+    `,
+  });
+}
+
 export async function sendReviewNotification({
   to,
   professionalName,
