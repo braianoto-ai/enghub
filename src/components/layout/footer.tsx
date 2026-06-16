@@ -43,6 +43,8 @@ export async function Footer() {
             <ul className="mt-3 space-y-2">
               <li><Link href="/sobre" className="text-sm text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200">{t("support_about")}</Link></li>
               <li><Link href="/contato" className="text-sm text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200">{t("support_contact")}</Link></li>
+              <li><Link href="/blog" className="text-sm text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200">Blog</Link></li>
+              <li><Link href="/noticias" className="text-sm text-gray-500 hover:text-gray-700 dark:text-zinc-400 dark:hover:text-zinc-200">Notícias do setor</Link></li>
             </ul>
           </div>
         </div>
