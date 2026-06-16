@@ -5,6 +5,8 @@ import { MobileNav } from "@/components/layout/mobile-nav";
 import { NotificationBell } from "@/components/layout/notification-bell";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { TrialBanner } from "@/components/trial-banner";
+import { PushNotificationPrompt } from "@/components/push-notification-prompt";
+import { PwaInstallBanner } from "@/components/pwa-install-banner";
 
 export default async function DashboardLayout({
   children,
@@ -64,6 +66,8 @@ export default async function DashboardLayout({
         </main>
       </div>
       <MobileNav tenant={tenant} user={user} unreadMessages={unreadMessages} />
+      <PwaInstallBanner />
+      <PushNotificationPrompt />
     </div>
   );
 }
