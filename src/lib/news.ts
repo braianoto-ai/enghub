@@ -101,7 +101,7 @@ export async function ingestAllSources(): Promise<{ total_inserted: number; tota
     .eq("active", true);
 
   if (error || !sources) {
-    console.error("[news] Erro ao buscar fontes:", error);
+    console.error("[news] Erro ao buscar fontes:", JSON.stringify(error));
     return { total_inserted: 0, total_skipped: 0 };
   }
 
