@@ -55,7 +55,7 @@ export function WelcomeModal({ name, slug }: WelcomeModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-zinc-900">
+      <div className="w-full max-w-md max-h-[90dvh] overflow-y-auto rounded-2xl bg-white shadow-2xl dark:bg-zinc-900">
         {/* Header */}
         <div className="relative bg-gradient-to-br from-zinc-900 to-zinc-800 px-6 pt-8 pb-6 text-center">
           <button

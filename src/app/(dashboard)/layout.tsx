@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/layout/sidebar";
+import { MobileNav } from "@/components/layout/mobile-nav";
 import { NotificationBell } from "@/components/layout/notification-bell";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { TrialBanner } from "@/components/trial-banner";
@@ -54,13 +55,15 @@ export default async function DashboardLayout({
           <ThemeToggle />
           <NotificationBell />
         </header>
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-8 dark:bg-zinc-950">
+        {/* pb-20 gives space for the mobile bottom nav on small screens */}
+        <main className="flex-1 overflow-y-auto bg-gray-50 p-4 pb-24 sm:p-6 sm:pb-28 lg:p-8 lg:pb-8 dark:bg-zinc-950">
           {isOnTrial && tenant?.trial_ends_at && (
             <TrialBanner trialEndsAt={tenant.trial_ends_at} plan={tenant.plan} />
           )}
           {children}
         </main>
       </div>
+      <MobileNav tenant={tenant} user={user} unreadMessages={unreadMessages} />
     </div>
   );
 }

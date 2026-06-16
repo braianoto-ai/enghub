@@ -134,15 +134,19 @@ export function PerfilForm({ tenant, profile }: PerfilFormProps) {
           <Input
             id="phone"
             name="phone"
+            type="tel"
             label="Telefone"
             placeholder="(11) 99999-9999"
+            autoComplete="tel"
             defaultValue={profile?.phone ?? ""}
           />
           <Input
             id="whatsapp"
             name="whatsapp"
+            type="tel"
             label="WhatsApp"
             placeholder="(11) 99999-9999"
+            autoComplete="tel"
             defaultValue={profile?.whatsapp ?? ""}
           />
           <Input
@@ -157,6 +161,7 @@ export function PerfilForm({ tenant, profile }: PerfilFormProps) {
             name="city"
             label="Cidade"
             placeholder="São Paulo"
+            autoComplete="address-level2"
             defaultValue={profile?.city ?? ""}
           />
           <Input
@@ -164,6 +169,7 @@ export function PerfilForm({ tenant, profile }: PerfilFormProps) {
             name="state"
             label="Estado"
             placeholder="SP"
+            autoComplete="address-level1"
             defaultValue={profile?.state ?? ""}
           />
           <Input

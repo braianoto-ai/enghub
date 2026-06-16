@@ -1,15 +1,27 @@
 import { NextRequest } from "next/server";
+import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { geminiStream } from "@/lib/ai";
+
+const schema = z.object({
+  name: z.string().max(120).optional(),
+  areas: z.array(z.string().max(60)).max(10).optional(),
+  city: z.string().max(80).optional(),
+  state: z.string().max(40).optional(),
+  years_experience: z.number().int().min(0).max(60).optional(),
+  education: z.string().max(200).optional(),
+  crea: z.string().max(40).optional(),
+});
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return new Response("Não autenticado", { status: 401 });
 
-  const body = await request.json();
-  const { name, areas, city, state, years_experience, education, crea } = body;
+  const parsed = schema.safeParse(await request.json());
+  if (!parsed.success) return new Response("Dados inválidos", { status: 400 });
+  const { name, areas, city, state, years_experience, education, crea } = parsed.data;
 
   const areasText = (areas as string[] | undefined)?.join(", ") ?? "Engenharia";
   const locationText = [city, state].filter(Boolean).join(", ");

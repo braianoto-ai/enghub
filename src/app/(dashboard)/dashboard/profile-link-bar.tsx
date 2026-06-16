@@ -4,17 +4,16 @@ import { useState } from "react";
 import { ExternalLink, Copy, Check, QrCode, X } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://enghub.com.br";
+
 export function ProfileLinkBar({ slug }: { slug: string }) {
   const [copied, setCopied] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
 
-  const url = typeof window !== "undefined"
-    ? `${window.location.origin}/pt/${slug}`
-    : `https://enghub-eight.vercel.app/pt/${slug}`;
+  const profileUrl = `${SITE_URL}/pt/${slug}`;
 
   function handleCopy() {
-    const u = `${window.location.origin}/pt/${slug}`;
-    navigator.clipboard.writeText(u).then(() => {
+    navigator.clipboard.writeText(profileUrl).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
@@ -61,9 +60,9 @@ export function ProfileLinkBar({ slug }: { slug: string }) {
             </div>
             <div className="flex flex-col items-center gap-4 p-6">
               <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm dark:border-zinc-700">
-                <QRCodeSVG value={url} size={180} />
+                <QRCodeSVG value={profileUrl} size={180} />
               </div>
-              <p className="text-center text-xs text-gray-500 dark:text-zinc-400 break-all">{url}</p>
+              <p className="text-center text-xs text-gray-500 dark:text-zinc-400 break-all">{profileUrl}</p>
               <p className="text-center text-xs text-gray-400">Escaneie para acessar o perfil. Use em cartão de visita, apresentações ou redes sociais.</p>
             </div>
           </div>

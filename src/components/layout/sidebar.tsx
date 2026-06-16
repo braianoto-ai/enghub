@@ -55,7 +55,7 @@ export function Sidebar({ tenant, user, unreadMessages = 0 }: SidebarProps) {
   }
 
   return (
-    <aside className="flex h-screen w-64 flex-col border-r border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+    <aside className="hidden lg:flex h-screen w-64 flex-col border-r border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
       <div className="flex h-16 items-center gap-2 border-b border-gray-200 px-6 dark:border-zinc-800">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-700">
           <span className="font-bold text-white">E</span>

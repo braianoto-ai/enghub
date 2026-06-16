@@ -111,7 +111,7 @@ export function TenantsAdminClient({ tenants }: { tenants: Tenant[] }) {
                       <div>
                         <div className="flex items-center gap-1">
                           <p className="text-sm font-medium text-gray-900 dark:text-zinc-100">{t.name}</p>
-                          <Link href={`/${t.slug}`} target="_blank" className="text-gray-400 hover:text-gray-700">
+                          <Link href={`/${t.slug}`} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-700">
                             <ExternalLink size={11} />
                           </Link>
                         </div>
