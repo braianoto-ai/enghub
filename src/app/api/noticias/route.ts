@@ -14,9 +14,10 @@ export async function GET(request: NextRequest) {
   let query = supabase
     .from("news_articles")
     .select(`
-      id, title, excerpt, url, image_url, published_at, category,
+      id, title, excerpt, url, image_url, published_at, category, language,
       news_sources!inner(name, url)
     `)
+    .order("language", { ascending: false })
     .order("published_at", { ascending: false })
     .range(offset, offset + limit - 1);
 

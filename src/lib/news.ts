@@ -24,6 +24,7 @@ interface NewsSource {
   name: string;
   rss_url: string;
   category: NewsCategory;
+  language: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -82,6 +83,7 @@ export async function ingestSource(source: NewsSource): Promise<{ inserted: numb
         published_at: publishedAt,
         source_id: source.id,
         category: source.category,
+        language: source.language,
       },
       { onConflict: "url", ignoreDuplicates: true }
     );
@@ -97,7 +99,7 @@ export async function ingestAllSources(): Promise<{ total_inserted: number; tota
 
   const { data: sources, error } = await supabase
     .from("news_sources")
-    .select("id, name, rss_url, category")
+    .select("id, name, rss_url, category, language")
     .eq("active", true);
 
   if (error || !sources) {
