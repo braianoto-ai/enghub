@@ -92,7 +92,7 @@ export async function ingestSource(source: NewsSource): Promise<{ inserted: numb
   return { inserted, skipped };
 }
 
-export async function ingestAllSources(): Promise<{ total_inserted: number; total_skipped: number; debug_error?: string }> {
+export async function ingestAllSources(): Promise<{ total_inserted: number; total_skipped: number }> {
   const supabase = createAdminClient();
 
   const { data: sources, error } = await supabase
@@ -101,8 +101,8 @@ export async function ingestAllSources(): Promise<{ total_inserted: number; tota
     .eq("active", true);
 
   if (error || !sources) {
-    console.error("[news] Erro ao buscar fontes:", JSON.stringify(error));
-    return { total_inserted: 0, total_skipped: 0, debug_error: JSON.stringify(error) };
+    console.error("[news] Erro ao buscar fontes:", error);
+    return { total_inserted: 0, total_skipped: 0 };
   }
 
   let total_inserted = 0;
