@@ -118,7 +118,13 @@ async function handler(request: NextRequest) {
     source: (a.news_sources as any)?.name ?? "Fonte desconhecida",
   }));
 
-  const digest = await generateDigest(input);
+  let digest;
+  try {
+    digest = await generateDigest(input);
+  } catch (err) {
+    console.error("[blog] Erro no Gemini:", err);
+    return NextResponse.json({ error: "Erro ao gerar digest", detail: String(err) }, { status: 500 });
+  }
 
   const date = new Date();
   const weekStr = `${date.getFullYear()}-w${Math.ceil(date.getDate() / 7).toString().padStart(2, "0")}`;
