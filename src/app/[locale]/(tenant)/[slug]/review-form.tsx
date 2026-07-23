@@ -40,13 +40,17 @@ export function ReviewForm({ tenantId }: ReviewFormProps) {
     const reviewerEmail = formData.get("email") as string;
     const comment = (formData.get("comment") as string) || null;
 
-    const { error: err } = await supabase.from("reviews").insert({
-      tenant_id: tenantId,
-      rating,
-      reviewer_name: reviewerName,
-      reviewer_email: reviewerEmail,
-      comment,
-    });
+    const { data: inserted, error: err } = await supabase
+      .from("reviews")
+      .insert({
+        tenant_id: tenantId,
+        rating,
+        reviewer_name: reviewerName,
+        reviewer_email: reviewerEmail,
+        comment,
+      })
+      .select("id")
+      .single();
 
     if (err) {
       setError("Erro ao enviar avaliação. Tente novamente.");
@@ -56,7 +60,7 @@ export function ReviewForm({ tenantId }: ReviewFormProps) {
       fetch("/api/notify/review", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tenantId, reviewerName, rating, comment }),
+        body: JSON.stringify({ reviewId: inserted.id }),
       }).catch(() => {});
     }
     setLoading(false);

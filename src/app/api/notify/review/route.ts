@@ -1,21 +1,47 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { z } from "zod";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { sendReviewNotification } from "@/lib/email";
+import { rateLimit } from "@/lib/rate-limit";
+
+const Schema = z.object({
+  reviewId: z.string().uuid("reviewId inválido"),
+});
 
 export async function POST(req: NextRequest) {
   try {
-    const { tenantId, reviewerName, rating, comment } = await req.json();
-
-    if (!tenantId || !reviewerName || !rating) {
-      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+    const ip =
+      req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
+      req.headers.get("x-real-ip") ??
+      "unknown";
+    const rl = rateLimit(`notify-review:${ip}`, { limit: 10, windowMs: 60_000 });
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Muitas requisições." }, { status: 429 });
     }
 
-    const supabase = await createClient();
+    const parsed = Schema.safeParse(await req.json());
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 });
+    }
+
+    const supabase = createAdminClient();
+
+    // Busca a avaliação real no banco — nunca confia em campos do body,
+    // só no id de uma review que realmente foi inserida.
+    const { data: review } = await supabase
+      .from("reviews")
+      .select("tenant_id, rating, reviewer_name, comment")
+      .eq("id", parsed.data.reviewId)
+      .maybeSingle();
+
+    if (!review) {
+      return NextResponse.json({ error: "Review not found" }, { status: 404 });
+    }
 
     const { data: tenant } = await supabase
       .from("tenants")
       .select("name, slug, owner_id")
-      .eq("id", tenantId)
+      .eq("id", review.tenant_id)
       .maybeSingle();
 
     if (!tenant) {
@@ -32,22 +58,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Owner email not found" }, { status: 404 });
     }
 
-    const stars = "★".repeat(rating) + "☆".repeat(5 - rating);
+    const stars = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
 
     await Promise.all([
       sendReviewNotification({
         to: profile.email,
         professionalName: tenant.name,
-        reviewerName,
-        rating,
-        comment,
+        reviewerName: review.reviewer_name ?? "Anônimo",
+        rating: review.rating,
+        comment: review.comment,
         slug: tenant.slug,
       }),
       supabase.from("notifications").insert({
-        tenant_id: tenantId,
+        tenant_id: review.tenant_id,
         type: "review",
-        title: `Nova avaliação ${stars} de ${reviewerName}`,
-        body: comment ? comment.slice(0, 120) : `${rating}/5 estrelas`,
+        title: `Nova avaliação ${stars} de ${review.reviewer_name ?? "Anônimo"}`,
+        body: review.comment ? review.comment.slice(0, 120) : `${review.rating}/5 estrelas`,
         href: "/dashboard/avaliacoes",
         read: false,
       }),
