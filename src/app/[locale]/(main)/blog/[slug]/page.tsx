@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { blogPosts, getPost, formatDate } from "@/lib/blog";
-import { Clock, ArrowLeft, ArrowRight, BookOpen } from "lucide-react";
+import { getBlogPosts, getBlogPost, formatDate } from "@/lib/blog";
+import { Clock, ArrowLeft, ArrowRight, BookOpen, Sparkles } from "lucide-react";
+
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  return blogPosts.map((p) => ({ slug: p.slug }));
+  const posts = await getBlogPosts();
+  return posts.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -14,7 +17,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getBlogPost(slug);
   if (!post) return {};
   return {
     title: post.title,
@@ -28,7 +31,6 @@ export async function generateMetadata({
   };
 }
 
-// Renderiza markdown simples (## heading, **bold**, lista com -)
 function renderContent(content: string) {
   const lines = content.trim().split("\n");
   const elements: React.ReactNode[] = [];
@@ -49,7 +51,7 @@ function renderContent(content: string) {
           {line.slice(4)}
         </h3>
       );
-    } else if (line.startsWith("- ") || line.startsWith("1. ") || line.match(/^\d+\. /)) {
+    } else if (line.startsWith("- ") || line.match(/^\d+\. /)) {
       const items: string[] = [];
       while (i < lines.length && (lines[i].startsWith("- ") || lines[i].match(/^\d+\. /))) {
         items.push(lines[i].replace(/^- /, "").replace(/^\d+\. /, ""));
@@ -66,7 +68,7 @@ function renderContent(content: string) {
       );
       continue;
     } else if (line.trim() === "") {
-      // skip empty
+      // skip
     } else {
       elements.push(
         <p key={i} className="mb-4 leading-relaxed text-zinc-600 dark:text-zinc-400">
@@ -102,6 +104,7 @@ const categoryColors: Record<string, string> = {
   Negócios: "bg-gray-200 text-gray-700 dark:bg-gray-700/40 dark:text-gray-300",
   Regulamentação: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
   Marketing: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
+  "Digest Semanal": "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300",
 };
 
 export default async function BlogPostPage({
@@ -110,14 +113,14 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getBlogPost(slug);
   if (!post) notFound();
 
-  const others = blogPosts.filter((p) => p.slug !== slug).slice(0, 2);
+  const allPosts = await getBlogPosts();
+  const others = allPosts.filter((p) => p.slug !== slug).slice(0, 2);
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-950">
-      {/* Header do post */}
       <div className="border-b border-zinc-100 bg-zinc-50 px-4 py-12 dark:border-zinc-800 dark:bg-zinc-900/40">
         <div className="mx-auto max-w-3xl">
           <Link
@@ -136,18 +139,14 @@ export default async function BlogPostPage({
             {post.title}
           </h1>
 
-          <p className="mt-3 text-lg text-zinc-500 dark:text-zinc-400">
-            {post.excerpt}
-          </p>
+          <p className="mt-3 text-lg text-zinc-500 dark:text-zinc-400">{post.excerpt}</p>
 
           <div className="mt-6 flex items-center gap-4">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-bold text-gray-800 dark:bg-gray-700/40 dark:text-gray-300">
-              {post.author.initials}
+              {post.isAiGenerated ? <Sparkles size={18} className="text-violet-500" /> : post.author.initials}
             </div>
             <div>
-              <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                {post.author.name}
-              </p>
+              <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{post.author.name}</p>
               <p className="flex items-center gap-2 text-xs text-zinc-400">
                 <span>{post.author.role}</span>
                 <span>·</span>
@@ -161,42 +160,40 @@ export default async function BlogPostPage({
         </div>
       </div>
 
-      {/* Conteúdo */}
       <div className="mx-auto max-w-3xl px-4 py-12">
         <article className="prose-zinc">
           {renderContent(post.content)}
         </article>
 
-        {/* CTA inline */}
+        {post.isAiGenerated && (
+          <div className="mt-8 flex items-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-4 py-3 text-xs text-violet-600 dark:border-violet-800/40 dark:bg-violet-900/20 dark:text-violet-400">
+            <Sparkles size={14} />
+            Este digest foi gerado automaticamente por IA com curadoria das principais fontes de engenharia da semana.
+          </div>
+        )}
+
         <div className="mt-12 rounded-2xl border border-gray-300 bg-gray-100 p-6 dark:border-gray-700/50 dark:bg-gray-800/20">
           <div className="flex items-start gap-4">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-700">
               <BookOpen size={20} className="text-white" />
             </div>
             <div>
-              <p className="font-semibold text-zinc-900 dark:text-zinc-100">
-                Crie seu portfólio profissional grátis
-              </p>
+              <p className="font-semibold text-zinc-900 dark:text-zinc-100">Crie seu portfólio profissional grátis</p>
               <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-                Junte-se a mais de 500 engenheiros que já têm presença digital no EngHub.
-                Comece agora, sem cartão de crédito.
+                Junte-se a engenheiros que já têm presença digital no EngHub. Comece agora, sem cartão de crédito.
               </p>
               <Link href="/cadastro">
                 <button className="mt-3 flex items-center gap-1.5 rounded-lg bg-gray-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-600">
-                  Criar meu perfil
-                  <ArrowRight size={14} />
+                  Criar meu perfil <ArrowRight size={14} />
                 </button>
               </Link>
             </div>
           </div>
         </div>
 
-        {/* Outros artigos */}
         {others.length > 0 && (
           <div className="mt-12">
-            <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-              Continue lendo
-            </h2>
+            <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Continue lendo</h2>
             <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
               {others.map((p) => (
                 <Link key={p.slug} href={`/blog/${p.slug}`} className="group">
@@ -208,8 +205,7 @@ export default async function BlogPostPage({
                       {p.title}
                     </h3>
                     <p className="mt-2 flex items-center gap-1 text-xs text-zinc-400">
-                      <Clock size={11} />
-                      {p.readTime} min
+                      <Clock size={11} /> {p.readTime} min
                     </p>
                   </div>
                 </Link>
