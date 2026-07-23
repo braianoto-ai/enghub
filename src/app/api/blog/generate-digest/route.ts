@@ -64,9 +64,12 @@ INSTRUÇÕES:
   if (!res.ok) throw new Error(`Gemini error: ${res.status}`);
 
   const data = await res.json();
-  const raw = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+  const rawOriginal = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+  console.log("[blog] Gemini raw (primeiros 500 chars):", rawOriginal.slice(0, 500));
+  // Gemini às vezes envolve o JSON em blocos de código markdown
+  const raw = rawOriginal.replace(/```(?:json)?\s*/g, "").replace(/```\s*/g, "").trim();
   const jsonMatch = raw.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error("Resposta inválida do Gemini");
+  if (!jsonMatch) throw new Error(`Resposta inválida do Gemini: ${rawOriginal.slice(0, 300)}`);
 
   return JSON.parse(jsonMatch[0]) as { title: string; excerpt: string; content: string };
 }
