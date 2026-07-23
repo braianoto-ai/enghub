@@ -15,7 +15,9 @@ export default async function PerfilPage() {
 
   const { data: profile } = await supabase
     .from("professional_profiles")
-    .select("*")
+    .select(
+      "bio, phone, whatsapp, website, linkedin, instagram, crea, cau, areas, city, state, years_experience, education, availability, curriculum_url, avatar_url, tenant_id"
+    )
     .eq("tenant_id", tenant?.id ?? "")
     .maybeSingle();
 

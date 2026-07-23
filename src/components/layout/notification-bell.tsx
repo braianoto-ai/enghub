@@ -30,6 +30,8 @@ export function NotificationBell() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unread, setUnread] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const fetchNotifications = useCallback(async () => {
@@ -39,12 +41,28 @@ export function NotificationBell() {
       const data = await res.json();
       setNotifications(data.notifications);
       setUnread(data.unread);
+      setHasMore(data.hasMore);
     } catch {
       // silently fail
     } finally {
       setLoading(false);
     }
   }, []);
+
+  async function loadMore() {
+    setLoadingMore(true);
+    try {
+      const res = await fetch(`/api/notifications?offset=${notifications.length}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      setNotifications((prev) => [...prev, ...data.notifications]);
+      setHasMore(data.hasMore);
+    } catch {
+      // silently fail
+    } finally {
+      setLoadingMore(false);
+    }
+  }
 
   useEffect(() => {
     fetchNotifications();
@@ -186,6 +204,17 @@ export function NotificationBell() {
                   </li>
                 ))}
               </ul>
+            )}
+            {hasMore && (
+              <div className="px-4 py-2 text-center">
+                <button
+                  onClick={loadMore}
+                  disabled={loadingMore}
+                  className="text-xs font-medium text-gray-700 hover:text-gray-800 disabled:opacity-50 dark:text-gray-400"
+                >
+                  {loadingMore ? "Carregando..." : "Carregar mais"}
+                </button>
+              </div>
             )}
           </div>
 

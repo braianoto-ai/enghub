@@ -70,12 +70,9 @@ export async function POST(request: NextRequest) {
       tag: tag || "enghub-notification",
     });
 
-    let sent = 0;
-    let failed = 0;
-
-    for (const sub of subscriptions) {
-      try {
-        await webpush.sendNotification(
+    const results = await Promise.allSettled(
+      subscriptions.map((sub) =>
+        webpush.sendNotification(
           {
             endpoint: sub.endpoint,
             keys: {
@@ -84,19 +81,29 @@ export async function POST(request: NextRequest) {
             },
           },
           payload
-        );
+        )
+      )
+    );
+
+    const expiredEndpoints: string[] = [];
+    let sent = 0;
+    let failed = 0;
+
+    results.forEach((result, i) => {
+      if (result.status === "fulfilled") {
         sent++;
-      } catch (err: unknown) {
-        failed++;
-        // Remove subscriptions expiradas (410 Gone ou 404)
-        const statusCode = (err as { statusCode?: number })?.statusCode;
-        if (statusCode === 410 || statusCode === 404) {
-          await adminSupabase
-            .from("push_subscriptions")
-            .delete()
-            .eq("endpoint", sub.endpoint);
-        }
+        return;
       }
+      failed++;
+      // Remove subscriptions expiradas (410 Gone ou 404)
+      const statusCode = (result.reason as { statusCode?: number })?.statusCode;
+      if (statusCode === 410 || statusCode === 404) {
+        expiredEndpoints.push(subscriptions[i].endpoint);
+      }
+    });
+
+    if (expiredEndpoints.length > 0) {
+      await adminSupabase.from("push_subscriptions").delete().in("endpoint", expiredEndpoints);
     }
 
     return NextResponse.json({ sent, failed });
