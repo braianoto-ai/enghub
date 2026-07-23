@@ -86,8 +86,9 @@ async function handler(request: NextRequest) {
 
   const supabase = createAdminClient();
 
-  // Busca os melhores artigos da última semana (PT primeiro, depois EN)
-  const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  // Busca os melhores artigos do período (PT primeiro, depois EN)
+  const days = parseInt(new URL(request.url).searchParams.get("days") ?? "7", 10);
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
   const { data: articles, error } = await supabase
     .from("news_articles")
     .select("title, excerpt, category, language, news_sources!inner(name)")
