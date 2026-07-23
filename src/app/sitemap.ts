@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { blogPosts } from "@/lib/blog";
+import { getBlogPosts } from "@/lib/blog";
 import { areaSlugToKey, brazilianStates } from "@/lib/seo-locations";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://enghub.com.br";
@@ -20,7 +20,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Blog posts
-  const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+  const posts = await getBlogPosts();
+  const blogPages: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
     lastModified: new Date(post.publishedAt),
     changeFrequency: "monthly" as const,
