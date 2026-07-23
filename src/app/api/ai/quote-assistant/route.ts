@@ -1,15 +1,36 @@
 import { NextRequest } from "next/server";
+import { z } from "zod";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { geminiStream } from "@/lib/ai";
+import { rateLimit } from "@/lib/rate-limit";
+
+const Schema = z.object({
+  messages: z
+    .array(
+      z.object({
+        role: z.enum(["user", "assistant"]),
+        content: z.string().min(1).max(1000),
+      })
+    )
+    .min(1)
+    .max(20),
+  tenantId: z.string().uuid(),
+  area: z.string().max(60).optional(),
+});
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
-  const { messages, tenantId, area } = body as {
-    messages: { role: "user" | "assistant"; content: string }[];
-    tenantId: string;
-    area?: string;
-  };
-  if (!messages?.length || !tenantId) return new Response("Parâmetros inválidos", { status: 400 });
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
+    request.headers.get("x-real-ip") ??
+    "unknown";
+  const rl = rateLimit(`quote-assistant:${ip}`, { limit: 20, windowMs: 5 * 60_000 });
+  if (!rl.allowed) {
+    return new Response("Muitas requisições. Tente novamente em instantes.", { status: 429 });
+  }
+
+  const parsed = Schema.safeParse(await request.json());
+  if (!parsed.success) return new Response("Parâmetros inválidos", { status: 400 });
+  const { messages, tenantId, area } = parsed.data;
 
   const admin = createAdminClient();
   const { data: profile } = await admin

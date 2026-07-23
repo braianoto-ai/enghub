@@ -26,7 +26,12 @@ export async function GET(request: NextRequest) {
   }
 
   if (q) {
-    query = query.or(`title.ilike.%${q}%,excerpt.ilike.%${q}%`);
+    // Remove caracteres com significado especial no filtro PostgREST
+    // (vírgula/parênteses/aspas quebrariam a estrutura do .or()).
+    const safeQ = q.replace(/[,()"\\]/g, " ").trim().slice(0, 100);
+    if (safeQ) {
+      query = query.or(`title.ilike.%${safeQ}%,excerpt.ilike.%${safeQ}%`);
+    }
   }
 
   const { data, error } = await query;

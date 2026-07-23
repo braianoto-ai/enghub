@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendTrialReminderEmail } from "@/lib/email";
+import { isCronAuthorized } from "@/lib/cron-auth";
 
 // Vercel Cron Job — runs daily at 09:00 UTC
 // Config is in vercel.json
 
 export async function GET(req: NextRequest) {
-  // Protect with CRON_SECRET
-  const authHeader = req.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!isCronAuthorized(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

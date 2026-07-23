@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { geminiStream } from "@/lib/ai";
+import { rateLimit } from "@/lib/rate-limit";
 
 const schema = z.object({
   name: z.string().max(120).optional(),
@@ -18,6 +19,11 @@ export async function POST(request: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return new Response("Não autenticado", { status: 401 });
+
+  const rl = rateLimit(`generate-bio:${user.id}`, { limit: 10, windowMs: 60 * 60_000 });
+  if (!rl.allowed) {
+    return new Response("Muitas requisições. Tente novamente em instantes.", { status: 429 });
+  }
 
   const parsed = schema.safeParse(await request.json());
   if (!parsed.success) return new Response("Dados inválidos", { status: 400 });

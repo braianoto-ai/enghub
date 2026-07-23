@@ -1,16 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { isCronAuthorized } from "@/lib/cron-auth";
 
 export const maxDuration = 60;
-
-function isAuthorized(request: NextRequest): boolean {
-  const cronHeader = request.headers.get("authorization");
-  const manualHeader = request.headers.get("x-cron-secret");
-  return (
-    cronHeader === `Bearer ${process.env.CRON_SECRET}` ||
-    manualHeader === process.env.CRON_SECRET
-  );
-}
 
 function slugify(text: string): string {
   return text
@@ -81,7 +73,7 @@ export async function POST(request: NextRequest) {
 }
 
 async function handler(request: NextRequest) {
-  if (!isAuthorized(request)) {
+  if (!isCronAuthorized(request)) {
     return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   }
 
